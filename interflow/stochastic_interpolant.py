@@ -27,11 +27,11 @@ def compute_div(
         t.requires_grad_(True)
         f_val = f(x, t)
         divergence = 0.0
-        for i in range(x.shape[1]):
+        for i in range(x.shape[1]): # loop over all dimensions
             divergence += \
                     torch.autograd.grad(
-                            f_val[:, i].sum(), x, create_graph=True
-                        )[0][:, i]
+                            f_val[:, i].sum(), x, create_graph=True # select the i-1th component of f_val for all samples, take sum, take derivative w.r.t. x
+                        )[0][:, i] # get \partial f_{i-1}/\partial x_{i-1}. [0] first because torch.autograd.grad returns a tuple, so we need to extract the tensor itself inside of the tuple.
 
     return divergence.view(bs)
 
@@ -99,13 +99,14 @@ class Interpolant(torch.nn.Module):
         super(Interpolant, self).__init__()
         
 
-        self.path = path
-        if gamma == None:
-            if self.path == 'one-sided-linear' or self.path == 'one-sided-trig': gamma_type = None
-            self.gamma, self.gamma_dot, self.gg_dot = fabrics.make_gamma(gamma_type=gamma_type)
+        self.path = path # store interpolant type
+        if gamma == None: # no gamma provided
+            if self.path == 'one-sided-linear' or self.path == 'one-sided-trig': gamma_type = None #  no gamma needed
+            self.gamma, self.gamma_dot, self.gg_dot = fabrics.make_gamma(gamma_type=gamma_type) # create gamma functions from presets
         else:
-            self.gamma, self.gamma_dot, self.gg_dot = gamma, gamma_dot, gg_dot
-        if self.path == 'custom':
+            self.gamma, self.gamma_dot, self.gg_dot = gamma, gamma_dot, gg_dot # use provided gamma functions
+        if self.path == 'custom': # for custom paths, the user must provide both the interpolation and its derivative
+            ## consider modify here to support nonlinear interpolant ##
             print('Assuming interpolant was passed in directly...')
             self.It = It
             self.dtIt = dtIt
@@ -118,7 +119,7 @@ class Interpolant(torch.nn.Module):
         
 
     def calc_xt(self, t: Time, x0: Sample, x1: Sample):
-        if self.path=='one-sided-linear' or self.path == 'mirror' or self.path=='one-sided-trig':
+        if self.path=='one-sided-linear' or self.path == 'mirror' or self.path=='one-sided-trig': ## modify here to not include here for nonlinear interpolant##
             return self.It(t, x0, x1)
         else:
             z = torch.randn(x0.shape).to(t)
@@ -149,7 +150,7 @@ class PFlowRHS(torch.nn.Module):
     def __init__(self, b: Velocity, interpolant: Interpolant, sample_only=False):
         super(PFlowRHS, self).__init__()
         self.b = b
-        self.interpolant = interpolant
+        self.interpolant = interpolant # not used
         self.sample_only = sample_only
 
 
