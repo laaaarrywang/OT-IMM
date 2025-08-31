@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from . import util
+import interflow.coupling_flows as coupling_flows
 import math
 import hashlib
 import os
@@ -111,6 +112,80 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None):
         
         It    = lambda t, x0, x1: b(t)*x1 + a(t)*x0
         dtIt  = lambda t, x0, x1: adot(t)*x0
+
+    elif path == "nonlinear":
+        # Nonlinear interpolant using TimeIndexedAffineFlow
+        # I_t = T_t(a_t * T_0^{-1}(x0) + b_t * T_1^{-1}(x1))
+        
+        a      = lambda t: torch.cos(0.5*math.pi*t)
+        adot   = lambda t: -0.5*math.pi*torch.sin(0.5*math.pi*t)
+        b      = lambda t: torch.sin(0.5*math.pi*t)
+        bdot   = lambda t: 0.5*math.pi*torch.cos(0.5*math.pi*t)
+
+        # Initialize flow if not provided
+        if flow_model is None:
+            # Infer features from first call (will be set properly when used)
+            flow_model = coupling_flows.TimeIndexedAffineFlow(
+                features=None,  # Will be set dynamically
+                num_layers=8,
+                hidden_features=512,
+                time_embed_dim=128,
+                conditioner_blocks=2
+            )
+
+        def It(t, x0, x1):
+            """
+            Nonlinear interpolation: I_t = T_t(a_t * T_0^{-1}(x0) + b_t * T_1^{-1}(x1))
+            
+            Args:
+                t: Time parameter(s) [B] or scalar
+                x0: Starting points [B, D]
+                x1: Ending points [B, D]
+            """
+            # Handle scalar t
+            if not isinstance(t, torch.Tensor):
+                t = torch.tensor(t, dtype=torch.float32)
+            if t.dim() == 0:
+                t = t.unsqueeze(0)
+            
+            # Get batch size and features
+            B = x0.shape[0]
+            D = x0.shape[1]
+            
+            # Initialize flow if features not set
+            if flow_model.features is None:
+                flow_model.features = D
+                # Reinitialize with correct features
+                flow_model.__init__(
+                    features=D,
+                    num_layers=flow_model.transform.transforms.__len__() // 2,  # Approximate
+                    hidden_features=512,
+                    time_embed_dim=128,
+                    conditioner_blocks=2
+                )
+            
+            # Ensure t has correct shape
+            if t.shape[0] == 1 and B > 1:
+                t = t.expand(B)
+            
+            # Apply inverse flow at boundary times
+            t_0 = torch.zeros(B, device=x0.device)
+            t_1 = torch.ones(B, device=x1.device)
+            
+            z0, _ = flow_model(x0, t_0, reverse=True)  # T_0^{-1}(x0)
+            z1, _ = flow_model(x1, t_1, reverse=True)  # T_1^{-1}(x1)
+            
+            # Linear combination in latent space
+            a_t = a(t).view(-1, 1)  # [B, 1]
+            b_t = b(t).view(-1, 1)  # [B, 1]
+            z_interp = a_t * z0 + b_t * z1
+            
+            # Apply forward flow at time t
+            y, _ = flow_model(z_interp, t, reverse=False)  # T_t(z_interp)
+            
+            return y
+
+         
         
     elif path == 'custom':
         return None, None, None
