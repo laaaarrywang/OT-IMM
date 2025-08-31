@@ -80,23 +80,32 @@ class ImageAffineConditioner(nn.Module):
         D = C * H * W
         self.D = D
 
+        # nflows convention: mask==1 -> TRANSFORMED (B), mask==0 -> IDENTITY/conditioner (A)
         mask_bool = mask_flat > 0.5
         idx_B = torch.nonzero(mask_bool, as_tuple=False).view(-1)      # transformed
-        idx_A = torch.nonzero(~mask_bool, as_tuple=False).view(-1)     # identity / conditioner
+        idx_A = torch.nonzero(~mask_bool, as_tuple=False).view(-1)     # identity/conditioner
+
+        # Register buffers BEFORE using them
         self.register_buffer("idx_A", idx_A.long())
         self.register_buffer("idx_B", idx_B.long())
-        
+
         self.nB = int(mask_bool.sum().item())
         self.nA = D - self.nB
-        
-        # Optional but useful sanity checks:
-        assert in_features == self.nA, f"Expected in_features={self.nA}, got {in_features}"
-        assert out_features == 2 * self.nB, "Affine coupling expects 2*nB outputs."
 
+        # Sanity checks with what nflows passes to transform_net_create_fn
+        assert in_features == self.nA, f"in_features={in_features} but expected {self.nA}"
+        assert out_features == 2 * self.nB, f"out_features={out_features} but expected {2*self.nB}"
+
+        # One-hot basis to scatter A coords into flat image without in-place ops (vmap-safe)
+        A_basis = F.one_hot(idx_A.long(), num_classes=D).to(torch.float32)  # [nA, D]
+        self.register_buffer("A_basis", A_basis)
+
+        # Single mask channel (any channel marked as A becomes 1)
         mask_img = mask_flat.view(C, H, W)
         mask_single = (mask_img.sum(0, keepdim=True) > 0).to(mask_img.dtype)  # [1,H,W]
         self.register_buffer("mask_channel", mask_single)
 
+        # Time context projection -> ctx_channels (broadcast over HxW)
         self.ctx_proj = nn.Linear(time_embed_dim, ctx_channels, bias=True)
 
         in_ch = C + 1 + ctx_channels
@@ -104,32 +113,39 @@ class ImageAffineConditioner(nn.Module):
         blocks = [nn.Conv2d(in_ch, ch, 3, padding=1), nn.ReLU(inplace=True)]
         for _ in range(num_blocks - 1):
             blocks += [nn.Conv2d(ch, ch, 3, padding=1), nn.ReLU(inplace=True)]
-        blocks += [nn.Conv2d(ch, 2 * C, 3, padding=1)]
+        blocks += [nn.Conv2d(ch, 2 * C, 3, padding=1)]  # outputs [shift, log_scale] per channel
         self.trunk = nn.Sequential(*blocks)
 
     def forward(self, x_A_vec, context):
+        """
+        x_A_vec: [B, nA]  (only A-coordinates)
+        context: [B, time_embed_dim]
+        returns: [B, 2*nB] packed as [shift_B, log_scale_B]
+        """
         B = x_A_vec.size(0)
-        device = x_A_vec.device
         dtype = x_A_vec.dtype
 
-        img_A = torch.zeros(B, self.D, device=device, dtype=dtype)
-        img_A[:, self.idx_A] = x_A_vec
+        # vmap-safe scatter via matmul: [B, nA] @ [nA, D] -> [B, D]
+        img_A = torch.matmul(x_A_vec, self.A_basis.to(dtype=dtype))
         img_A = img_A.view(B, self.C, self.H, self.W)
 
-        mask = self.mask_channel.expand(B, -1, -1, -1)     # [B,1,H,W]
-        ctx = self.ctx_proj(context).view(B, -1, 1, 1)     # [B,ctx,1,1]
-        ctx = ctx.expand(-1, -1, self.H, self.W)           # [B,ctx,H,W]
+        mask = self.mask_channel.expand(B, -1, -1, -1)                 # [B,1,H,W]
+        ctx  = self.ctx_proj(context).view(B, -1, 1, 1).expand(-1, -1, self.H, self.W)
 
-        feats = torch.cat([img_A, mask, ctx], dim=1)       # [B, C+1+ctx, H, W]
-        params_full = self.trunk(feats)                    # [B, 2*C, H, W]
+        feats = torch.cat([img_A, mask, ctx], dim=1)                   # [B, C+1+ctx, H, W]
+        params_full = self.trunk(feats)                                 # [B, 2*C, H, W]
+        params_flat = params_full.view(B, 2 * self.D)                   # [B, 2D]
 
-        params_flat = params_full.view(B, 2 * self.D)
-        shift_full  = params_flat[:, : self.D]
-        logscale_full = params_flat[:, self.D :]
+        shift_full    = params_flat[:, : self.D]                        # [B, D]
+        logscale_full = params_flat[:, self.D :]                        # [B, D]
 
-        shift_B    = shift_full[:, self.idx_B]             # [B, nB]
-        logscale_B = logscale_full[:, self.idx_B]          # [B, nB]
-        return torch.cat([shift_B, logscale_B], dim=1)     # [B, 2*nB]
+        # vmap-safe gathers
+        shift_B    = torch.index_select(shift_full,    1, self.idx_B)   # [B, nB]
+        logscale_B = torch.index_select(logscale_full, 1, self.idx_B)   # [B, nB]
+
+        return torch.cat([shift_B, logscale_B], dim=1)                  # [B, 2*nB]
+
+        return torch.cat([shift_B, logscale_B], dim=1)    # [B, 2*nB]
 
 def make_affine_coupling_image(C, H, W, time_embed_dim, mask_flat,
                                hidden_channels=64, num_blocks=3, ctx_channels=16):
