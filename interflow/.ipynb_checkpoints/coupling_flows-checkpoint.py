@@ -81,13 +81,16 @@ class ImageAffineConditioner(nn.Module):
         self.D = D
 
         mask_bool = mask_flat > 0.5
-        idx_A = torch.nonzero(mask_bool, as_tuple=False).view(-1)
-        idx_B = torch.nonzero(~mask_bool, as_tuple=False).view(-1)
+        idx_B = torch.nonzero(mask_bool, as_tuple=False).view(-1)      # transformed
+        idx_A = torch.nonzero(~mask_bool, as_tuple=False).view(-1)     # identity / conditioner
         self.register_buffer("idx_A", idx_A.long())
         self.register_buffer("idx_B", idx_B.long())
-
-        self.nA = int(mask_bool.sum().item())
-        self.nB = D - self.nA
+        
+        self.nB = int(mask_bool.sum().item())
+        self.nA = D - self.nB
+        
+        # Optional but useful sanity checks:
+        assert in_features == self.nA, f"Expected in_features={self.nA}, got {in_features}"
         assert out_features == 2 * self.nB, "Affine coupling expects 2*nB outputs."
 
         mask_img = mask_flat.view(C, H, W)
