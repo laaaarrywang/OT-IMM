@@ -503,7 +503,7 @@ def create_vector_flow(
         vector_layers=mlp_blocks,
         vector_activation=activation,
         vector_layernorm=use_layernorm,
-    )
+    ).double()
 
 
 def create_mnist_flow(
@@ -537,7 +537,7 @@ def create_mnist_flow(
             img_num_blocks=img_blocks,
             img_groups=img_groups,
             img_log_scale_clamp=img_log_scale_clamp,
-        )
+        ).double()
     else:
         return create_vector_flow(
             28 * 28,
@@ -573,7 +573,7 @@ def create_cifar10_flow(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,
-    )
+    ).double()
 
 
 def create_imagenet_flow(
@@ -599,7 +599,7 @@ def create_imagenet_flow(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,
-    )
+    ).double()
 
 
 def create_image_flow(
@@ -625,4 +625,69 @@ def create_image_flow(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,
-    )
+    ).double()
+
+# Create a numerically stable ImageNet flow variant
+def create_imagenet_flow_stable(
+    *,
+    resolution: int = 224,
+    num_layers: int = 4,          # Fewer layers to reduce error accumulation  
+    time_embed_dim: int = 256,
+    img_base_channels: int = 128,
+    img_blocks: int = 3,
+    img_groups: int = 32,
+    img_log_scale_clamp: float = 5.0,  # REDUCED from 10.0 to 5.0
+    use_permutation: bool = True,
+) -> TimeIndexedRealNVP:
+    """
+    Numerically stable ImageNet flow with:
+    - Reduced log_scale_clamp for better reversibility
+    - Fewer coupling layers to minimize error accumulation
+    - Conservative architecture for numerical stability
+    """
+    flow = TimeIndexedRealNVP(
+        shape=(3, resolution, resolution),
+        num_layers=num_layers,
+        time_embed_dim=time_embed_dim,
+        use_permutation=use_permutation,
+        img_base_channels=img_base_channels,
+        img_num_blocks=img_blocks,
+        img_groups=img_groups,
+        img_log_scale_clamp=img_log_scale_clamp,  # Key change: 5.0 instead of 10.0
+    ).double()
+    
+    # Replace with more stable time embedding
+    flow.time_embed = FourierTimeEmbedding(
+        embed_dim=time_embed_dim, 
+        min_freq=1.0, 
+        max_freq=50.0  # Reduced from 1000 to 50
+    ).double()
+    
+    return flow
+
+# Double precision variant
+def create_imagenet_flow_fp64(
+    *,
+    resolution: int = 224,
+    num_layers: int = 6,
+    time_embed_dim: int = 512,
+    img_base_channels: int = 256,
+    img_blocks: int = 4,
+    img_groups: int = 32,
+    img_log_scale_clamp: float = 10.0,
+    use_permutation: bool = True,
+) -> TimeIndexedRealNVP:
+    """
+    Double precision ImageNet flow for maximum numerical accuracy.
+    Use this when you need the best possible log-determinant consistency.
+    """
+    return TimeIndexedRealNVP(
+        shape=(3, resolution, resolution),
+        num_layers=num_layers,
+        time_embed_dim=time_embed_dim,
+        use_permutation=use_permutation,
+        img_base_channels=img_base_channels,
+        img_num_blocks=img_blocks,
+        img_groups=img_groups,
+        img_log_scale_clamp=img_log_scale_clamp,
+    ).double()  # Convert to float64
