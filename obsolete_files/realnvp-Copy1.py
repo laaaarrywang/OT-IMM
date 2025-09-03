@@ -12,7 +12,37 @@ import torch.nn.functional as F
 from nflows import transforms
 from nflows.nn import nets
 
-class TimeEmbedding():
+
+class FourierTimeEmbedding(nn.Module):
+    """
+    Creates smooth, differentiable time embeddings using Fourier features.
+    Maps t \in [0,1] to high-dimensional representation for conditioning.
+    """
+    def __init__(self, embed_dim=128, min_freq=1.0, max_freq=1000.0):
+        super().__init__()
+        assert embed_dim % 2 == 0, "embed_dim must be even for sin/cos pairs"
+        
+        n_freqs = embed_dim // 2
+        # Geometric progression of frequencies for multi-scale representation
+        freqs = torch.exp(torch.linspace(
+            math.log(min_freq), 
+            math.log(max_freq), 
+            n_freqs
+        ))
+        self.register_buffer("freqs", freqs)
+    
+    def forward(self, t):
+        """
+        Args:
+            t: [B] tensor with values in [0,1]
+        Returns:
+            [B, embed_dim] time embeddings
+        """
+        t = t.view(-1, 1) # [B] --> [B,1] 
+        # Phase = 2π * t * frequency
+        phases = 2.0 * math.pi * t * self.freqs[None, :] # [None, : ] adds a dimension for broadcasting
+        # Concatenate sin and cos for each frequency
+        return torch.cat([torch.sin(phases), torch.cos(phases)], dim=-1)
 
 
 def create_coupling_mask(shape, mask_type = 'alternating', **kwargs):
