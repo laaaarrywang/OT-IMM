@@ -1,0 +1,158 @@
+Device: cuda
+
+=== VECTOR FLOW ===
+Params: 3,499,200 (27.99 MB)
+
+[vector(32)] Invertibility check
+  ||x_rec - x||_2    : mean 3.780e-16 | max 6.504e-16
+  ||x_rec - x||_inf  : mean 2.637e-16 | max 4.441e-16
+  rel L2 error       : mean 7.216e-17 | max 1.144e-16
+  |logdet + logdet^-1|: mean 1.110e-15 | max 3.553e-15
+  PASS: True
+
+[vector(32)] Differentiability in time: autograd vs finite-difference
+  Dimension: 32
+  Total grad stats: mean 2.419e+00 | std 7.577e+01
+  Per-elem grad:    mean 7.561e-02 | std 2.368e+00
+  eps=1.0e-01 | total_err 5.731e+01 | per_elem_err 1.791e+00 | rel_err 9.958e-01
+  eps=3.0e-02 | total_err 5.777e+01 | per_elem_err 1.805e+00 | rel_err 9.805e-01
+  eps=1.0e-02 | total_err 5.624e+01 | per_elem_err 1.757e+00 | rel_err 9.656e-01
+  eps=3.0e-03 | total_err 6.036e+01 | per_elem_err 1.886e+00 | rel_err 1.199e+00
+  eps=1.0e-03 | total_err 6.608e+01 | per_elem_err 2.065e+00 | rel_err 1.562e+00
+
+[vector(32)] Differentiability in input: autograd vs finite-difference
+  Input shape: torch.Size([8, 32])
+  Total dimensions: 32
+  Grad stats: mean 6.950e-01 | std 1.127e-01
+  Grad magnitude: mean |∇x| 6.950e-01
+  eps=1.0e-03 | abs_err 1.527e-06 | rel_err 1.682e-06
+  eps=3.0e-04 | abs_err 4.582e-07 | rel_err 5.046e-07
+  eps=1.0e-04 | abs_err 1.527e-07 | rel_err 1.682e-07
+  eps=3.0e-05 | abs_err 4.559e-08 | rel_err 5.021e-08
+  eps=1.0e-05 | abs_err 1.480e-08 | rel_err 1.630e-08
+
+=== MNIST-LIKE IMAGE FLOW ===
+Params: 3,463,500 (27.71 MB)
+
+[MNIST (1x28x28)] Invertibility check
+  ||x_rec - x||_2    : mean 3.810e-14 | max 3.948e-14
+  ||x_rec - x||_inf  : mean 6.273e-15 | max 6.661e-15
+  rel L2 error       : mean 1.356e-15 | max 1.406e-15
+  |logdet + logdet^-1|: mean 5.684e-14 | max 5.684e-14
+  PASS: True
+
+[MNIST (1x28x28)] Differentiability in time: autograd vs finite-difference
+  Dimension: 784
+  Total grad stats: mean 1.134e+05 | std 3.800e+05
+  Per-elem grad:    mean 1.446e+02 | std 4.846e+02
+  eps=1.0e-01 | total_err 3.125e+05 | per_elem_err 3.986e+02 | rel_err 9.951e-01
+  eps=3.0e-02 | total_err 3.077e+05 | per_elem_err 3.925e+02 | rel_err 9.666e-01
+  eps=1.0e-02 | total_err 3.059e+05 | per_elem_err 3.902e+02 | rel_err 9.585e-01
+  eps=3.0e-03 | total_err 2.881e+05 | per_elem_err 3.674e+02 | rel_err 9.530e-01
+  eps=1.0e-03 | total_err 3.040e+05 | per_elem_err 3.877e+02 | rel_err 8.418e-01
+
+[MNIST (1x28x28)] Differentiability in input: autograd vs finite-difference
+  Input shape: torch.Size([4, 1, 28, 28])
+  Total dimensions: 784
+  Grad stats: mean 1.098e+00 | std 4.742e-01
+  Grad magnitude: mean |∇x| 1.099e+00
+  eps=1.0e-03 | abs_err 1.335e-04 | rel_err 4.826e-03
+  eps=3.0e-04 | abs_err 4.005e-05 | rel_err 1.448e-03
+  eps=1.0e-04 | abs_err 1.335e-05 | rel_err 4.826e-04
+  eps=3.0e-05 | abs_err 4.005e-06 | rel_err 1.447e-04
+  eps=1.0e-05 | abs_err 1.382e-06 | rel_err 4.996e-05
+
+=== CIFAR-10 IMAGE FLOW ===
+Params: 10,611,760 (84.89 MB)
+
+[CIFAR (3x32x32)] Invertibility check
+  ||x_rec - x||_2    : mean 1.498e-13 | max 1.642e-13
+  ||x_rec - x||_inf  : mean 1.227e-14 | max 1.488e-14
+  rel L2 error       : mean 2.690e-15 | max 2.956e-15
+  |logdet + logdet^-1|: mean 1.137e-13 | max 2.274e-13
+  PASS: True
+
+[CIFAR (3x32x32)] Differentiability in time: autograd vs finite-difference
+  Dimension: 3,072
+  Total grad stats: mean -8.764e+05 | std 1.458e+06
+  Per-elem grad:    mean -2.853e+02 | std 4.747e+02
+  eps=1.0e-01 | total_err 1.521e+06 | per_elem_err 4.953e+02 | rel_err 9.971e-01
+  eps=3.0e-02 | total_err 1.507e+06 | per_elem_err 4.905e+02 | rel_err 9.880e-01
+  eps=1.0e-02 | total_err 1.513e+06 | per_elem_err 4.926e+02 | rel_err 9.915e-01
+  eps=3.0e-03 | total_err 1.492e+06 | per_elem_err 4.855e+02 | rel_err 9.833e-01
+  eps=1.0e-03 | total_err 1.398e+06 | per_elem_err 4.549e+02 | rel_err 9.129e-01
+
+[CIFAR (3x32x32)] Differentiability in input: autograd vs finite-difference
+  Input shape: torch.Size([4, 3, 32, 32])
+  Total dimensions: 3,072
+  Grad stats: mean 5.105e-01 | std 4.129e-01
+  Grad magnitude: mean |∇x| 5.522e-01
+  eps=1.0e-03 | abs_err 1.935e-05 | rel_err 8.885e-06
+  eps=3.0e-04 | abs_err 5.805e-06 | rel_err 2.665e-06
+  eps=1.0e-04 | abs_err 1.939e-06 | rel_err 8.902e-07
+  eps=3.0e-05 | abs_err 5.674e-07 | rel_err 2.605e-07
+  eps=1.0e-05 | abs_err 1.657e-07 | rel_err 7.606e-08
+
+=== IMAGENET-LIKE IMAGE FLOW ===
+Params: 26,128,932 (209.03 MB)
+
+[ImageNet (3x128x128)] Invertibility check
+  ||x_rec - x||_2    : mean 5.218e-13 | max 5.490e-13
+  ||x_rec - x||_inf  : mean 1.636e-14 | max 1.815e-14
+  rel L2 error       : mean 2.351e-15 | max 2.477e-15
+  |logdet + logdet^-1|: mean 1.819e-12 | max 3.638e-12
+  PASS: True
+
+[ImageNet (3x128x128)] Differentiability in time: autograd vs finite-difference
+  Dimension: 49,152
+  Total grad stats: mean -9.764e+06 | std 1.003e+07
+  Per-elem grad:    mean -1.986e+02 | std 2.040e+02
+  eps=1.0e-01 | total_err 1.237e+07 | per_elem_err 2.516e+02 | rel_err 1.011e+00
+  eps=3.0e-02 | total_err 1.236e+07 | per_elem_err 2.514e+02 | rel_err 1.009e+00
+  eps=1.0e-02 | total_err 1.286e+07 | per_elem_err 2.617e+02 | rel_err 1.018e+00
+  eps=3.0e-03 | total_err 1.395e+07 | per_elem_err 2.837e+02 | rel_err 1.083e+00
+  eps=1.0e-03 | total_err 1.556e+07 | per_elem_err 3.166e+02 | rel_err 1.138e+00
+
+[ImageNet (3x128x128)] Differentiability in input: autograd vs finite-difference
+  Input shape: torch.Size([4, 3, 128, 128])
+  Total dimensions: 49,152
+  Grad stats: mean 8.169e-01 | std 3.538e-01
+  Grad magnitude: mean |∇x| 8.172e-01
+  eps=1.0e-03 | abs_err 3.122e-05 | rel_err 4.924e-05
+  eps=3.0e-04 | abs_err 9.380e-06 | rel_err 1.480e-05
+  eps=1.0e-04 | abs_err 3.196e-06 | rel_err 5.041e-06
+  eps=3.0e-05 | abs_err 1.231e-06 | rel_err 1.942e-06
+  eps=1.0e-05 | abs_err 1.231e-06 | rel_err 1.942e-06
+
+=== FULL IMAGENET FLOW ===
+Params: 5,830,168 (46.64 MB)
+
+[ImageNet (3x224x224)] Invertibility check
+  ||x_rec - x||_2    : mean 5.292e-13 | max 5.528e-13
+  ||x_rec - x||_inf  : mean 8.896e-15 | max 9.326e-15
+  rel L2 error       : mean 1.364e-15 | max 1.427e-15
+  |logdet + logdet^-1|: mean 2.425e-12 | max 7.276e-12
+  PASS: True
+
+[ImageNet (3x224x224)] Differentiability in time: autograd vs finite-difference
+  Dimension: 150,528
+  Total grad stats: mean -5.193e+06 | std 2.549e+07
+  Per-elem grad:    mean -3.450e+01 | std 1.693e+02
+  eps=1.0e-01 | total_err 2.042e+07 | per_elem_err 1.356e+02 | rel_err 1.005e+00
+  eps=3.0e-02 | total_err 2.040e+07 | per_elem_err 1.355e+02 | rel_err 1.003e+00
+  eps=1.0e-02 | total_err 1.983e+07 | per_elem_err 1.317e+02 | rel_err 9.795e-01
+  eps=3.0e-03 | total_err 1.662e+07 | per_elem_err 1.104e+02 | rel_err 7.899e-01
+  eps=1.0e-03 | total_err 2.980e+07 | per_elem_err 1.980e+02 | rel_err 1.540e+00
+
+[ImageNet (3x224x224)] Differentiability in input: autograd vs finite-difference
+  Input shape: torch.Size([6, 3, 224, 224])
+  Total dimensions: 150,528
+  Grad stats: mean 7.962e-01 | std 4.242e-01
+  Grad magnitude: mean |∇x| 8.008e-01
+  eps=1.0e-03 | abs_err 2.527e-05 | rel_err 3.901e-05
+  eps=3.0e-04 | abs_err 7.614e-06 | rel_err 1.176e-05
+  eps=1.0e-04 | abs_err 2.376e-06 | rel_err 3.668e-06
+  eps=3.0e-05 | abs_err 2.413e-07 | rel_err 3.726e-07
+  eps=1.0e-05 | abs_err 2.437e-07 | rel_err 3.763e-07
+
+All checks done.
