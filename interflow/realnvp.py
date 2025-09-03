@@ -665,29 +665,4 @@ def create_imagenet_flow_stable(
     
     return flow
 
-# Double precision variant
-def create_imagenet_flow_fp64(
-    *,
-    resolution: int = 224,
-    num_layers: int = 6,
-    time_embed_dim: int = 512,
-    img_base_channels: int = 256,
-    img_blocks: int = 4,
-    img_groups: int = 32,
-    img_log_scale_clamp: float = 10.0,
-    use_permutation: bool = True,
-) -> TimeIndexedRealNVP:
-    """
-    Double precision ImageNet flow for maximum numerical accuracy.
-    Use this when you need the best possible log-determinant consistency.
-    """
-    return TimeIndexedRealNVP(
-        shape=(3, resolution, resolution),
-        num_layers=num_layers,
-        time_embed_dim=time_embed_dim,
-        use_permutation=use_permutation,
-        img_base_channels=img_base_channels,
-        img_num_blocks=img_blocks,
-        img_groups=img_groups,
-        img_log_scale_clamp=img_log_scale_clamp,
-    ).double()  # Convert to float64
+
