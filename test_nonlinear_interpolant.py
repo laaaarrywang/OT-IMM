@@ -36,14 +36,14 @@ def test_nonlinear_interpolant():
             # At t=0, for linear coefficients a(0)=1, b(0)=0
             # So T_0(T_0^{-1}(x0)) should be close to x0
             diff = (y - x0).abs().max()
-            print(f"    Boundary check at t=0: max diff = {diff:.6f}")
+            print(f"    Boundary check at t=0: max diff = {diff:.15f}")
             assert diff < 1e-3, f"Boundary condition failed at t=0: {diff}"
             
         elif t_val == 1.0:
             # At t=1, for linear coefficients a(1)=0, b(1)=1
             # So T_1(T_1^{-1}(x1)) should be close to x1
             diff = (y - x1).abs().max()
-            print(f"    Boundary check at t=1: max diff = {diff:.6f}")
+            print(f"    Boundary check at t=1: max diff = {diff:.15f}")
             assert diff < 1e-3, f"Boundary condition failed at t=1: {diff}"
     
     # Test 2: Time derivative

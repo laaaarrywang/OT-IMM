@@ -18,10 +18,14 @@ class InputWrapper(torch.nn.Module):
         x: torch.tensor   # [batch x dim]
     ) -> torch.tensor:    # [batch x (1 + dim)]
         """Concatenate time over the batch dimension."""
+        # Ensure t matches x's dtype and device
+        t = t.to(dtype=x.dtype, device=x.device)
         inp = torch.cat((t.repeat(x.shape[0]).unsqueeze(1), x), dim = 1)
         return inp
     
     def forward(self, x, t):
+        # Ensure wrapped module matches x's dtype/device
+        self.v.to(x)
         tx = self.net_inp(t,x)
         return self.v(tx)
 
@@ -153,7 +157,7 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
         else:
             raise ValueError(f"Unknown data_type: {data_type}")
 
-        def It(t, x0, x1):
+        def It_method(self, t, x0, x1):
             if not isinstance(t, torch.Tensor):
                 t = torch.tensor(t, dtype = x0.dtype, device = x0.device)
             if t.dim() == 0:
@@ -173,8 +177,8 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
             t_1 = torch.ones_like(t_expanded, dtype = x1.dtype, device = x1.device)
             
             # Apply inverse flow to get z0 and z1
-            z0, _  = flow_model(x0, t_0, inverse=True) # T_0^{-1}(x0)
-            z1, _  = flow_model(x1, t_1, inverse=True) # T_1^{-1}(x1)
+            z0, _  = self(x0, t_0, inverse=True) # T_0^{-1}(x0)
+            z1, _  = self(x1, t_1, inverse=True) # T_1^{-1}(x1)
 
             # Step 2: Linear combination in latent space
             a_t = a(t)  # Coefficient at time t
@@ -203,10 +207,10 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
             z_interp = a_t * z0 + b_t * z1
 
             # Step 3: Apply forward flow at time t
-            y, _ = flow_model(z_interp, t_expanded, inverse=False)  # T_t(z_interp)
+            y, _ = self(z_interp, t_expanded, inverse=False)  # T_t(z_interp)
 
             return y 
-        def dtIt(t, x0, x1):
+        def dtIt_method(self, t, x0, x1):
           """
           Time derivative of nonlinear interpolation.
           
@@ -234,8 +238,8 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
           t_0 = torch.zeros(B, dtype=x0.dtype, device=x0.device)
           t_1 = torch.ones(B, dtype=x1.dtype, device=x1.device)
 
-          z0, _ = flow_model(x0, t_0, inverse=True)  # T_0^{-1}(x0)
-          z1, _ = flow_model(x1, t_1, inverse=True)  # T_1^{-1}(x1)
+          z0, _ = self(x0, t_0, inverse=True)  # T_0^{-1}(x0)
+          z1, _ = self(x1, t_1, inverse=True)  # T_1^{-1}(x1)
 
           # Compute coefficients and their derivatives
           a_t = a(t)
@@ -272,7 +276,7 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
           z_interp = a_t * z0 + b_t * z1
 
           # Compute T_t(z_interp) with gradient tracking
-          y, _ = flow_model(z_interp, t_expanded, inverse=False)
+          y, _ = self(z_interp, t_expanded, inverse=False)
 
           # Compute total derivative using autograd
           # This captures both ∂T_t/∂t and the chain rule through z_interp
@@ -311,6 +315,8 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
               y_plus = It(t_plus, x0, x1)
               y_minus = It(t_minus, x0, x1)
               return (y_plus - y_minus) / (t_plus - t_minus)
+        flow_model.It = It_method.__get__(flow_model, flow_model.__class__)
+        flow_model.dtIt = dtIt_method.__get__(flow_model, flow_model.__class__)
         
     elif path == 'custom':
         return None, None, None
@@ -319,7 +325,7 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
         raise NotImplementedError("The interpolant you specified is not implemented.")
 
     
-    return It, dtIt, (a, adot, b, bdot)
+    return flow_model.It, flow_model.dtIt, (a, adot, b, bdot), flow_model
 
 
 def make_gamma(gamma_type = 'brownian', aval = None):
