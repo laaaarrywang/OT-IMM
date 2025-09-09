@@ -188,7 +188,7 @@ def test_vector_differentiability(device="cpu"):
     from realnvp import create_vector_flow
     
     model = create_vector_flow(dim=8).to(device)  # Small for Jacobian test
-    x = torch.randn(4, 8, device=device, dtype=torch.float64)
+    x = torch.randn(4, 8, device=device, dtype=torch.float32)
     
     run_comprehensive_differentiability_tests(model, x, "Vector (8D)")
 
@@ -197,7 +197,7 @@ def test_mnist_differentiability(device="cpu"):
     from realnvp import create_mnist_flow
     
     model = create_mnist_flow().to(device)
-    x = torch.randn(2, 1, 28, 28, device=device, dtype=torch.float64)
+    x = torch.randn(2, 1, 28, 28, device=device, dtype=torch.float32)
     
     # Only test grad w.r.t. t and x (skip Jacobian for 784D)
     check_differentiability_t(model, x, "MNIST (784D)")

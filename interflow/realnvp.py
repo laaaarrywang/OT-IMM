@@ -503,7 +503,7 @@ def create_vector_flow(
         vector_layers=mlp_blocks,
         vector_activation=activation,
         vector_layernorm=use_layernorm,
-    ).double()
+    )
 
 
 def create_mnist_flow(
@@ -537,7 +537,7 @@ def create_mnist_flow(
             img_num_blocks=img_blocks,
             img_groups=img_groups,
             img_log_scale_clamp=img_log_scale_clamp,
-        ).double()
+        )
     else:
         return create_vector_flow(
             28 * 28,
@@ -573,7 +573,7 @@ def create_cifar10_flow(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,
-    ).double()
+    )
 
 
 def create_imagenet_flow(
@@ -599,7 +599,7 @@ def create_imagenet_flow(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,
-    ).double()
+    )
 
 
 def create_image_flow(
@@ -625,7 +625,7 @@ def create_image_flow(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,
-    ).double()
+    )
 
 # Create a numerically stable ImageNet flow variant
 def create_imagenet_flow_stable(
@@ -654,14 +654,14 @@ def create_imagenet_flow_stable(
         img_num_blocks=img_blocks,
         img_groups=img_groups,
         img_log_scale_clamp=img_log_scale_clamp,  # Key change: 5.0 instead of 10.0
-    ).double()
+    )
     
     # Replace with more stable time embedding
     flow.time_embed = FourierTimeEmbedding(
         embed_dim=time_embed_dim, 
         min_freq=1.0, 
         max_freq=50.0  # Reduced from 1000 to 50
-    ).double()
+    )
     
     return flow
 

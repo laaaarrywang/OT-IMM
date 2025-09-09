@@ -14,8 +14,8 @@ def test_nonlinear_interpolant():
     batch_size = 4
 
     # Create test data
-    x0 = torch.randn(batch_size, dim, dtype=torch.float64)
-    x1 = torch.randn(batch_size, dim, dtype=torch.float64)
+    x0 = torch.randn(batch_size, dim, dtype=torch.float32)
+    x1 = torch.randn(batch_size, dim, dtype=torch.float32)
 
     # Create interpolant
     It, dtIt, coeffs = fabrics.make_It(
@@ -27,7 +27,7 @@ def test_nonlinear_interpolant():
 
     # Test at different time points
     for t_val in [0.0, 0.25, 0.5, 0.75, 1.0]:
-        t = torch.tensor(t_val, dtype=torch.float64)
+        t = torch.tensor(t_val, dtype=torch.float32)
 
         # Compute interpolation
         y = It(t, x0, x1)
@@ -46,7 +46,7 @@ def test_nonlinear_interpolant():
 
     # Test time derivative
     print("\n  Testing time derivative...")
-    t = torch.tensor(0.5, dtype=torch.float64)
+    t = torch.tensor(0.5, dtype=torch.float32)
     dy_dt = dtIt(t, x0, x1)
     print(f"  dtIt shape: {dy_dt.shape}, mean={dy_dt.mean():.4f}, std={dy_dt.std():.4f}")
 
@@ -55,8 +55,8 @@ def test_nonlinear_interpolant():
     print("Testing MNIST DATA (1x28x28)...")
     print("="*60)
     batch_size = 2
-    x0_mnist = torch.randn(batch_size, 1, 28, 28, dtype=torch.float64)
-    x1_mnist = torch.randn(batch_size, 1, 28, 28, dtype=torch.float64)
+    x0_mnist = torch.randn(batch_size, 1, 28, 28, dtype=torch.float32)
+    x1_mnist = torch.randn(batch_size, 1, 28, 28, dtype=torch.float32)
 
     It_mnist, dtIt_mnist, _ = fabrics.make_It(
         path='nonlinear',
@@ -65,7 +65,7 @@ def test_nonlinear_interpolant():
     )
 
     for t_val in [0.0, 0.25, 0.5, 0.75, 1.0]:
-        t = torch.tensor(t_val, dtype=torch.float64)
+        t = torch.tensor(t_val, dtype=torch.float32)
         y_mnist = It_mnist(t, x0_mnist, x1_mnist)
         print(f"  t={t_val}: shape={y_mnist.shape}, mean={y_mnist.mean():.4f}, std={y_mnist.std():.4f}")
         
@@ -80,7 +80,7 @@ def test_nonlinear_interpolant():
             assert diff < 1e-3, f"Boundary condition failed at t=1: {diff}"
 
     print("\n  Testing time derivative...")
-    t = torch.tensor(0.5, dtype=torch.float64)
+    t = torch.tensor(0.5, dtype=torch.float32)
     dy_dt_mnist = dtIt_mnist(t, x0_mnist, x1_mnist)
     print(f"  dtIt shape: {dy_dt_mnist.shape}, mean={dy_dt_mnist.mean():.4f}, std={dy_dt_mnist.std():.4f}")
 
@@ -89,8 +89,8 @@ def test_nonlinear_interpolant():
     print("Testing CIFAR-10 DATA (3x32x32)...")
     print("="*60)
     batch_size = 2
-    x0_cifar = torch.randn(batch_size, 3, 32, 32, dtype=torch.float64)
-    x1_cifar = torch.randn(batch_size, 3, 32, 32, dtype=torch.float64)
+    x0_cifar = torch.randn(batch_size, 3, 32, 32, dtype=torch.float32)
+    x1_cifar = torch.randn(batch_size, 3, 32, 32, dtype=torch.float32)
 
     It_cifar, dtIt_cifar, _ = fabrics.make_It(
         path='nonlinear',
@@ -99,7 +99,7 @@ def test_nonlinear_interpolant():
     )
 
     for t_val in [0.0, 0.25, 0.5, 0.75, 1.0]:
-        t = torch.tensor(t_val, dtype=torch.float64)
+        t = torch.tensor(t_val, dtype=torch.float32)
         y_cifar = It_cifar(t, x0_cifar, x1_cifar)
         print(f"  t={t_val}: shape={y_cifar.shape}, mean={y_cifar.mean():.4f}, std={y_cifar.std():.4f}")
         
@@ -114,7 +114,7 @@ def test_nonlinear_interpolant():
             assert diff < 1e-3, f"Boundary condition failed at t=1: {diff}"
 
     print("\n  Testing time derivative...")
-    t = torch.tensor(0.5, dtype=torch.float64)
+    t = torch.tensor(0.5, dtype=torch.float32)
     dy_dt_cifar = dtIt_cifar(t, x0_cifar, x1_cifar)
     print(f"  dtIt shape: {dy_dt_cifar.shape}, mean={dy_dt_cifar.mean():.4f}, std={dy_dt_cifar.std():.4f}")
 
@@ -123,8 +123,8 @@ def test_nonlinear_interpolant():
     print("Testing IMAGENET 128x128 DATA...")
     print("="*60)
     batch_size = 2
-    x0_img128 = torch.randn(batch_size, 3, 128, 128, dtype=torch.float64)
-    x1_img128 = torch.randn(batch_size, 3, 128, 128, dtype=torch.float64)
+    x0_img128 = torch.randn(batch_size, 3, 128, 128, dtype=torch.float32)
+    x1_img128 = torch.randn(batch_size, 3, 128, 128, dtype=torch.float32)
 
     It_img128, dtIt_img128, _ = fabrics.make_It(
         path='nonlinear',
@@ -134,7 +134,7 @@ def test_nonlinear_interpolant():
     )
 
     for t_val in [0.0, 0.25, 0.5, 0.75, 1.0]:
-        t = torch.tensor(t_val, dtype=torch.float64)
+        t = torch.tensor(t_val, dtype=torch.float32)
         y_img128 = It_img128(t, x0_img128, x1_img128)
         print(f"  t={t_val}: shape={y_img128.shape}, mean={y_img128.mean():.4f}, std={y_img128.std():.4f}")
         
@@ -149,7 +149,7 @@ def test_nonlinear_interpolant():
             assert diff < 1e-3, f"Boundary condition failed at t=1: {diff}"
 
     print("\n  Testing time derivative...")
-    t = torch.tensor(0.5, dtype=torch.float64)
+    t = torch.tensor(0.5, dtype=torch.float32)
     dy_dt_img128 = dtIt_img128(t, x0_img128, x1_img128)
     print(f"  dtIt shape: {dy_dt_img128.shape}, mean={dy_dt_img128.mean():.4f}, std={dy_dt_img128.std():.4f}")
 
@@ -158,8 +158,8 @@ def test_nonlinear_interpolant():
     print("Testing IMAGENET 224x224 DATA (stable version)...")
     print("="*60)
     batch_size = 2  # Full batch size for powerful machines
-    x0_img224 = torch.randn(batch_size, 3, 224, 224, dtype=torch.float64)
-    x1_img224 = torch.randn(batch_size, 3, 224, 224, dtype=torch.float64)
+    x0_img224 = torch.randn(batch_size, 3, 224, 224, dtype=torch.float32)
+    x1_img224 = torch.randn(batch_size, 3, 224, 224, dtype=torch.float32)
 
     It_img224, dtIt_img224, _ = fabrics.make_It(
         path='nonlinear',
@@ -168,7 +168,7 @@ def test_nonlinear_interpolant():
     )
 
     for t_val in [0.0, 0.25, 0.5, 0.75, 1.0]:
-        t = torch.tensor(t_val, dtype=torch.float64)
+        t = torch.tensor(t_val, dtype=torch.float32)
         y_img224 = It_img224(t, x0_img224, x1_img224)
         print(f"  t={t_val}: shape={y_img224.shape}, mean={y_img224.mean():.4f}, std={y_img224.std():.4f}")
         
@@ -183,7 +183,7 @@ def test_nonlinear_interpolant():
             assert diff < 1e-3, f"Boundary condition failed at t=1: {diff}"
 
     print("\n  Testing time derivative...")
-    t = torch.tensor(0.5, dtype=torch.float64)
+    t = torch.tensor(0.5, dtype=torch.float32)
     dy_dt_img224 = dtIt_img224(t, x0_img224, x1_img224)
     print(f"  dtIt shape: {dy_dt_img224.shape}, mean={dy_dt_img224.mean():.4f}, std={dy_dt_img224.std():.4f}")
 
