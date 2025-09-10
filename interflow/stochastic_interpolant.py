@@ -109,6 +109,7 @@ class Interpolant(torch.nn.Module):
             self.gamma, self.gamma_dot, self.gg_dot = fabrics.make_gamma(gamma_type=gamma_type) # create gamma functions from presets
         else:
             self.gamma, self.gamma_dot, self.gg_dot = gamma, gamma_dot, gg_dot # use provided gamma functions
+            
         if self.path == 'custom': # for custom paths, the user must provide both the interpolation and its derivative
             ## consider modify here to support nonlinear interpolant ##
             print('Assuming interpolant was passed in directly...')
@@ -116,10 +117,9 @@ class Interpolant(torch.nn.Module):
             self.dtIt = dtIt
             assert self.It != None
             assert self.dtIt != None
- 
-
-        self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
-        self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
+        else:
+            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
+            self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         
 
     def calc_xt(self, t: Time, x0: Sample, x1: Sample):

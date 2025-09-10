@@ -253,64 +253,27 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
             
             # Expand coefficients to match data shape
             if data_type == 'vector':
-              a_t = a_t.view(-1, 1).expand(B, -1)
-              b_t = b_t.view(-1, 1).expand(B, -1)
-              adot_t = adot_t.view(-1, 1).expand(B, -1)
-              bdot_t = bdot_t.view(-1, 1).expand(B, -1)
-              if a_t.shape[1] == 1:
-                  a_t = a_t.expand_as(z0)
-                  b_t = b_t.expand_as(z1)
-                  adot_t = adot_t.expand_as(z0)
-                  bdot_t = bdot_t.expand_as(z1)
+                a_t = a_t.view(-1, 1).expand(B, -1)
+                b_t = b_t.view(-1, 1).expand(B, -1)
+                adot_t = adot_t.view(-1, 1).expand(B, -1)
+                bdot_t = bdot_t.view(-1, 1).expand(B, -1)
+                if a_t.shape[1] == 1:
+                    a_t = a_t.expand_as(z0)
+                    b_t = b_t.expand_as(z1)
+                    adot_t = adot_t.expand_as(z0)
+                    bdot_t = bdot_t.expand_as(z1)
             else:  # Image data
-              for coef in [a_t, b_t, adot_t, bdot_t]:
-                  while coef.dim() < z0.dim():
-                      coef = coef.unsqueeze(-1)
-              a_t = a_t.expand_as(z0)
-              b_t = b_t.expand_as(z1)
-              adot_t = adot_t.expand_as(z0)
-              bdot_t = bdot_t.expand_as(z1)
+                for coef in [a_t, b_t, adot_t, bdot_t]:
+                    while coef.dim() < z0.dim():
+                        coef = coef.unsqueeze(-1)
+                a_t = a_t.expand_as(z0)
+                b_t = b_t.expand_as(z1)
+                adot_t = adot_t.expand_as(z0)
+                bdot_t = bdot_t.expand_as(z1)
             
             # Interpolated latent point
             z_interp = a_t * z0 + b_t * z1
             
-            # # Compute T_t(z_interp) with gradient tracking
-            # y, _ = self(z_interp, t_expanded, inverse=False)
-            
-            # # Compute total derivative using autograd
-            # # This captures both ∂T_t/∂t and the chain rule through z_interp
-            # dt_contribution = adot_t * z0 + bdot_t * z1
-            
-            # # We need to compute the Jacobian-vector product
-            # # For efficiency, we'll use autograd to compute d/dt[T_t(z_t)]
-            # if t.requires_grad:
-            #     # Compute gradient w.r.t. t
-            #     grad_outputs = torch.ones_like(y)
-            #     grads = torch.autograd.grad(
-            #         outputs=y,
-            #         inputs=[t, z_interp],
-            #         grad_outputs=grad_outputs,
-            #         create_graph=True,
-            #         allow_unused=True
-            #     )
-            
-            #     if grads[0] is not None:  # ∂T_t/∂t term
-            #         dt_direct = grads[0].expand_as(y)
-            #     else:
-            #         dt_direct = torch.zeros_like(y)
-            
-            #     if grads[1] is not None:  # ∂T_t/∂z term  
-            #         #dz_term = (grads[1] * dt_contribution).sum(dim=tuple(range(1,grads[1].dim())), keepdim=True)
-            #         #dz_term = dz_term.expand_as(y)
-            #         # *** can be optimized since we don't actually need grads[1]
-            #         def F(z):
-            #             out, _ = self(z, t_expanded, inverse=False)  # shape like y
-            #             return out
-            #         _, dz_term = jvp(F, (z_interp,), (dt_contribution,), create_graph=True)
-            #     else:
-            #         dz_term = torch.zeros_like(y)
-            
-            #     return dt_direct + dz_term
             # Define forward at time t
             def F(z, tt):
                 out, _ = self(z, tt, inverse=False)
