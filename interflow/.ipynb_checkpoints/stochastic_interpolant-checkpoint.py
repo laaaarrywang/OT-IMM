@@ -654,10 +654,14 @@ def loss_per_sample_one_sided_v(
     t: torch.tensor,
     interpolant: Interpolant
 ) -> torch.tensor:
-    """Compute the loss on an individual sample."""
+    """Compute the loss on an individual sample.
+       Modified to adapt to nonlinear stochastic interpolants
+    """
+    x0    = x0.unsqueeze(0)
+    x1    = x1.unsqueeze(0)
     xt    = interpolant.calc_xt(t, x0, x1)
-    # xt already has batch dim [B, dim]; keep t as [1]
-    t = t.unsqueeze(0)
+    # xt already has batch dim [B, dim]
+    #t = t.unsqueeze(0), no need to do this since It_method and dtIt_method will check dimension of t
     dtIt  = interpolant.dtIt(t, x0, x1)
     vt = v(xt, t)
     loss  = 0.5*torch.sum(vt**2) - torch.sum((dtIt) * vt)
@@ -725,39 +729,44 @@ def loss_per_sample_mirror(
 def make_batch_loss(loss_per_sample: Callable, method: str ='shared') -> Callable:
     """Convert a sample loss into a batched loss."""
     if method == 'shared':
-        def wrapper_loss(bvseta, x0, x1, t, interpolant):
-            # vmap gives us individual samples, but interpolant expects batch dims
-            # Add batch dimension of 1 for interpolant methods
-            x0_batched = x0.unsqueeze(0)  # [dim] -> [1, dim]
-            x1_batched = x1.unsqueeze(0)  # [dim] -> [1, dim]
-            return loss_per_sample(bvseta, x0_batched, x1_batched, t, interpolant)
+        # def wrapper_loss(bvseta, x0, x1, t, interpolant):
+        #     # vmap gives us individual samples, but interpolant expects batch dims
+        #     # Add batch dimension of 1 for interpolant methods
+        #     x0_batched = x0.unsqueeze(0)  # [dim] -> [1, dim]
+        #     x1_batched = x1.unsqueeze(0)  # [dim] -> [1, dim]
+        #     return loss_per_sample(bvseta, x0_batched, x1_batched, t, interpolant)
         
-        def fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant):
-            # Fallback for nonlinear interpolants that don't work with vmap
-            # Manual loop over batch dimension
-            bs = x0s.shape[0]
-            losses = []
-            for i in range(bs):
-                x0_i = x0s[i:i+1]  # Keep batch dim of 1
-                x1_i = x1s[i:i+1]  # Keep batch dim of 1
-                t_i = ts[i]
-                loss_i = loss_per_sample(bvseta, x0_i, x1_i, t_i, interpolant)
-                losses.append(loss_i)
-            return torch.stack(losses)
+        # def fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant):
+        #     # Fallback for nonlinear interpolants that don't work with vmap
+        #     # Manual loop over batch dimension
+        #     bs = x0s.shape[0]
+        #     losses = []
+        #     for i in range(bs):
+        #         x0_i = x0s[i:i+1]  # Keep batch dim of 1
+        #         x1_i = x1s[i:i+1]  # Keep batch dim of 1
+        #         t_i = ts[i]
+        #         loss_i = loss_per_sample(bvseta, x0_i, x1_i, t_i, interpolant)
+        #         losses.append(loss_i)
+        #     return torch.stack(losses)
         
-        # Try to detect if this is a nonlinear interpolant that will conflict with vmap
-        def smart_batched_loss(bvseta, x0s, x1s, ts, interpolant):
-            if hasattr(interpolant, 'path') and interpolant.path == 'nonlinear':
-                print("fallback is used")
-                return fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant)
-            else:
-                ## Share the batch dimension i for x0, x1, t
-                in_dims_set = (None, 0, 0, 0, None)
-                vmap_loss = vmap(wrapper_loss, in_dims=in_dims_set, randomness='different')
-                print("vmap is used")
-                return vmap_loss(bvseta, x0s, x1s, ts, interpolant)
+        # # Try to detect if this is a nonlinear interpolant that will conflict with vmap
+        # def smart_batched_loss(bvseta, x0s, x1s, ts, interpolant):
+        #     if hasattr(interpolant, 'path') and interpolant.path == 'nonlinear':
+        #         print("fallback is used")
+        #         return fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant)
+        #     else:
+        #         ## Share the batch dimension i for x0, x1, t
+        #         in_dims_set = (None, 0, 0, 0, None)
+        #         vmap_loss = vmap(wrapper_loss, in_dims=in_dims_set, randomness='different')
+        #         print("vmap is used")
+        #         return vmap_loss(bvseta, x0s, x1s, ts, interpolant)
         
-        return smart_batched_loss
+        ## Share the batch dimension i for x0, x1, t
+        in_dims_set = (None, 0, 0, 0, None)
+        batched_loss = vmap(loss_per_sample, in_dims=in_dims_set, randomness='different')
+        return batched_loss
+        
+        #return smart_batched_loss
     
     
 ### global variable for the available losses

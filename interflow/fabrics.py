@@ -212,49 +212,47 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
 
             return y 
         def dtIt_method(self, t, x0, x1):
-          """
-          Time derivative of nonlinear interpolation.
-          
-          d/dt[I_t] = ∂T_t/∂t(z_t) + (∂T_t/∂z)(z_t) * (a'_t*z0 + b'_t*z1)
-          
-          where z_t = a_t*T_0^{-1}(x0) + b_t*T_1^{-1}(x1)
-          """
-          # Ensure t is a tensor with gradient tracking
-          if not isinstance(t, torch.Tensor):
-              t = torch.tensor(t, dtype=x0.dtype, device=x0.device)
-          if t.dim() == 0:
-              t = t.unsqueeze(0)
-
-          t = t.requires_grad_(True)
-
-          B = x0.shape[0]
-
-          # Expand t if needed
-          if t.shape[0] == 1 and B > 1:
-              t_expanded = t.expand(B)
-          else:
-              t_expanded = t
-
-          # Get latent representations at boundaries
-          t_0 = torch.zeros(B, dtype=x0.dtype, device=x0.device)
-          t_1 = torch.ones(B, dtype=x1.dtype, device=x1.device)
-
-          z0, _ = self(x0, t_0, inverse=True)  # T_0^{-1}(x0)
-          z1, _ = self(x1, t_1, inverse=True)  # T_1^{-1}(x1)
-
-          # Compute coefficients and their derivatives
-          a_t = a(t)
-          b_t = b(t)
-          adot_t = adot(t)
-          bdot_t = bdot(t)
-
-          # Handle broadcasting
-          for coef in [a_t, b_t, adot_t, bdot_t]:
-              if coef.dim() == 0:
-                  coef = coef.unsqueeze(0)
-
-          # Expand coefficients to match data shape
-          if data_type == 'vector':
+            """
+            Time derivative of nonlinear interpolation.
+            
+            d/dt[I_t] = ∂T_t/∂t(z_t) + (∂T_t/∂z)(z_t) * (a'_t*z0 + b'_t*z1)
+            
+            where z_t = a_t*T_0^{-1}(x0) + b_t*T_1^{-1}(x1)
+            """
+            # Ensure t is a tensor with gradient tracking
+            if not isinstance(t, torch.Tensor):
+                t = torch.tensor(t, dtype=x0.dtype, device=x0.device)
+            if t.dim() == 0:
+                t = t.unsqueeze(0)
+            
+            B = x0.shape[0]
+            
+            # Expand t if needed
+            if t.shape[0] == 1 and B > 1:
+                t_expanded = t.expand(B)
+            else:
+                t_expanded = t
+            
+            # Get latent representations at boundaries
+            t_0 = torch.zeros(B, dtype=x0.dtype, device=x0.device)
+            t_1 = torch.ones(B, dtype=x1.dtype, device=x1.device)
+            
+            z0, _ = self(x0, t_0, inverse=True)  # T_0^{-1}(x0)
+            z1, _ = self(x1, t_1, inverse=True)  # T_1^{-1}(x1)
+            
+            # Compute coefficients and their derivatives
+            a_t = a(t)
+            b_t = b(t)
+            adot_t = adot(t)
+            bdot_t = bdot(t)
+            
+            # Handle broadcasting
+            for coef in [a_t, b_t, adot_t, bdot_t]:
+                if coef.dim() == 0:
+                    coef = coef.unsqueeze(0)
+            
+            # Expand coefficients to match data shape
+            if data_type == 'vector':
               a_t = a_t.view(-1, 1).expand(B, -1)
               b_t = b_t.view(-1, 1).expand(B, -1)
               adot_t = adot_t.view(-1, 1).expand(B, -1)
@@ -264,7 +262,7 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                   b_t = b_t.expand_as(z1)
                   adot_t = adot_t.expand_as(z0)
                   bdot_t = bdot_t.expand_as(z1)
-          else:  # Image data
+            else:  # Image data
               for coef in [a_t, b_t, adot_t, bdot_t]:
                   while coef.dim() < z0.dim():
                       coef = coef.unsqueeze(-1)
@@ -272,54 +270,71 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
               b_t = b_t.expand_as(z1)
               adot_t = adot_t.expand_as(z0)
               bdot_t = bdot_t.expand_as(z1)
-
-          # Interpolated latent point
-          z_interp = a_t * z0 + b_t * z1
-
-          # Compute T_t(z_interp) with gradient tracking
-          y, _ = self(z_interp, t_expanded, inverse=False)
-
-          # Compute total derivative using autograd
-          # This captures both ∂T_t/∂t and the chain rule through z_interp
-          dt_contribution = adot_t * z0 + bdot_t * z1
-
-          # We need to compute the Jacobian-vector product
-          # For efficiency, we'll use autograd to compute d/dt[T_t(z_t)]
-          if t.requires_grad:
-              # Compute gradient w.r.t. t
-              grad_outputs = torch.ones_like(y)
-              grads = torch.autograd.grad(
-                  outputs=y,
-                  inputs=[t, z_interp],
-                  grad_outputs=grad_outputs,
-                  create_graph=True,
-                  allow_unused=True
-              )
-
-              if grads[0] is not None:  # ∂T_t/∂t term
-                  dt_direct = grads[0].expand_as(y)
-              else:
-                  dt_direct = torch.zeros_like(y)
-
-              if grads[1] is not None:  # ∂T_t/∂z term  
-                  #dz_term = (grads[1] * dt_contribution).sum(dim=tuple(range(1,grads[1].dim())), keepdim=True)
-                  #dz_term = dz_term.expand_as(y)
-                  def F(z):
-                      out, _ = self(z, t_expanded, inverse=False)  # shape like y
-                      return out
-                  _, dz_term = jvp(F, (z_interp,), (dt_contribution,), create_graph=True)
-              else:
-                  dz_term = torch.zeros_like(y)
-
-              return dt_direct + dz_term
-          else:
-              # Fallback: numerical approximation
-              eps = 1e-5
-              t_plus = torch.clamp(t + eps, max=1.0)
-              t_minus = torch.clamp(t - eps, min=0.0)
-              y_plus = It(t_plus, x0, x1)
-              y_minus = It(t_minus, x0, x1)
-              return (y_plus - y_minus) / (t_plus - t_minus)
+            
+            # Interpolated latent point
+            z_interp = a_t * z0 + b_t * z1
+            
+            # # Compute T_t(z_interp) with gradient tracking
+            # y, _ = self(z_interp, t_expanded, inverse=False)
+            
+            # # Compute total derivative using autograd
+            # # This captures both ∂T_t/∂t and the chain rule through z_interp
+            # dt_contribution = adot_t * z0 + bdot_t * z1
+            
+            # # We need to compute the Jacobian-vector product
+            # # For efficiency, we'll use autograd to compute d/dt[T_t(z_t)]
+            # if t.requires_grad:
+            #     # Compute gradient w.r.t. t
+            #     grad_outputs = torch.ones_like(y)
+            #     grads = torch.autograd.grad(
+            #         outputs=y,
+            #         inputs=[t, z_interp],
+            #         grad_outputs=grad_outputs,
+            #         create_graph=True,
+            #         allow_unused=True
+            #     )
+            
+            #     if grads[0] is not None:  # ∂T_t/∂t term
+            #         dt_direct = grads[0].expand_as(y)
+            #     else:
+            #         dt_direct = torch.zeros_like(y)
+            
+            #     if grads[1] is not None:  # ∂T_t/∂z term  
+            #         #dz_term = (grads[1] * dt_contribution).sum(dim=tuple(range(1,grads[1].dim())), keepdim=True)
+            #         #dz_term = dz_term.expand_as(y)
+            #         # *** can be optimized since we don't actually need grads[1]
+            #         def F(z):
+            #             out, _ = self(z, t_expanded, inverse=False)  # shape like y
+            #             return out
+            #         _, dz_term = jvp(F, (z_interp,), (dt_contribution,), create_graph=True)
+            #     else:
+            #         dz_term = torch.zeros_like(y)
+            
+            #     return dt_direct + dz_term
+            # Define forward at time t
+            def F(z, tt):
+                out, _ = self(z, tt, inverse=False)
+                return out
+            
+            # Tangents wrt (z, t):
+            # v_z = dz/dt = a'_t z0 + b'_t z1
+            # v_t = dt/dt = 1
+            v_z = adot_t * z0 + bdot_t * z1
+            v_t = torch.ones_like(t_expanded)
+            
+            # Single JVP over (z, t) gives full d/dt[T_t(z_t)]
+            try:
+                from torch.func import jvp
+                _, ydot = jvp(F, (z_interp, t_expanded), (v_z, v_t), create_graph=True)
+            except Exception:
+                _, ydot = torch.autograd.functional.jvp(
+                    lambda z, tt: self(z, tt, inverse=False)[0],
+                    (z_interp, t_expanded),
+                    (v_z, v_t),
+                    create_graph=True
+                )
+            
+            return ydot
         flow_model.It = It_method.__get__(flow_model, flow_model.__class__)
         flow_model.dtIt = dtIt_method.__get__(flow_model, flow_model.__class__)
         
