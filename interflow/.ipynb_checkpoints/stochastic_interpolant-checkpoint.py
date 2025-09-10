@@ -27,11 +27,11 @@ def compute_div(
         t.requires_grad_(True)
         f_val = f(x, t)
         divergence = 0.0
-        for i in range(x.shape[1]):
+        for i in range(x.shape[1]): # loop over all dimensions
             divergence += \
                     torch.autograd.grad(
-                            f_val[:, i].sum(), x, create_graph=True
-                        )[0][:, i]
+                            f_val[:, i].sum(), x, create_graph=True # select the i-1th component of f_val for all samples, take sum, take derivative w.r.t. x
+                        )[0][:, i] # get \partial f_{i-1}/\partial x_{i-1}. [0] first because torch.autograd.grad returns a tuple, so we need to extract the tensor itself inside of the tuple.
 
     return divergence.view(bs)
 
@@ -94,18 +94,23 @@ class Interpolant(torch.nn.Module):
         gamma_dot: Callable[[Time], torch.tensor]      = None,
         gg_dot: Callable[[Time], torch.tensor]         = None,
         It: Callable[[Time, Sample, Sample], Sample]   = None, 
-        dtIt: Callable[[Time, Sample, Sample], Sample] = None
+        dtIt: Callable[[Time, Sample, Sample], Sample] = None,
+        # new parameters for nonlinear interpolant
+        flow_config: dict = None,
+        data_type: str = None,
+        data_dim: tuple = None,
     ) -> None:
         super(Interpolant, self).__init__()
         
 
-        self.path = path
-        if gamma == None:
-            if self.path == 'one-sided-linear' or self.path == 'one-sided-trig': gamma_type = None
-            self.gamma, self.gamma_dot, self.gg_dot = fabrics.make_gamma(gamma_type=gamma_type)
+        self.path = path # store interpolant type
+        if gamma == None: # no gamma provided
+            if self.path == 'one-sided-linear' or self.path == 'one-sided-trig' or  self.path == 'nonlinear': gamma_type = None #  no gamma needed
+            self.gamma, self.gamma_dot, self.gg_dot = fabrics.make_gamma(gamma_type=gamma_type) # create gamma functions from presets
         else:
-            self.gamma, self.gamma_dot, self.gg_dot = gamma, gamma_dot, gg_dot
-        if self.path == 'custom':
+            self.gamma, self.gamma_dot, self.gg_dot = gamma, gamma_dot, gg_dot # use provided gamma functions
+        if self.path == 'custom': # for custom paths, the user must provide both the interpolation and its derivative
+            ## consider modify here to support nonlinear interpolant ##
             print('Assuming interpolant was passed in directly...')
             self.It = It
             self.dtIt = dtIt
@@ -113,12 +118,12 @@ class Interpolant(torch.nn.Module):
             assert self.dtIt != None
  
 
-        self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot)
+        self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
         self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         
 
     def calc_xt(self, t: Time, x0: Sample, x1: Sample):
-        if self.path=='one-sided-linear' or self.path == 'mirror' or self.path=='one-sided-trig':
+        if self.path=='one-sided-linear' or self.path == 'mirror' or self.path=='one-sided-trig' or self.path == "nonlinear": 
             return self.It(t, x0, x1)
         else:
             z = torch.randn(x0.shape).to(t)
@@ -149,7 +154,7 @@ class PFlowRHS(torch.nn.Module):
     def __init__(self, b: Velocity, interpolant: Interpolant, sample_only=False):
         super(PFlowRHS, self).__init__()
         self.b = b
-        self.interpolant = interpolant
+        self.interpolant = interpolant # not used
         self.sample_only = sample_only
 
 
@@ -651,7 +656,8 @@ def loss_per_sample_one_sided_v(
 ) -> torch.tensor:
     """Compute the loss on an individual sample."""
     xt    = interpolant.calc_xt(t, x0, x1)
-    xt, t = xt.unsqueeze(0), t.unsqueeze(0)
+    # xt already has batch dim [B, dim]; keep t as [1]
+    t = t.unsqueeze(0)
     dtIt  = interpolant.dtIt(t, x0, x1)
     vt = v(xt, t)
     loss  = 0.5*torch.sum(vt**2) - torch.sum((dtIt) * vt)
@@ -719,10 +725,39 @@ def loss_per_sample_mirror(
 def make_batch_loss(loss_per_sample: Callable, method: str ='shared') -> Callable:
     """Convert a sample loss into a batched loss."""
     if method == 'shared':
-        ## Share the batch dimension i for x0, x1, t
-        in_dims_set = (None, 0, 0, 0, None)
-        batched_loss = vmap(loss_per_sample, in_dims=in_dims_set, randomness='different')
-        return batched_loss
+        def wrapper_loss(bvseta, x0, x1, t, interpolant):
+            # vmap gives us individual samples, but interpolant expects batch dims
+            # Add batch dimension of 1 for interpolant methods
+            x0_batched = x0.unsqueeze(0)  # [dim] -> [1, dim]
+            x1_batched = x1.unsqueeze(0)  # [dim] -> [1, dim]
+            return loss_per_sample(bvseta, x0_batched, x1_batched, t, interpolant)
+        
+        def fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant):
+            # Fallback for nonlinear interpolants that don't work with vmap
+            # Manual loop over batch dimension
+            bs = x0s.shape[0]
+            losses = []
+            for i in range(bs):
+                x0_i = x0s[i:i+1]  # Keep batch dim of 1
+                x1_i = x1s[i:i+1]  # Keep batch dim of 1
+                t_i = ts[i]
+                loss_i = loss_per_sample(bvseta, x0_i, x1_i, t_i, interpolant)
+                losses.append(loss_i)
+            return torch.stack(losses)
+        
+        # Try to detect if this is a nonlinear interpolant that will conflict with vmap
+        def smart_batched_loss(bvseta, x0s, x1s, ts, interpolant):
+            if hasattr(interpolant, 'path') and interpolant.path == 'nonlinear':
+                print("fallback is used")
+                return fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant)
+            else:
+                ## Share the batch dimension i for x0, x1, t
+                in_dims_set = (None, 0, 0, 0, None)
+                vmap_loss = vmap(wrapper_loss, in_dims=in_dims_set, randomness='different')
+                print("vmap is used")
+                return vmap_loss(bvseta, x0s, x1s, ts, interpolant)
+        
+        return smart_batched_loss
     
     
 ### global variable for the available losses

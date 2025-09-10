@@ -748,11 +748,13 @@ def make_batch_loss(loss_per_sample: Callable, method: str ='shared') -> Callabl
         # Try to detect if this is a nonlinear interpolant that will conflict with vmap
         def smart_batched_loss(bvseta, x0s, x1s, ts, interpolant):
             if hasattr(interpolant, 'path') and interpolant.path == 'nonlinear':
+                print("fallback is used")
                 return fallback_batched_loss(bvseta, x0s, x1s, ts, interpolant)
             else:
                 ## Share the batch dimension i for x0, x1, t
                 in_dims_set = (None, 0, 0, 0, None)
                 vmap_loss = vmap(wrapper_loss, in_dims=in_dims_set, randomness='different')
+                print("vmap is used")
                 return vmap_loss(bvseta, x0s, x1s, ts, interpolant)
         
         return smart_batched_loss

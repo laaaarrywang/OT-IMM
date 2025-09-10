@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from torch.autograd.functional import jvp
 from . import util
 from .realnvp import TimeIndexedRealNVP, create_vector_flow, create_mnist_flow, create_cifar10_flow, create_imagenet_flow, create_imagenet_flow_stable, create_image_flow
 import math
@@ -301,8 +302,12 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                   dt_direct = torch.zeros_like(y)
 
               if grads[1] is not None:  # ∂T_t/∂z term  
-                  dz_term = (grads[1] * dt_contribution).sum(dim=tuple(range(1,grads[1].dim())), keepdim=True)
-                  dz_term = dz_term.expand_as(y)
+                  #dz_term = (grads[1] * dt_contribution).sum(dim=tuple(range(1,grads[1].dim())), keepdim=True)
+                  #dz_term = dz_term.expand_as(y)
+                  def F(z):
+                      out, _ = self(z, t_expanded, inverse=False)  # shape like y
+                      return out
+                  _, dz_term = jvp(F, (z_interp,), (dt_contribution,), create_graph=True)
               else:
                   dz_term = torch.zeros_like(y)
 
