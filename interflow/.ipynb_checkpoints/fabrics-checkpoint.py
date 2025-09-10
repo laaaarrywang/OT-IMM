@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from torch.autograd.functional import jvp
+from torch.func import jvp
 from . import util
 from .realnvp import TimeIndexedRealNVP, create_vector_flow, create_mnist_flow, create_cifar10_flow, create_imagenet_flow, create_imagenet_flow_stable, create_image_flow
 import math
@@ -323,18 +323,9 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
             v_t = torch.ones_like(t_expanded)
             
             # Single JVP over (z, t) gives full d/dt[T_t(z_t)]
-            try:
-                from torch.func import jvp
-                _, ydot = jvp(F, (z_interp, t_expanded), (v_z, v_t), create_graph=True)
-            except Exception:
-                _, ydot = torch.autograd.functional.jvp(
-                    lambda z, tt: self(z, tt, inverse=False)[0],
-                    (z_interp, t_expanded),
-                    (v_z, v_t),
-                    create_graph=True
-                )
-            
+            _, ydot = jvp(F, (z_interp, t_expanded), (v_z, v_t))
             return ydot
+            
         flow_model.It = It_method.__get__(flow_model, flow_model.__class__)
         flow_model.dtIt = dtIt_method.__get__(flow_model, flow_model.__class__)
         
