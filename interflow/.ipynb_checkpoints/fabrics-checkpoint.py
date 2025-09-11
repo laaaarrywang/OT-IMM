@@ -292,14 +292,15 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
         flow_model.It = It_method.__get__(flow_model, flow_model.__class__)
         flow_model.dtIt = dtIt_method.__get__(flow_model, flow_model.__class__)
         
+        return flow_model.It, flow_model.dtIt, (a, adot, b, bdot), flow_model # early return
     elif path == 'custom':
         return None, None, None
 
     else:
         raise NotImplementedError("The interpolant you specified is not implemented.")
-
+    return It, dtIt, (a, adot, b, bdot)
     
-    return flow_model.It, flow_model.dtIt, (a, adot, b, bdot), flow_model
+    
 
 
 def make_gamma(gamma_type = 'brownian', aval = None):

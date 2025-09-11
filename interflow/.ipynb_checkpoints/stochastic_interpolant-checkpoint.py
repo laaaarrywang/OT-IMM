@@ -117,8 +117,11 @@ class Interpolant(torch.nn.Module):
             self.dtIt = dtIt
             assert self.It != None
             assert self.dtIt != None
-        else:
+        elif self.path == "nonlinear":
             self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
+            self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
+        else:
+            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         
 
