@@ -305,6 +305,172 @@ def make_attention_net(
     return InputWrapper(v_net)
 
 
+def _sinusoidal_time_embedding(t, dim):
+    half = dim // 2
+    device, dtype = t.device, t.dtype
+    freq = torch.exp(
+        torch.arange(half, device=device, dtype=dtype) * (-math.log(10000.0) / max(half - 1, 1))
+    )
+    args = t[:, None] * freq[None, :]
+    emb = torch.cat([torch.sin(args), torch.cos(args)], dim=-1)
+    if dim % 2 == 1:
+        emb = F.pad(emb, (0, 1))
+    return emb
+
+
+class _TimeEmbedding(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        hidden = max(dim * 4, 64)
+        self.net = nn.Sequential(
+            nn.Linear(dim, hidden),
+            nn.SiLU(),
+            nn.Linear(hidden, dim)
+        )
+
+    def forward(self, t):
+        return self.net(t)
+
+
+class _ResBlock2D(nn.Module):
+    def __init__(self, in_ch, out_ch, time_dim, groups=8, dropout=0.0):
+        super().__init__()
+        self.norm1 = nn.GroupNorm(min(groups, in_ch), in_ch)
+        self.conv1 = nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1)
+        self.time_proj = nn.Linear(time_dim, out_ch)
+        self.norm2 = nn.GroupNorm(min(groups, out_ch), out_ch)
+        self.conv2 = nn.Conv2d(out_ch, out_ch, kernel_size=3, padding=1)
+        self.dropout = nn.Dropout(dropout) if dropout > 0 else nn.Identity()
+        self.act = nn.SiLU()
+        self.skip = nn.Conv2d(in_ch, out_ch, kernel_size=1) if in_ch != out_ch else nn.Identity()
+
+    def forward(self, x, t):
+        h = self.conv1(self.act(self.norm1(x)))
+        h = h + self.time_proj(self.act(t))[:, :, None, None]
+        h = self.conv2(self.dropout(self.act(self.norm2(h))))
+        return h + self.skip(x)
+
+
+class _Downsample2D(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.down = nn.Conv2d(channels, channels, kernel_size=3, stride=2, padding=1)
+
+    def forward(self, x):
+        return self.down(x)
+
+
+class _Upsample2D(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.up = nn.ConvTranspose2d(channels, channels, kernel_size=4, stride=2, padding=1)
+
+    def forward(self, x):
+        return self.up(x)
+
+
+class UNetVelocity(nn.Module):
+    def __init__(
+        self,
+        in_channels=3,
+        base_channels=128,
+        time_dim=256,
+        channel_mults=(1, 2, 4),
+        dropout=0.0,
+        groups=32
+    ):
+        super().__init__()
+        if len(channel_mults) != 3:
+            raise ValueError("channel_mults must contain three entries")
+        self.time_dim = time_dim
+        self.time_embed = _TimeEmbedding(time_dim)
+        self.input = nn.Conv2d(in_channels, base_channels, kernel_size=3, padding=1)
+
+        c1 = base_channels * channel_mults[0]
+        c2 = base_channels * channel_mults[1]
+        c3 = base_channels * channel_mults[2]
+
+        self.down1 = _ResBlock2D(base_channels, c1, time_dim, groups, dropout)
+        self.down2 = _ResBlock2D(c1, c2, time_dim, groups, dropout)
+        self.down3 = _ResBlock2D(c2, c3, time_dim, groups, dropout)
+        self.ds1 = _Downsample2D(c1)
+        self.ds2 = _Downsample2D(c2)
+
+        self.mid1 = _ResBlock2D(c3, c3, time_dim, groups, dropout)
+        self.mid2 = _ResBlock2D(c3, c3, time_dim, groups, dropout)
+
+        self.up1 = _ResBlock2D(c3 + c2, c2, time_dim, groups, dropout)
+        self.up2 = _ResBlock2D(c2 + c1, c1, time_dim, groups, dropout)
+        self.us1 = _Upsample2D(c3)
+        self.us2 = _Upsample2D(c2)
+
+        self.out_norm = nn.GroupNorm(min(groups, c1), c1)
+        self.out = nn.Conv2d(c1, in_channels, kernel_size=3, padding=1)
+
+    def _prep_time(self, t, batch, device, dtype):
+        if t.dim() > 1:
+            t = t.view(t.shape[0], -1)
+            if t.shape[1] != 1:
+                raise ValueError("Time tensor must have a singleton feature dimension")
+            t = t[:, 0]
+        t = t.to(device=device, dtype=dtype).reshape(-1)
+        if t.shape[0] == 1 and batch > 1:
+            t = t.repeat(batch)
+        elif t.shape[0] != batch:
+            if batch % t.shape[0] == 0:
+                t = t.repeat(int(batch / t.shape[0]))
+            else:
+                raise ValueError("Time tensor batch does not align with input batch")
+        return t
+
+    def forward(self, x, t):
+        b = x.shape[0]
+        if t.dim() == 0:
+            t = t.unsqueeze(0)
+        t = self._prep_time(t, b, x.device, x.dtype)
+        time_emb = self.time_embed(_sinusoidal_time_embedding(t, self.time_dim))
+
+        x0 = self.input(x)
+        d1 = self.down1(x0, time_emb)
+        x = self.ds1(d1)
+        d2 = self.down2(x, time_emb)
+        x = self.ds2(d2)
+        x = self.down3(x, time_emb)
+
+        x = self.mid1(x, time_emb)
+        x = self.mid2(x, time_emb)
+
+        x = self.us1(x)
+        x = torch.cat([x, d2], dim=1)
+        x = self.up1(x, time_emb)
+
+        x = self.us2(x)
+        x = torch.cat([x, d1], dim=1)
+        x = self.up2(x, time_emb)
+
+        x = F.silu(self.out_norm(x))
+        return self.out(x)
+
+
+def make_unet_velocity(
+    in_channels=3,
+    base_channels=128,
+    time_dim=256,
+    channel_mults=(1, 2, 4),
+    dropout=0.0,
+    groups=32
+):
+    """Factory for UNetVelocity so notebooks can instantiate without boilerplate."""
+    return UNetVelocity(
+        in_channels=in_channels,
+        base_channels=base_channels,
+        time_dim=time_dim,
+        channel_mults=channel_mults,
+        dropout=dropout,
+        groups=groups,
+    )
+
+
 def make_activation(act):
     """Helper function to create activation layers."""
     if act == 'relu':
