@@ -1,0 +1,144 @@
+===========================================
+Starting job on g003.gautschi.rcac.purdue.edu at Thu Sep 25 03:59:33 AM EDT 2025
+Config file: configs/outer_focused.json
+Job ID: 3593257
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Thu Sep 25 03:59:33 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:21:00.0 Off |                    0 |
+| N/A   33C    P8             34W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/outer_focused.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/outer_focused/config.json
+
+Starting training for 50 epochs...
+Output directory: results/outer_focused
+Epoch 1/50: v_loss=-6.4107, flow_loss=-7.2030, v_grad=20.6677, flow_grad=0.0000, E[|v|²]=15.4561
+Saved plot to results/outer_focused/epoch_0001.png
+Epoch 2/50: v_loss=-9.7521, flow_loss=-9.5833, v_grad=8.1916, flow_grad=0.0000, E[|v|²]=19.0331
+Saved plot to results/outer_focused/epoch_0002.png
+Epoch 3/50: v_loss=-9.3417, flow_loss=-10.4064, v_grad=4.8070, flow_grad=0.0000, E[|v|²]=19.2259
+Saved plot to results/outer_focused/epoch_0003.png
+Epoch 4/50: v_loss=-8.3649, flow_loss=-10.5320, v_grad=15.3212, flow_grad=0.0000, E[|v|²]=18.0335
+Saved plot to results/outer_focused/epoch_0004.png
+Epoch 5/50: v_loss=-9.1552, flow_loss=-8.5841, v_grad=8.0075, flow_grad=0.0000, E[|v|²]=16.6710
+Saved plot to results/outer_focused/epoch_0005.png
+Epoch 6/50: v_loss=-9.0396, flow_loss=-8.7703, v_grad=6.5541, flow_grad=0.0000, E[|v|²]=18.3586
+Saved plot to results/outer_focused/epoch_0006.png
+Epoch 7/50: v_loss=-9.9509, flow_loss=-10.2253, v_grad=7.6303, flow_grad=0.0000, E[|v|²]=21.3882
+Saved plot to results/outer_focused/epoch_0007.png
+Epoch 8/50: v_loss=-8.8395, flow_loss=-9.1141, v_grad=10.6483, flow_grad=0.0000, E[|v|²]=18.1521
+Saved plot to results/outer_focused/epoch_0008.png
+Epoch 9/50: v_loss=-9.8175, flow_loss=-10.4339, v_grad=5.1250, flow_grad=0.0000, E[|v|²]=21.1939
+Saved plot to results/outer_focused/epoch_0009.png
+Epoch 10/50: v_loss=-10.3432, flow_loss=-9.4191, v_grad=6.2224, flow_grad=0.0000, E[|v|²]=20.5313
+Saved plot to results/outer_focused/epoch_0010.png
+Epoch 11/50: v_loss=-9.7379, flow_loss=-9.3133, v_grad=7.6056, flow_grad=0.0000, E[|v|²]=20.5472
+Saved plot to results/outer_focused/epoch_0011.png
+Epoch 12/50: v_loss=-9.2898, flow_loss=-9.5476, v_grad=7.3240, flow_grad=0.0000, E[|v|²]=18.7057
+Saved plot to results/outer_focused/epoch_0012.png
+Epoch 13/50: v_loss=-9.9992, flow_loss=-9.5059, v_grad=3.7042, flow_grad=0.0000, E[|v|²]=20.4295
+Saved plot to results/outer_focused/epoch_0013.png
+Epoch 14/50: v_loss=-10.0186, flow_loss=-11.1746, v_grad=5.5655, flow_grad=0.0000, E[|v|²]=21.4310
+Saved plot to results/outer_focused/epoch_0014.png
+Epoch 15/50: v_loss=-9.2248, flow_loss=-8.9745, v_grad=5.9973, flow_grad=0.0000, E[|v|²]=20.4211
+Saved plot to results/outer_focused/epoch_0015.png
+Epoch 16/50: v_loss=-8.9487, flow_loss=-10.2510, v_grad=7.2017, flow_grad=0.0000, E[|v|²]=20.2373
+Saved plot to results/outer_focused/epoch_0016.png
+Epoch 17/50: v_loss=-8.6685, flow_loss=-9.5753, v_grad=5.6699, flow_grad=0.0000, E[|v|²]=18.5723
+Saved plot to results/outer_focused/epoch_0017.png
+Epoch 18/50: v_loss=-11.0269, flow_loss=-9.4844, v_grad=4.3580, flow_grad=0.0000, E[|v|²]=22.7108
+Saved plot to results/outer_focused/epoch_0018.png
+Epoch 19/50: v_loss=-9.2045, flow_loss=-8.8087, v_grad=5.5922, flow_grad=0.0000, E[|v|²]=20.8604
+Saved plot to results/outer_focused/epoch_0019.png
+Epoch 20/50: v_loss=-9.2901, flow_loss=-9.7441, v_grad=3.9085, flow_grad=0.0000, E[|v|²]=19.3490
+Saved plot to results/outer_focused/epoch_0020.png
+Epoch 21/50: v_loss=-9.4054, flow_loss=-10.8405, v_grad=5.7442, flow_grad=0.0000, E[|v|²]=19.5361
+Saved plot to results/outer_focused/epoch_0021.png
+Epoch 22/50: v_loss=-10.0900, flow_loss=-11.1690, v_grad=4.4845, flow_grad=0.0000, E[|v|²]=20.6679
+Saved plot to results/outer_focused/epoch_0022.png
+Epoch 23/50: v_loss=-11.0933, flow_loss=-9.7567, v_grad=5.9205, flow_grad=0.0000, E[|v|²]=22.8034
+Saved plot to results/outer_focused/epoch_0023.png
+Epoch 24/50: v_loss=-10.1813, flow_loss=-9.9159, v_grad=5.8042, flow_grad=0.0000, E[|v|²]=21.3413
+Saved plot to results/outer_focused/epoch_0024.png
+Epoch 25/50: v_loss=-9.2701, flow_loss=-9.6300, v_grad=5.2185, flow_grad=0.0000, E[|v|²]=19.0272
+Saved plot to results/outer_focused/epoch_0025.png
+Epoch 26/50: v_loss=-9.3097, flow_loss=-10.4869, v_grad=6.0685, flow_grad=0.0000, E[|v|²]=19.2969
+Saved plot to results/outer_focused/epoch_0026.png
+Epoch 27/50: v_loss=-9.8125, flow_loss=-10.1445, v_grad=5.4739, flow_grad=0.0000, E[|v|²]=20.0884
+Saved plot to results/outer_focused/epoch_0027.png
+Epoch 28/50: v_loss=-9.0064, flow_loss=-8.9930, v_grad=5.6197, flow_grad=0.0000, E[|v|²]=18.3534
+Saved plot to results/outer_focused/epoch_0028.png
+Epoch 29/50: v_loss=-10.0372, flow_loss=-10.3075, v_grad=4.6631, flow_grad=0.0000, E[|v|²]=19.6143
+Saved plot to results/outer_focused/epoch_0029.png
+Epoch 30/50: v_loss=-10.7043, flow_loss=-9.5777, v_grad=4.5105, flow_grad=0.0000, E[|v|²]=20.2363
+Saved plot to results/outer_focused/epoch_0030.png
+Epoch 31/50: v_loss=-10.1299, flow_loss=-10.6392, v_grad=3.4014, flow_grad=0.0000, E[|v|²]=20.8325
+Saved plot to results/outer_focused/epoch_0031.png
+Epoch 32/50: v_loss=-10.4416, flow_loss=-9.9047, v_grad=4.5213, flow_grad=0.0000, E[|v|²]=21.2674
+Saved plot to results/outer_focused/epoch_0032.png
+Epoch 33/50: v_loss=-10.6828, flow_loss=-10.1907, v_grad=6.9415, flow_grad=0.0000, E[|v|²]=20.1882
+Saved plot to results/outer_focused/epoch_0033.png
+Epoch 34/50: v_loss=-10.3611, flow_loss=-11.4291, v_grad=4.1335, flow_grad=0.0000, E[|v|²]=21.6021
+Saved plot to results/outer_focused/epoch_0034.png
+Epoch 35/50: v_loss=-9.2343, flow_loss=-9.6964, v_grad=4.6908, flow_grad=0.0000, E[|v|²]=19.7812
+Saved plot to results/outer_focused/epoch_0035.png
+Epoch 36/50: v_loss=-9.7883, flow_loss=-10.7019, v_grad=4.3910, flow_grad=0.0000, E[|v|²]=20.5468
+Saved plot to results/outer_focused/epoch_0036.png
+Epoch 37/50: v_loss=-9.7373, flow_loss=-10.3303, v_grad=4.8271, flow_grad=0.0000, E[|v|²]=20.2324
+Saved plot to results/outer_focused/epoch_0037.png
+Epoch 38/50: v_loss=-10.6145, flow_loss=-9.4042, v_grad=4.0816, flow_grad=0.0000, E[|v|²]=21.2449
+Saved plot to results/outer_focused/epoch_0038.png
+Epoch 39/50: v_loss=-9.7041, flow_loss=-9.7419, v_grad=4.1067, flow_grad=0.0000, E[|v|²]=20.2356
+Saved plot to results/outer_focused/epoch_0039.png
+Epoch 40/50: v_loss=-10.5808, flow_loss=-10.7929, v_grad=4.3864, flow_grad=0.0000, E[|v|²]=20.5287
+Saved plot to results/outer_focused/epoch_0040.png
+Epoch 41/50: v_loss=-9.6129, flow_loss=-9.8792, v_grad=4.5993, flow_grad=0.0000, E[|v|²]=19.6347
+Saved plot to results/outer_focused/epoch_0041.png
+Epoch 42/50: v_loss=-11.0819, flow_loss=-9.6946, v_grad=5.0155, flow_grad=0.0000, E[|v|²]=20.8537
+Saved plot to results/outer_focused/epoch_0042.png
+Epoch 43/50: v_loss=-10.1001, flow_loss=-10.3138, v_grad=5.1713, flow_grad=0.0000, E[|v|²]=21.7306
+Saved plot to results/outer_focused/epoch_0043.png
+Epoch 44/50: v_loss=-9.8211, flow_loss=-9.5568, v_grad=3.5408, flow_grad=0.0000, E[|v|²]=20.1792
+Saved plot to results/outer_focused/epoch_0044.png
+Epoch 45/50: v_loss=-9.9052, flow_loss=-9.7350, v_grad=3.4061, flow_grad=0.0000, E[|v|²]=20.0395
+Saved plot to results/outer_focused/epoch_0045.png
+Epoch 46/50: v_loss=-10.0252, flow_loss=-11.0856, v_grad=5.1363, flow_grad=0.0000, E[|v|²]=20.3052
+Saved plot to results/outer_focused/epoch_0046.png
+Epoch 47/50: v_loss=-9.4358, flow_loss=-10.6676, v_grad=4.7365, flow_grad=0.0000, E[|v|²]=20.0324
+Saved plot to results/outer_focused/epoch_0047.png
+Epoch 48/50: v_loss=-10.1453, flow_loss=-10.2544, v_grad=5.1199, flow_grad=0.0000, E[|v|²]=20.9088
+Saved plot to results/outer_focused/epoch_0048.png
+Epoch 49/50: v_loss=-10.0833, flow_loss=-10.3482, v_grad=4.1926, flow_grad=0.0000, E[|v|²]=21.1328
+Saved plot to results/outer_focused/epoch_0049.png
+Epoch 50/50: v_loss=-10.7197, flow_loss=-9.8715, v_grad=3.6229, flow_grad=0.0000, E[|v|²]=20.8885
+Saved plot to results/outer_focused/epoch_0050.png
+===========================================
+Job finished at Thu Sep 25 04:04:46 AM EDT 2025
+Exit code: 1
+===========================================

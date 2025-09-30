@@ -1,0 +1,49 @@
+Lmod has detected the following error: The following module(s) are unknown:
+"anaconda3"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "anaconda3"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+/var/spool/slurm/job3620634/slurm_script: line 28: activate: No such file or directory
+Traceback (most recent call last):
+  File "/home/wang6559/Desktop/stochastic-interpolants/tune_hyperparameters.py", line 544, in <module>
+    run_experiment(config_path)
+  File "/home/wang6559/Desktop/stochastic-interpolants/tune_hyperparameters.py", line 412, in run_experiment
+    loss_v, loss_flow, v_grad, flow_grad = train_step(
+  File "/home/wang6559/Desktop/stochastic-interpolants/tune_hyperparameters.py", line 116, in train_step
+    loss_v = loss_fn_v(v, x0s, x1s, ts, interpolant)
+  File "/home/wang6559/Desktop/stochastic-interpolants/interflow/stochastic_interpolant.py", line 797, in loss
+    loss_val = loss_fn(bvseta, x0s, x1s, ts, interpolant)
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/_functorch/apis.py", line 203, in wrapped
+    return vmap_impl(
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/_functorch/vmap.py", line 331, in vmap_impl
+    return _flat_vmap(
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/_functorch/vmap.py", line 479, in _flat_vmap
+    batched_outputs = func(*batched_inputs, **kwargs)
+  File "/home/wang6559/Desktop/stochastic-interpolants/interflow/stochastic_interpolant.py", line 679, in loss_per_sample_one_sided_v
+    xt = interpolant.calc_xt(t, x0, x1)
+  File "/home/wang6559/Desktop/stochastic-interpolants/tune_hyperparameters.py", line 329, in calc_xt
+    xt_complex = self.interpolant_base.calc_xt(t, x0, x1)
+  File "/home/wang6559/Desktop/stochastic-interpolants/interflow/stochastic_interpolant.py", line 132, in calc_xt
+    return self.It(t, x0, x1)
+  File "/home/wang6559/Desktop/stochastic-interpolants/interflow/fabrics.py", line 239, in It_method
+    z0, _  = self(x0, t_0, inverse=True) # T_0^{-1}(x0)
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/wang6559/Desktop/stochastic-interpolants/interflow/realnvp.py", line 527, in forward
+    t_emb = self.time_embed(t)  # [B, time_embed_dim]
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/wang6559/Desktop/stochastic-interpolants/interflow/realnvp.py", line 74, in forward
+    phases = 2.0 * math.pi * t * self.freqs[None, :]
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!

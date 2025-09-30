@@ -1,0 +1,54 @@
+==========================================
+Hyperparameter Tuning Job
+==========================================
+Job ID: 3620631
+Job Name: tune_baseline_500vs10
+Node: g004
+Config: tune_configs/baseline_500vs10.json
+Start time: Mon Sep 29 06:45:21 PM EDT 2025
+
+GPU Information:
+NVIDIA L40S, 46068 MiB, 45458 MiB
+
+Configuration:
+{
+  "n_epochs": 100,
+  "batch_size": 1000,
+  "n_inner": 500,
+  "n_outer": 10,
+  "sched_step_size": 5000,
+  "v_hidden_sizes": [
+    256,
+    256,
+    256,
+    256
+  ],
+  "time_embed_dim": 128,
+  "name": "baseline_500vs10",
+  "lr_v": 0.002,
+  "lr_flow": 0.0002,
+  "flow_num_layers": 2,
+  "flow_hidden": 128,
+  "mlp_blocks": 2,
+  "fourier_max_freq": 10.0,
+  "use_spectral_norm": true,
+  "log_scale_clamp": 1.0
+}
+==========================================
+Starting training...
+==========================================
+============================================================
+Running experiment: baseline_500vs10
+============================================================
+Using device: cuda
+
+Training for 100 epochs...
+  Batch size: 1000
+  Inner/Outer: 500/10
+  LR v/flow: 2.00e-03/2.00e-04
+  Flow architecture: 2 layers, 128 hidden
+
+==========================================
+Job completed with exit code: 1
+End time: Mon Sep 29 06:45:47 PM EDT 2025
+==========================================

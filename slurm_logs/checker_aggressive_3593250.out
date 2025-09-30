@@ -1,0 +1,143 @@
+===========================================
+Starting job on g002.gautschi.rcac.purdue.edu at Thu Sep 25 03:31:32 AM EDT 2025
+Config file: configs/aggressive.json
+Job ID: 3593250
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Thu Sep 25 03:31:32 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:21:00.0 Off |                    0 |
+| N/A   32C    P8             33W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/aggressive.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/aggressive/config.json
+
+Starting training for 50 epochs...
+Output directory: results/aggressive
+Epoch 1/50: v_loss=-9.4961, flow_loss=-9.6077, v_grad=9.4458, flow_grad=0.0000, E[|v|²]=21.5578
+Saved plot to results/aggressive/epoch_0001.png
+Epoch 2/50: v_loss=-9.8669, flow_loss=-9.7543, v_grad=10.5718, flow_grad=0.0000, E[|v|²]=21.0246
+Saved plot to results/aggressive/epoch_0002.png
+Epoch 3/50: v_loss=-10.5664, flow_loss=-8.6208, v_grad=10.9654, flow_grad=0.0000, E[|v|²]=18.6937
+Saved plot to results/aggressive/epoch_0003.png
+Epoch 4/50: v_loss=-10.2612, flow_loss=-8.4339, v_grad=7.6282, flow_grad=0.0000, E[|v|²]=22.0458
+Saved plot to results/aggressive/epoch_0004.png
+Epoch 5/50: v_loss=-10.8260, flow_loss=-8.5670, v_grad=8.7009, flow_grad=0.0000, E[|v|²]=23.4701
+Saved plot to results/aggressive/epoch_0005.png
+Epoch 6/50: v_loss=-10.6457, flow_loss=-10.4591, v_grad=5.7120, flow_grad=0.0000, E[|v|²]=21.8628
+Saved plot to results/aggressive/epoch_0006.png
+Epoch 7/50: v_loss=-10.0871, flow_loss=-10.4397, v_grad=4.3741, flow_grad=0.0000, E[|v|²]=20.2015
+Saved plot to results/aggressive/epoch_0007.png
+Epoch 8/50: v_loss=-9.7588, flow_loss=-10.2881, v_grad=5.7080, flow_grad=0.0000, E[|v|²]=21.7209
+Saved plot to results/aggressive/epoch_0008.png
+Epoch 9/50: v_loss=-10.1492, flow_loss=-10.1660, v_grad=5.3061, flow_grad=0.0000, E[|v|²]=21.2592
+Saved plot to results/aggressive/epoch_0009.png
+Epoch 10/50: v_loss=-9.6393, flow_loss=-10.8478, v_grad=7.0942, flow_grad=0.0000, E[|v|²]=19.8196
+Saved plot to results/aggressive/epoch_0010.png
+Epoch 11/50: v_loss=-9.6107, flow_loss=-9.4875, v_grad=6.0502, flow_grad=0.0000, E[|v|²]=19.9062
+Saved plot to results/aggressive/epoch_0011.png
+Epoch 12/50: v_loss=-10.3289, flow_loss=-10.2776, v_grad=4.3775, flow_grad=0.0000, E[|v|²]=22.1593
+Saved plot to results/aggressive/epoch_0012.png
+Epoch 13/50: v_loss=-10.0988, flow_loss=-10.6776, v_grad=5.1632, flow_grad=0.0000, E[|v|²]=20.5421
+Saved plot to results/aggressive/epoch_0013.png
+Epoch 14/50: v_loss=-9.2074, flow_loss=-8.8873, v_grad=5.2749, flow_grad=0.0000, E[|v|²]=19.8878
+Saved plot to results/aggressive/epoch_0014.png
+Epoch 15/50: v_loss=-10.1805, flow_loss=-8.5138, v_grad=3.5078, flow_grad=0.0000, E[|v|²]=19.9841
+Saved plot to results/aggressive/epoch_0015.png
+Epoch 16/50: v_loss=-10.1886, flow_loss=-9.6290, v_grad=4.0366, flow_grad=0.0000, E[|v|²]=20.4841
+Saved plot to results/aggressive/epoch_0016.png
+Epoch 17/50: v_loss=-10.7707, flow_loss=-10.7585, v_grad=5.6073, flow_grad=0.0000, E[|v|²]=20.6097
+Saved plot to results/aggressive/epoch_0017.png
+Epoch 18/50: v_loss=-9.0604, flow_loss=-9.8459, v_grad=3.6577, flow_grad=0.0000, E[|v|²]=19.9272
+Saved plot to results/aggressive/epoch_0018.png
+Epoch 19/50: v_loss=-10.8804, flow_loss=-9.7970, v_grad=3.2530, flow_grad=0.0000, E[|v|²]=21.6001
+Saved plot to results/aggressive/epoch_0019.png
+Epoch 20/50: v_loss=-10.7078, flow_loss=-9.3304, v_grad=6.2366, flow_grad=0.0000, E[|v|²]=20.0551
+Saved plot to results/aggressive/epoch_0020.png
+Epoch 21/50: v_loss=-9.2095, flow_loss=-10.0734, v_grad=7.4471, flow_grad=0.0000, E[|v|²]=20.9533
+Saved plot to results/aggressive/epoch_0021.png
+Epoch 22/50: v_loss=-10.8635, flow_loss=-8.6654, v_grad=4.3776, flow_grad=0.0000, E[|v|²]=20.6486
+Saved plot to results/aggressive/epoch_0022.png
+Epoch 23/50: v_loss=-9.5654, flow_loss=-10.5992, v_grad=3.8829, flow_grad=0.0000, E[|v|²]=20.2792
+Saved plot to results/aggressive/epoch_0023.png
+Epoch 24/50: v_loss=-9.7859, flow_loss=-8.9963, v_grad=4.1841, flow_grad=0.0000, E[|v|²]=21.0330
+Saved plot to results/aggressive/epoch_0024.png
+Epoch 25/50: v_loss=-9.2009, flow_loss=-9.2816, v_grad=6.9402, flow_grad=0.0000, E[|v|²]=20.3610
+Saved plot to results/aggressive/epoch_0025.png
+Epoch 26/50: v_loss=-8.3968, flow_loss=-8.8276, v_grad=6.4799, flow_grad=0.0000, E[|v|²]=19.1171
+Saved plot to results/aggressive/epoch_0026.png
+Epoch 27/50: v_loss=-9.4822, flow_loss=-9.8490, v_grad=3.6720, flow_grad=0.0000, E[|v|²]=20.0755
+Saved plot to results/aggressive/epoch_0027.png
+Epoch 28/50: v_loss=-9.7720, flow_loss=-10.2913, v_grad=4.4007, flow_grad=0.0000, E[|v|²]=18.9226
+Saved plot to results/aggressive/epoch_0028.png
+Epoch 29/50: v_loss=-10.4965, flow_loss=-10.1139, v_grad=6.4744, flow_grad=0.0000, E[|v|²]=20.8788
+Saved plot to results/aggressive/epoch_0029.png
+Epoch 30/50: v_loss=-8.5607, flow_loss=-9.8216, v_grad=5.0908, flow_grad=0.0000, E[|v|²]=19.6808
+Saved plot to results/aggressive/epoch_0030.png
+Epoch 31/50: v_loss=-10.0333, flow_loss=-10.0985, v_grad=5.4196, flow_grad=0.0000, E[|v|²]=20.5527
+Saved plot to results/aggressive/epoch_0031.png
+Epoch 32/50: v_loss=-10.0581, flow_loss=-10.3098, v_grad=3.7979, flow_grad=0.0000, E[|v|²]=20.7195
+Saved plot to results/aggressive/epoch_0032.png
+Epoch 33/50: v_loss=-9.8822, flow_loss=-8.4861, v_grad=2.9905, flow_grad=0.0000, E[|v|²]=20.5506
+Saved plot to results/aggressive/epoch_0033.png
+Epoch 34/50: v_loss=-8.7869, flow_loss=-9.5255, v_grad=5.4651, flow_grad=0.0000, E[|v|²]=20.4439
+Saved plot to results/aggressive/epoch_0034.png
+Epoch 35/50: v_loss=-9.6622, flow_loss=-10.7903, v_grad=3.0090, flow_grad=0.0000, E[|v|²]=20.6805
+Saved plot to results/aggressive/epoch_0035.png
+Epoch 36/50: v_loss=-9.7209, flow_loss=-10.6777, v_grad=3.6289, flow_grad=0.0000, E[|v|²]=21.0456
+Saved plot to results/aggressive/epoch_0036.png
+Epoch 37/50: v_loss=-11.3681, flow_loss=-10.0820, v_grad=4.5869, flow_grad=0.0000, E[|v|²]=20.6296
+Saved plot to results/aggressive/epoch_0037.png
+Epoch 38/50: v_loss=-9.9024, flow_loss=-9.6477, v_grad=3.6563, flow_grad=0.0000, E[|v|²]=20.4511
+Saved plot to results/aggressive/epoch_0038.png
+Epoch 39/50: v_loss=-10.1257, flow_loss=-9.8026, v_grad=4.2804, flow_grad=0.0000, E[|v|²]=20.0368
+Saved plot to results/aggressive/epoch_0039.png
+Epoch 40/50: v_loss=-10.3361, flow_loss=-9.4612, v_grad=5.3063, flow_grad=0.0000, E[|v|²]=21.1803
+Saved plot to results/aggressive/epoch_0040.png
+Epoch 41/50: v_loss=-9.8636, flow_loss=-9.7407, v_grad=4.3255, flow_grad=0.0000, E[|v|²]=20.2478
+Saved plot to results/aggressive/epoch_0041.png
+Epoch 42/50: v_loss=-9.7772, flow_loss=-9.5463, v_grad=3.4290, flow_grad=0.0000, E[|v|²]=20.3030
+Saved plot to results/aggressive/epoch_0042.png
+Epoch 43/50: v_loss=-10.1295, flow_loss=-10.2237, v_grad=4.1022, flow_grad=0.0000, E[|v|²]=20.9150
+Saved plot to results/aggressive/epoch_0043.png
+Epoch 44/50: v_loss=-10.7724, flow_loss=-10.2369, v_grad=4.0322, flow_grad=0.0000, E[|v|²]=21.0137
+Saved plot to results/aggressive/epoch_0044.png
+Epoch 45/50: v_loss=-9.1290, flow_loss=-10.6927, v_grad=3.2381, flow_grad=0.0000, E[|v|²]=20.6201
+Saved plot to results/aggressive/epoch_0045.png
+Epoch 46/50: v_loss=-10.6767, flow_loss=-9.3030, v_grad=3.9739, flow_grad=0.0000, E[|v|²]=20.6199
+Saved plot to results/aggressive/epoch_0046.png
+Epoch 47/50: v_loss=-9.4603, flow_loss=-10.3466, v_grad=5.8969, flow_grad=0.0000, E[|v|²]=20.1402
+Saved plot to results/aggressive/epoch_0047.png
+Epoch 48/50: v_loss=-9.9984, flow_loss=-10.0815, v_grad=4.3774, flow_grad=0.0000, E[|v|²]=20.7754
+Saved plot to results/aggressive/epoch_0048.png
+Epoch 49/50: v_loss=-9.5759, flow_loss=-11.1744, v_grad=4.4731, flow_grad=0.0000, E[|v|²]=20.5339
+Saved plot to results/aggressive/epoch_0049.png
+Epoch 50/50: v_loss=-9.9099, flow_loss=-9.3354, v_grad=4.4913, flow_grad=0.0000, E[|v|²]=20.8087
+Saved plot to results/aggressive/epoch_0050.png
+===========================================
+Job finished at Thu Sep 25 03:36:05 AM EDT 2025
+Exit code: 1
+===========================================

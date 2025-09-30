@@ -1,0 +1,17 @@
+Lmod has detected the following error: The following module(s) are unknown:
+"anaconda3"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "anaconda3"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+/var/spool/slurm/job3620653/slurm_script: line 28: activate: No such file or directory
+Traceback (most recent call last):
+  File "/home/wang6559/Desktop/stochastic-interpolants/tune_hyperparameters.py", line 9, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'

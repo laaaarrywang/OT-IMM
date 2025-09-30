@@ -1,0 +1,154 @@
+===========================================
+Starting job on g003.gautschi.rcac.purdue.edu at Thu Sep 25 03:43:07 AM EDT 2025
+Config file: configs/enhanced_rect.json
+Job ID: 3593255
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Thu Sep 25 03:43:07 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:E1:00.0 Off |                    0 |
+| N/A   40C    P8             35W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/enhanced_rect.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/enhanced_rect/config.json
+
+Starting training for 50 epochs...
+Output directory: results/enhanced_rect
+Epoch 1/50: v_loss=-9.3965, flow_loss=-10.8878, v_grad=5.3460, flow_grad=0.0000, E[|v|²]=22.4123
+Saved plot to results/enhanced_rect/epoch_0001.png
+Epoch 2/50: v_loss=-9.2024, flow_loss=-9.7981, v_grad=5.5450, flow_grad=0.0000, E[|v|²]=18.2850
+Saved plot to results/enhanced_rect/epoch_0002.png
+Epoch 3/50: v_loss=-10.7847, flow_loss=-9.8732, v_grad=4.2266, flow_grad=0.0000, E[|v|²]=21.1876
+Saved plot to results/enhanced_rect/epoch_0003.png
+Epoch 4/50: v_loss=-9.9826, flow_loss=-8.8498, v_grad=4.7616, flow_grad=0.0000, E[|v|²]=20.1017
+Saved plot to results/enhanced_rect/epoch_0004.png
+Epoch 5/50: v_loss=-9.7078, flow_loss=-9.6260, v_grad=4.7535, flow_grad=0.0000, E[|v|²]=20.5621
+Saved plot to results/enhanced_rect/epoch_0005.png
+Epoch 6/50: v_loss=-10.8566, flow_loss=-9.7181, v_grad=5.0767, flow_grad=0.0000, E[|v|²]=20.8465
+Saved plot to results/enhanced_rect/epoch_0006.png
+Epoch 7/50: v_loss=-9.7333, flow_loss=-10.0223, v_grad=3.3879, flow_grad=0.0000, E[|v|²]=20.1749
+Saved plot to results/enhanced_rect/epoch_0007.png
+Epoch 8/50: v_loss=-10.0780, flow_loss=-10.1719, v_grad=3.1452, flow_grad=0.0000, E[|v|²]=20.0817
+Saved plot to results/enhanced_rect/epoch_0008.png
+Epoch 9/50: v_loss=-11.5918, flow_loss=-10.7318, v_grad=4.0505, flow_grad=0.0000, E[|v|²]=20.8346
+Saved plot to results/enhanced_rect/epoch_0009.png
+Epoch 10/50: v_loss=-9.6642, flow_loss=-10.4472, v_grad=4.2343, flow_grad=0.0000, E[|v|²]=20.2862
+Saved plot to results/enhanced_rect/epoch_0010.png
+Epoch 11/50: v_loss=-9.4370, flow_loss=-10.2397, v_grad=4.3081, flow_grad=0.0000, E[|v|²]=20.7343
+Saved plot to results/enhanced_rect/epoch_0011.png
+Epoch 12/50: v_loss=-10.4042, flow_loss=-9.1520, v_grad=4.1507, flow_grad=0.0000, E[|v|²]=20.6950
+Saved plot to results/enhanced_rect/epoch_0012.png
+Epoch 13/50: v_loss=-10.3925, flow_loss=-10.1964, v_grad=5.4405, flow_grad=0.0000, E[|v|²]=20.5296
+Saved plot to results/enhanced_rect/epoch_0013.png
+Epoch 14/50: v_loss=-9.6122, flow_loss=-8.7548, v_grad=4.9515, flow_grad=0.0000, E[|v|²]=20.8360
+Saved plot to results/enhanced_rect/epoch_0014.png
+Epoch 15/50: v_loss=-10.3290, flow_loss=-10.0468, v_grad=4.4719, flow_grad=0.0000, E[|v|²]=20.8007
+Saved plot to results/enhanced_rect/epoch_0015.png
+Epoch 16/50: v_loss=-10.2238, flow_loss=-8.8236, v_grad=4.2650, flow_grad=0.0000, E[|v|²]=20.9108
+Saved plot to results/enhanced_rect/epoch_0016.png
+Epoch 17/50: v_loss=-10.9755, flow_loss=-10.5597, v_grad=2.9479, flow_grad=0.0000, E[|v|²]=20.8013
+Saved plot to results/enhanced_rect/epoch_0017.png
+Epoch 18/50: v_loss=-9.6529, flow_loss=-10.3664, v_grad=4.4181, flow_grad=0.0000, E[|v|²]=20.8566
+Saved plot to results/enhanced_rect/epoch_0018.png
+Epoch 19/50: v_loss=-10.1672, flow_loss=-10.6123, v_grad=5.8733, flow_grad=0.0000, E[|v|²]=20.5165
+Saved plot to results/enhanced_rect/epoch_0019.png
+Epoch 20/50: v_loss=-10.0709, flow_loss=-9.2464, v_grad=3.7271, flow_grad=0.0000, E[|v|²]=20.7658
+Saved plot to results/enhanced_rect/epoch_0020.png
+Epoch 21/50: v_loss=-10.4446, flow_loss=-10.8074, v_grad=4.8165, flow_grad=0.0000, E[|v|²]=20.8496
+Saved plot to results/enhanced_rect/epoch_0021.png
+Epoch 22/50: v_loss=-11.6447, flow_loss=-10.0966, v_grad=4.9142, flow_grad=0.0000, E[|v|²]=20.4846
+Saved plot to results/enhanced_rect/epoch_0022.png
+Epoch 23/50: v_loss=-9.0186, flow_loss=-9.8029, v_grad=4.7025, flow_grad=0.0000, E[|v|²]=20.9376
+Saved plot to results/enhanced_rect/epoch_0023.png
+Epoch 24/50: v_loss=-9.9375, flow_loss=-10.6664, v_grad=4.8604, flow_grad=0.0000, E[|v|²]=21.0845
+Saved plot to results/enhanced_rect/epoch_0024.png
+Epoch 25/50: v_loss=-9.9403, flow_loss=-10.7419, v_grad=4.8605, flow_grad=0.0000, E[|v|²]=20.7922
+Saved plot to results/enhanced_rect/epoch_0025.png
+Epoch 26/50: v_loss=-9.7236, flow_loss=-10.5597, v_grad=4.8793, flow_grad=0.0000, E[|v|²]=20.6136
+Saved plot to results/enhanced_rect/epoch_0026.png
+Epoch 27/50: v_loss=-10.0528, flow_loss=-10.1489, v_grad=3.5702, flow_grad=0.0000, E[|v|²]=20.6320
+Saved plot to results/enhanced_rect/epoch_0027.png
+Epoch 28/50: v_loss=-10.5017, flow_loss=-9.1208, v_grad=3.5973, flow_grad=0.0000, E[|v|²]=20.6400
+Saved plot to results/enhanced_rect/epoch_0028.png
+Epoch 29/50: v_loss=-10.9339, flow_loss=-11.2498, v_grad=3.8426, flow_grad=0.0000, E[|v|²]=20.7096
+Saved plot to results/enhanced_rect/epoch_0029.png
+Epoch 30/50: v_loss=-9.7892, flow_loss=-9.7922, v_grad=4.7132, flow_grad=0.0000, E[|v|²]=20.3932
+Saved plot to results/enhanced_rect/epoch_0030.png
+Epoch 31/50: v_loss=-10.4204, flow_loss=-10.1534, v_grad=3.2192, flow_grad=0.0000, E[|v|²]=20.5717
+Saved plot to results/enhanced_rect/epoch_0031.png
+Epoch 32/50: v_loss=-9.7551, flow_loss=-10.4201, v_grad=3.9976, flow_grad=0.0000, E[|v|²]=20.7238
+Saved plot to results/enhanced_rect/epoch_0032.png
+Epoch 33/50: v_loss=-10.2936, flow_loss=-9.9484, v_grad=4.1721, flow_grad=0.0000, E[|v|²]=20.9716
+Saved plot to results/enhanced_rect/epoch_0033.png
+Epoch 34/50: v_loss=-9.8019, flow_loss=-10.5721, v_grad=4.2982, flow_grad=0.0000, E[|v|²]=20.6104
+Saved plot to results/enhanced_rect/epoch_0034.png
+Epoch 35/50: v_loss=-10.1091, flow_loss=-10.3639, v_grad=4.5949, flow_grad=0.0000, E[|v|²]=20.4497
+Saved plot to results/enhanced_rect/epoch_0035.png
+Epoch 36/50: v_loss=-10.8917, flow_loss=-8.4718, v_grad=5.1164, flow_grad=0.0000, E[|v|²]=21.0699
+Saved plot to results/enhanced_rect/epoch_0036.png
+Epoch 37/50: v_loss=-9.5816, flow_loss=-9.8547, v_grad=5.6292, flow_grad=0.0000, E[|v|²]=20.6471
+Saved plot to results/enhanced_rect/epoch_0037.png
+Epoch 38/50: v_loss=-9.8961, flow_loss=-10.6590, v_grad=5.5992, flow_grad=0.0000, E[|v|²]=20.6237
+Saved plot to results/enhanced_rect/epoch_0038.png
+Epoch 39/50: v_loss=-10.1202, flow_loss=-10.8726, v_grad=4.2838, flow_grad=0.0000, E[|v|²]=20.7046
+Saved plot to results/enhanced_rect/epoch_0039.png
+Epoch 40/50: v_loss=-9.6947, flow_loss=-9.1580, v_grad=4.5132, flow_grad=0.0000, E[|v|²]=20.6515
+Saved plot to results/enhanced_rect/epoch_0040.png
+Epoch 41/50: v_loss=-10.9437, flow_loss=-9.6592, v_grad=4.8594, flow_grad=0.0000, E[|v|²]=20.6410
+Saved plot to results/enhanced_rect/epoch_0041.png
+Epoch 42/50: v_loss=-10.3556, flow_loss=-9.4484, v_grad=3.7329, flow_grad=0.0000, E[|v|²]=21.0483
+Saved plot to results/enhanced_rect/epoch_0042.png
+Epoch 43/50: v_loss=-9.8711, flow_loss=-10.7751, v_grad=4.9585, flow_grad=0.0000, E[|v|²]=20.7131
+Saved plot to results/enhanced_rect/epoch_0043.png
+Epoch 44/50: v_loss=-9.9893, flow_loss=-9.4522, v_grad=4.8594, flow_grad=0.0000, E[|v|²]=20.7767
+Saved plot to results/enhanced_rect/epoch_0044.png
+Epoch 45/50: v_loss=-9.6674, flow_loss=-9.6302, v_grad=4.7580, flow_grad=0.0000, E[|v|²]=20.7161
+Saved plot to results/enhanced_rect/epoch_0045.png
+Epoch 46/50: v_loss=-10.3131, flow_loss=-9.8299, v_grad=3.4080, flow_grad=0.0000, E[|v|²]=20.8756
+Saved plot to results/enhanced_rect/epoch_0046.png
+Epoch 47/50: v_loss=-10.3830, flow_loss=-10.0805, v_grad=3.8953, flow_grad=0.0000, E[|v|²]=20.8405
+Saved plot to results/enhanced_rect/epoch_0047.png
+Epoch 48/50: v_loss=-11.0073, flow_loss=-9.4861, v_grad=4.4900, flow_grad=0.0000, E[|v|²]=20.4935
+Saved plot to results/enhanced_rect/epoch_0048.png
+Epoch 49/50: v_loss=-10.2113, flow_loss=-10.7688, v_grad=4.2691, flow_grad=0.0000, E[|v|²]=21.0510
+Saved plot to results/enhanced_rect/epoch_0049.png
+Epoch 50/50: v_loss=-9.7003, flow_loss=-10.0429, v_grad=5.4081, flow_grad=0.0000, E[|v|²]=20.6722
+Saved plot to results/enhanced_rect/epoch_0050.png
+===========================================
+Job finished at Thu Sep 25 03:58:43 AM EDT 2025
+Exit code: 1
+===========================================

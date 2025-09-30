@@ -1,0 +1,2 @@
+/home/wang6559/.conda/envs/OT_IMM/lib/python3.10/site-packages/torch/__init__.py:1144: UserWarning: torch.set_default_tensor_type() is deprecated as of PyTorch 2.1, please use torch.set_default_dtype() and torch.set_default_device() as alternatives. (Triggered internally at /opt/conda/conda-bld/pytorch_1729647352509/work/torch/csrc/tensor/python_tensor.cpp:432.)
+  _C._set_default_tensor_type(t)

@@ -1,0 +1,31 @@
+{
+  "exp_name": "rhombus_fast",
+  "training": {
+    "num_epochs": 100,
+    "batch_size": 1000,
+    "n_inner": 500,
+    "n_outer": 10,
+    "base_lr_v": 0.003,
+    "base_lr_flow": 0.001,
+    "v_sq_samples": 50000,
+    "v_sq_time_points": 100,
+    "plot_batch_size": 10000,
+    "target_type": "rhombus",
+    "warmup_steps": 50,
+    "seed": 2
+  },
+  "flow_config": {
+    "num_layers": 2,
+    "hidden": 256,
+    "mlp_blocks": 2,
+    "time_embed_dim": 128,
+    "activation": "gelu",
+    "use_layernorm": false,
+    "use_permutation": true,
+    "fourier_min_freq": 1.0,
+    "fourier_max_freq": 10.0,
+    "vector_use_spectral_norm": true,
+    "vector_log_scale_clamp": 2.0,
+    "vector_use_soft_clamp": true
+  }
+}

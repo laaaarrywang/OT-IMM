@@ -1,0 +1,44 @@
+==========================================
+Hyperparameter Tuning Job
+==========================================
+Job ID: 3620654
+Job Name: tune_deeper_4layer
+Node: g004
+Config: tune_configs/deeper_4layer.json
+Start time: Mon Sep 29 06:55:20 PM EDT 2025
+
+GPU Information:
+NVIDIA L40S, 46068 MiB, 45458 MiB
+
+Configuration:
+{
+  "n_epochs": 100,
+  "batch_size": 1000,
+  "n_inner": 500,
+  "n_outer": 10,
+  "sched_step_size": 5000,
+  "v_hidden_sizes": [
+    256,
+    256,
+    256,
+    256
+  ],
+  "time_embed_dim": 128,
+  "name": "deeper_4layer",
+  "lr_v": 0.002,
+  "lr_flow": 0.001,
+  "flow_num_layers": 4,
+  "flow_hidden": 128,
+  "mlp_blocks": 2,
+  "fourier_max_freq": 10.0,
+  "use_spectral_norm": true,
+  "log_scale_clamp": 1.0
+}
+==========================================
+Starting training...
+==========================================
+
+==========================================
+Job completed with exit code: 1
+End time: Mon Sep 29 06:55:20 PM EDT 2025
+==========================================

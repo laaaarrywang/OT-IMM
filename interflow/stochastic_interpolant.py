@@ -87,18 +87,20 @@ class Interpolant(torch.nn.Module):
     gamma_type:   what type of gamma function to use, e.g. 'brownian' for $\gamma(t) = \sqrt{t(1-t)}
     """
     def __init__(
-        self, 
+        self,
         path: str,
         gamma_type: str,
         gamma: Callable[[Time], torch.tensor]          = None,
         gamma_dot: Callable[[Time], torch.tensor]      = None,
         gg_dot: Callable[[Time], torch.tensor]         = None,
-        It: Callable[[Time, Sample, Sample], Sample]   = None, 
+        It: Callable[[Time, Sample, Sample], Sample]   = None,
         dtIt: Callable[[Time, Sample, Sample], Sample] = None,
         # new parameters for nonlinear interpolant
         flow_config: dict = None,
         data_type: str = None,
         data_dim: tuple = None,
+        # new parameter for diagonal matrix interpolant (for debugging)
+        diagonal_scale: torch.tensor = None,
     ) -> None:
         super(Interpolant, self).__init__()
         
@@ -118,10 +120,10 @@ class Interpolant(torch.nn.Module):
             assert self.It != None
             assert self.dtIt != None
         elif self.path == "nonlinear":
-            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
+            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim, diagonal_scale)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         else:
-            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot)
+            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, diagonal_scale=diagonal_scale)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         
 
@@ -138,8 +140,18 @@ class Interpolant(torch.nn.Module):
         Used if estimating the score and not the noise (eta). 
         """
         if self.path=='one-sided-linear' or self.path == 'one-sided-trig':
-            It_p = self.b(t)*x1 + self.a(t)*x0
-            It_m = self.b(t)*x1 - self.a(t)*x0
+            def _apply_coeff(vec: torch.tensor, coeff: torch.tensor) -> torch.tensor:
+                if not torch.is_tensor(coeff) or coeff.dim() == 0:
+                    return coeff * vec
+                coeff = coeff.to(dtype=vec.dtype, device=vec.device)
+                if vec.dim() == 1:
+                    return torch.matmul(coeff, vec)
+                if vec.dim() == 2:
+                    return torch.matmul(vec, coeff.transpose(-1, -2))
+                raise ValueError(f"Unsupported tensor rank {vec.dim()} for coefficient application")
+
+            It_p = _apply_coeff(x1, self.b(t)) + _apply_coeff(x0, self.a(t))
+            It_m = _apply_coeff(x1, self.b(t)) - _apply_coeff(x0, self.a(t))
             return It_p, It_m, x0
         else:
             z   = torch.randn(x0.shape).to(t)
@@ -658,17 +670,17 @@ def loss_per_sample_one_sided_v(
     interpolant: Interpolant
 ) -> torch.tensor:
     """Compute the loss on an individual sample.
-       Modified to adapt to nonlinear stochastic interpolants
+       Clean and simple implementation for all data types.
     """
-    x0    = x0.unsqueeze(0)
-    x1    = x1.unsqueeze(0)
-    xt    = interpolant.calc_xt(t, x0, x1)
-    # xt already has batch dim [B, dim]
-    #t = t.unsqueeze(0), no need to do this since It_method and dtIt_method will check dimension of t
-    dtIt  = interpolant.dtIt(t, x0, x1)
+    # Always add batch dimension - all interpolants expect [batch, features]
+    x0 = x0.unsqueeze(0)
+    x1 = x1.unsqueeze(0)
+
+    xt = interpolant.calc_xt(t, x0, x1)
+    dtIt = interpolant.dtIt(t, x0, x1)
     vt = v(xt, t)
-    loss  = 0.5*torch.sum(vt**2) - torch.sum((dtIt) * vt)
-    
+    loss = 0.5*torch.sum(vt**2) - torch.sum((dtIt) * vt)
+
     return loss
 
 
@@ -687,10 +699,28 @@ def loss_per_sample_one_sided_s(
     stp         = s(xtp, t)
     stm         = s(xtm, t)
     alpha       = interpolant.a(t)
-    
-    loss      = 0.5*torch.sum(stp**2) + (1 / (alpha))*torch.sum(stp*x0)
-    loss     += 0.5*torch.sum(stm**2) - (1 / (alpha))*torch.sum(stm*x0)
-    
+
+    stp_vec = stp.squeeze(0)
+    stm_vec = stm.squeeze(0)
+    x0_vec = x0 if x0.dim() == 1 else x0.squeeze(0)
+
+    if torch.is_tensor(alpha) and alpha.dim() >= 1:
+        alpha_t = alpha.to(dtype=x0_vec.dtype, device=x0_vec.device)
+        if alpha_t.dim() == 2:
+            alpha_inv = torch.linalg.inv(alpha_t)
+            scaled_x0 = torch.matmul(alpha_inv, x0_vec)
+        elif alpha_t.dim() == 1:
+            scaled_x0 = torch.reciprocal(alpha_t) * x0_vec
+        else:
+            scaled_x0 = torch.reciprocal(alpha_t) * x0_vec
+        loss = 0.5 * torch.dot(stp_vec, stp_vec) + torch.dot(stp_vec, scaled_x0)
+        loss += 0.5 * torch.dot(stm_vec, stm_vec) - torch.dot(stm_vec, scaled_x0)
+    else:
+        alpha_scalar = alpha if torch.is_tensor(alpha) else torch.tensor(alpha, dtype=x0_vec.dtype, device=x0_vec.device)
+        inv_alpha = 1.0 / alpha_scalar
+        loss = 0.5 * torch.dot(stp_vec, stp_vec) + inv_alpha * torch.dot(stp_vec, x0_vec)
+        loss += 0.5 * torch.dot(stm_vec, stm_vec) - inv_alpha * torch.dot(stm_vec, x0_vec)
+
     return loss
 
 
@@ -769,6 +799,4 @@ def make_loss(
         return loss_val
     
     return loss
-
-
 

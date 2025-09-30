@@ -1,0 +1,150 @@
+===========================================
+Starting job on g003.gautschi.rcac.purdue.edu at Thu Sep 25 03:31:33 AM EDT 2025
+Config file: configs/baseline.json
+Job ID: 3593252
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Thu Sep 25 03:31:33 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:E1:00.0 Off |                    0 |
+| N/A   33C    P8             33W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/baseline.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/baseline/config.json
+
+Starting training for 50 epochs...
+Output directory: results/baseline
+Epoch 1/50: v_loss=-10.2116, flow_loss=-10.4042, v_grad=5.9740, flow_grad=0.0000, E[|v|²]=22.1510
+Saved plot to results/baseline/epoch_0001.png
+Epoch 2/50: v_loss=-10.2259, flow_loss=-9.9594, v_grad=5.5784, flow_grad=0.0000, E[|v|²]=19.2056
+Saved plot to results/baseline/epoch_0002.png
+Epoch 3/50: v_loss=-10.7335, flow_loss=-9.7383, v_grad=4.4295, flow_grad=0.0000, E[|v|²]=21.1678
+Saved plot to results/baseline/epoch_0003.png
+Epoch 4/50: v_loss=-10.1163, flow_loss=-10.6165, v_grad=3.8241, flow_grad=0.0000, E[|v|²]=20.7950
+Saved plot to results/baseline/epoch_0004.png
+Epoch 5/50: v_loss=-9.6814, flow_loss=-9.6821, v_grad=3.7626, flow_grad=0.0000, E[|v|²]=19.7585
+Saved plot to results/baseline/epoch_0005.png
+Epoch 6/50: v_loss=-10.6044, flow_loss=-10.3907, v_grad=4.5954, flow_grad=0.0000, E[|v|²]=20.3191
+Saved plot to results/baseline/epoch_0006.png
+Epoch 7/50: v_loss=-9.7676, flow_loss=-10.6986, v_grad=4.7978, flow_grad=0.0000, E[|v|²]=21.0532
+Saved plot to results/baseline/epoch_0007.png
+Epoch 8/50: v_loss=-9.3964, flow_loss=-9.9753, v_grad=4.5991, flow_grad=0.0000, E[|v|²]=20.4250
+Saved plot to results/baseline/epoch_0008.png
+Epoch 9/50: v_loss=-10.1879, flow_loss=-9.9936, v_grad=3.6846, flow_grad=0.0000, E[|v|²]=20.4552
+Saved plot to results/baseline/epoch_0009.png
+Epoch 10/50: v_loss=-8.0323, flow_loss=-9.7943, v_grad=6.4028, flow_grad=0.0000, E[|v|²]=20.5103
+Saved plot to results/baseline/epoch_0010.png
+Epoch 11/50: v_loss=-10.5119, flow_loss=-9.8065, v_grad=3.6955, flow_grad=0.0000, E[|v|²]=20.7293
+Saved plot to results/baseline/epoch_0011.png
+Epoch 12/50: v_loss=-10.6192, flow_loss=-10.0579, v_grad=3.0635, flow_grad=0.0000, E[|v|²]=20.5938
+Saved plot to results/baseline/epoch_0012.png
+Epoch 13/50: v_loss=-10.6532, flow_loss=-9.9816, v_grad=5.4469, flow_grad=0.0000, E[|v|²]=21.1300
+Saved plot to results/baseline/epoch_0013.png
+Epoch 14/50: v_loss=-9.3009, flow_loss=-9.7413, v_grad=4.1740, flow_grad=0.0000, E[|v|²]=20.8530
+Saved plot to results/baseline/epoch_0014.png
+Epoch 15/50: v_loss=-10.0184, flow_loss=-9.9359, v_grad=3.8525, flow_grad=0.0000, E[|v|²]=20.4050
+Saved plot to results/baseline/epoch_0015.png
+Epoch 16/50: v_loss=-10.6743, flow_loss=-9.7276, v_grad=4.6692, flow_grad=0.0000, E[|v|²]=20.6470
+Saved plot to results/baseline/epoch_0016.png
+Epoch 17/50: v_loss=-10.2029, flow_loss=-11.6016, v_grad=3.1150, flow_grad=0.0000, E[|v|²]=20.6864
+Saved plot to results/baseline/epoch_0017.png
+Epoch 18/50: v_loss=-10.6214, flow_loss=-9.7148, v_grad=4.0309, flow_grad=0.0000, E[|v|²]=20.9171
+Saved plot to results/baseline/epoch_0018.png
+Epoch 19/50: v_loss=-10.1525, flow_loss=-11.5962, v_grad=3.0347, flow_grad=0.0000, E[|v|²]=20.5828
+Saved plot to results/baseline/epoch_0019.png
+Epoch 20/50: v_loss=-9.9715, flow_loss=-10.0405, v_grad=4.6864, flow_grad=0.0000, E[|v|²]=21.0948
+Saved plot to results/baseline/epoch_0020.png
+Epoch 21/50: v_loss=-9.7456, flow_loss=-10.3759, v_grad=4.6172, flow_grad=0.0000, E[|v|²]=20.6666
+Saved plot to results/baseline/epoch_0021.png
+Epoch 22/50: v_loss=-10.1388, flow_loss=-10.6364, v_grad=3.7481, flow_grad=0.0000, E[|v|²]=20.4876
+Saved plot to results/baseline/epoch_0022.png
+Epoch 23/50: v_loss=-9.5254, flow_loss=-11.0285, v_grad=6.4158, flow_grad=0.0000, E[|v|²]=21.0785
+Saved plot to results/baseline/epoch_0023.png
+Epoch 24/50: v_loss=-9.0926, flow_loss=-10.6366, v_grad=4.9782, flow_grad=0.0000, E[|v|²]=20.9275
+Saved plot to results/baseline/epoch_0024.png
+Epoch 25/50: v_loss=-10.5629, flow_loss=-11.3895, v_grad=3.5719, flow_grad=0.0000, E[|v|²]=20.4113
+Saved plot to results/baseline/epoch_0025.png
+Epoch 26/50: v_loss=-11.4948, flow_loss=-9.5247, v_grad=4.3268, flow_grad=0.0000, E[|v|²]=20.7486
+Saved plot to results/baseline/epoch_0026.png
+Epoch 27/50: v_loss=-9.9075, flow_loss=-8.9830, v_grad=5.3855, flow_grad=0.0000, E[|v|²]=20.4581
+Saved plot to results/baseline/epoch_0027.png
+Epoch 28/50: v_loss=-9.8365, flow_loss=-9.7999, v_grad=3.6269, flow_grad=0.0000, E[|v|²]=20.6577
+Saved plot to results/baseline/epoch_0028.png
+Epoch 29/50: v_loss=-10.8012, flow_loss=-9.5651, v_grad=5.9338, flow_grad=0.0000, E[|v|²]=20.6172
+Saved plot to results/baseline/epoch_0029.png
+Epoch 30/50: v_loss=-10.8499, flow_loss=-9.9156, v_grad=4.0307, flow_grad=0.0000, E[|v|²]=20.4787
+Saved plot to results/baseline/epoch_0030.png
+Epoch 31/50: v_loss=-9.2561, flow_loss=-10.7422, v_grad=4.0693, flow_grad=0.0000, E[|v|²]=21.0777
+Saved plot to results/baseline/epoch_0031.png
+Epoch 32/50: v_loss=-9.6772, flow_loss=-10.2527, v_grad=4.4167, flow_grad=0.0000, E[|v|²]=20.5885
+Saved plot to results/baseline/epoch_0032.png
+Epoch 33/50: v_loss=-10.3210, flow_loss=-10.5430, v_grad=5.2361, flow_grad=0.0000, E[|v|²]=20.9621
+Saved plot to results/baseline/epoch_0033.png
+Epoch 34/50: v_loss=-9.2079, flow_loss=-10.8941, v_grad=3.3623, flow_grad=0.0000, E[|v|²]=20.7128
+Saved plot to results/baseline/epoch_0034.png
+Epoch 35/50: v_loss=-10.2783, flow_loss=-10.5011, v_grad=4.9130, flow_grad=0.0000, E[|v|²]=20.5350
+Saved plot to results/baseline/epoch_0035.png
+Epoch 36/50: v_loss=-10.8253, flow_loss=-9.6271, v_grad=4.4259, flow_grad=0.0000, E[|v|²]=20.6563
+Saved plot to results/baseline/epoch_0036.png
+Epoch 37/50: v_loss=-9.6775, flow_loss=-9.7111, v_grad=3.4744, flow_grad=0.0000, E[|v|²]=20.8559
+Saved plot to results/baseline/epoch_0037.png
+Epoch 38/50: v_loss=-10.2294, flow_loss=-10.4040, v_grad=3.7581, flow_grad=0.0000, E[|v|²]=20.8095
+Saved plot to results/baseline/epoch_0038.png
+Epoch 39/50: v_loss=-10.5528, flow_loss=-10.8486, v_grad=4.3175, flow_grad=0.0000, E[|v|²]=20.9124
+Saved plot to results/baseline/epoch_0039.png
+Epoch 40/50: v_loss=-10.1303, flow_loss=-9.9389, v_grad=3.4164, flow_grad=0.0000, E[|v|²]=20.9249
+Saved plot to results/baseline/epoch_0040.png
+Epoch 41/50: v_loss=-9.4355, flow_loss=-10.5140, v_grad=4.0886, flow_grad=0.0000, E[|v|²]=20.7926
+Saved plot to results/baseline/epoch_0041.png
+Epoch 42/50: v_loss=-10.9245, flow_loss=-11.0529, v_grad=4.2451, flow_grad=0.0000, E[|v|²]=20.7823
+Saved plot to results/baseline/epoch_0042.png
+Epoch 43/50: v_loss=-9.9595, flow_loss=-9.4311, v_grad=4.4014, flow_grad=0.0000, E[|v|²]=21.0525
+Saved plot to results/baseline/epoch_0043.png
+Epoch 44/50: v_loss=-9.3285, flow_loss=-10.8424, v_grad=3.6981, flow_grad=0.0000, E[|v|²]=20.9050
+Saved plot to results/baseline/epoch_0044.png
+Epoch 45/50: v_loss=-10.6170, flow_loss=-10.3215, v_grad=4.0553, flow_grad=0.0000, E[|v|²]=20.7971
+Saved plot to results/baseline/epoch_0045.png
+Epoch 46/50: v_loss=-10.1400, flow_loss=-10.1385, v_grad=5.3669, flow_grad=0.0000, E[|v|²]=20.5837
+Saved plot to results/baseline/epoch_0046.png
+Epoch 47/50: v_loss=-10.7319, flow_loss=-9.7200, v_grad=3.6557, flow_grad=0.0000, E[|v|²]=20.7097
+Saved plot to results/baseline/epoch_0047.png
+Epoch 48/50: v_loss=-11.2010, flow_loss=-10.3928, v_grad=3.9382, flow_grad=0.0000, E[|v|²]=20.4939
+Saved plot to results/baseline/epoch_0048.png
+Epoch 49/50: v_loss=-10.5269, flow_loss=-9.8526, v_grad=3.7067, flow_grad=0.0000, E[|v|²]=20.7079
+Saved plot to results/baseline/epoch_0049.png
+Epoch 50/50: v_loss=-10.0013, flow_loss=-10.6124, v_grad=3.5243, flow_grad=0.0000, E[|v|²]=20.6687
+Saved plot to results/baseline/epoch_0050.png
+===========================================
+Job finished at Thu Sep 25 03:42:43 AM EDT 2025
+Exit code: 1
+===========================================

@@ -52,7 +52,9 @@ def make_fc_net(hidden_sizes, in_size, out_size, inner_act, final_act, **config)
 
 def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
            # New parameters for nonlinear interpolant
-           flow_config = None, data_type = 'vector', data_dim = None):
+           flow_config = None, data_type = 'vector', data_dim = None,
+           # New parameter for diagonal matrix coefficients (for debugging rectangular targets)
+           diagonal_scale = None):
     """gamma function must be specified if using the trigonometric interpolant
     
        For nonlinear interpolant:
@@ -94,14 +96,70 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
         dtIt = lambda t, x0, x1: adot(t)*x0 + bdot(t)*x1
     
     elif path == 'one-sided-linear':
+        # Original scalar implementation (kept for backward compatibility)
+        # a      = lambda t: (1-t)
+        # adot   = lambda t: -1.0
+        # b      = lambda t: t
+        # bdot   = lambda t: 1.0
+        # It   = lambda t, x0, x1: a(t)*x0 + b(t)*x1
+        # dtIt = lambda t, x0, x1: adot(t)*x0 + bdot(t)*x1
 
-        a      = lambda t: (1-t)
-        adot   = lambda t: -1.0
-        b      = lambda t: t
-        bdot   = lambda t: 1.0
-        
-        It   = lambda t, x0, x1: a(t)*x0 + b(t)*x1
-        dtIt = lambda t, x0, x1: adot(t)*x0 + bdot(t)*x1
+        # New implementation with optional diagonal scaling
+        if diagonal_scale is not None:
+            # diagonal_scale should be a tensor of shape [data_dim]
+            # Different interpolation speeds for each dimension
+            if not isinstance(diagonal_scale, torch.Tensor):
+                diagonal_scale = torch.tensor(diagonal_scale, dtype=torch.float32)
+
+            # Ensure diagonal_scale is positive
+            diagonal_scale = torch.abs(diagonal_scale)
+
+            def a(t):
+                # a(t) could also be diagonal, but keeping scalar for simplicity
+                return (1-t)
+
+            def adot(t):
+                return -1.0
+
+            def b(t):
+                # We want b(1) = 1 for all dimensions (identity behavior)
+                # But different dimensions can reach 1 at different rates
+                # Use a power function: b_i(t) = t^(1/scale_i)
+                # This ensures b_i(1) = 1 for all i, but with different speeds
+                if isinstance(t, torch.Tensor):
+                    t = t.view(-1, 1) if t.dim() > 0 else t
+                # Each dimension interpolates at rate controlled by 1/diagonal_scale
+                # Higher scale = slower interpolation for that dimension
+                return torch.pow(t, 1.0 / diagonal_scale)
+
+            def bdot(t):
+                # Derivative of t^(1/scale) is (1/scale) * t^(1/scale - 1)
+                if isinstance(t, torch.Tensor):
+                    t = t.view(-1, 1) if t.dim() > 0 else t
+                return (1.0 / diagonal_scale) * torch.pow(t, 1.0 / diagonal_scale - 1.0)
+
+            def It(t, x0, x1):
+                # Interpolation with diagonal b
+                # Each dimension has its own interpolation coefficient
+                b_diag = b(t)
+                if b_diag.dim() == 1:
+                    # Expand for broadcasting with batch
+                    b_diag = b_diag.unsqueeze(0)
+                return a(t)*x0 + b_diag*x1
+
+            def dtIt(t, x0, x1):
+                bdot_diag = bdot(t)
+                if bdot_diag.dim() == 1:
+                    bdot_diag = bdot_diag.unsqueeze(0)
+                return adot(t)*x0 + bdot_diag*x1
+        else:
+            # Original scalar implementation
+            a      = lambda t: (1-t)
+            adot   = lambda t: -1.0
+            b      = lambda t: t
+            bdot   = lambda t: 1.0
+            It   = lambda t, x0, x1: a(t)*x0 + b(t)*x1
+            dtIt = lambda t, x0, x1: adot(t)*x0 + bdot(t)*x1
 
     elif path == 'one-sided-trig':
 

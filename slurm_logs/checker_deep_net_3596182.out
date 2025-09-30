@@ -1,0 +1,260 @@
+===========================================
+Starting job on g003.gautschi.rcac.purdue.edu at Thu Sep 25 05:51:52 PM EDT 2025
+Config file: configs/deep_net.json
+Job ID: 3596182
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Thu Sep 25 17:51:52 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:E1:00.0 Off |                    0 |
+| N/A   33C    P8             33W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/deep_net.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/deep_net/config.json
+
+Starting training for 100 epochs...
+Output directory: results/deep_net
+Epoch 1/100: v_loss=17.1265, flow_loss=101.6551, v_grad=106.6810, flow_grad=3622.5681, E[|v|²]=37.0215
+Saved plot to results/deep_net/epoch_0001.png
+Epoch 2/100: v_loss=-1996.3679, flow_loss=15539.6592, v_grad=2396.1523, flow_grad=133486.7656, E[|v|²]=28138.6777
+Saved plot to results/deep_net/epoch_0002.png
+Epoch 3/100: v_loss=-9825.8740, flow_loss=94346.6250, v_grad=15742.2715, flow_grad=495026.1562, E[|v|²]=212386.5625
+Saved plot to results/deep_net/epoch_0003.png
+Epoch 4/100: v_loss=-512.6969, flow_loss=-2264.5315, v_grad=6958.7178, flow_grad=77704.5859, E[|v|²]=7745.6074
+Saved plot to results/deep_net/epoch_0004.png
+Epoch 5/100: v_loss=-1160.9453, flow_loss=9309.2666, v_grad=1715.8485, flow_grad=167327.6094, E[|v|²]=25949.0293
+Saved plot to results/deep_net/epoch_0005.png
+Epoch 6/100: v_loss=-202.0199, flow_loss=1036.1344, v_grad=2154.5930, flow_grad=26595.4863, E[|v|²]=2941.2666
+Saved plot to results/deep_net/epoch_0006.png
+Epoch 7/100: v_loss=-318.6425, flow_loss=1057.8152, v_grad=2156.1523, flow_grad=22516.1875, E[|v|²]=2821.4165
+Saved plot to results/deep_net/epoch_0007.png
+Epoch 8/100: v_loss=-2670.6917, flow_loss=13091.3584, v_grad=7050.0444, flow_grad=166760.7031, E[|v|²]=8028.5566
+Saved plot to results/deep_net/epoch_0008.png
+Epoch 9/100: v_loss=-14001.6738, flow_loss=91748.7422, v_grad=18262.5801, flow_grad=317592.3438, E[|v|²]=166574.5938
+Saved plot to results/deep_net/epoch_0009.png
+Epoch 10/100: v_loss=-7912.4219, flow_loss=179993.8594, v_grad=20852.0078, flow_grad=710451.1875, E[|v|²]=379610.4375
+Saved plot to results/deep_net/epoch_0010.png
+Epoch 11/100: v_loss=-2292.2615, flow_loss=324.8633, v_grad=6187.5913, flow_grad=52588.9297, E[|v|²]=9296.1709
+Saved plot to results/deep_net/epoch_0011.png
+Epoch 12/100: v_loss=-1484.6063, flow_loss=3373.9458, v_grad=1892.8458, flow_grad=95333.5703, E[|v|²]=12369.9922
+Saved plot to results/deep_net/epoch_0012.png
+Epoch 13/100: v_loss=-613.4894, flow_loss=885.8600, v_grad=2330.0530, flow_grad=24399.9004, E[|v|²]=2745.5312
+Saved plot to results/deep_net/epoch_0013.png
+Epoch 14/100: v_loss=-965.3458, flow_loss=2701.5032, v_grad=2971.3206, flow_grad=40488.4297, E[|v|²]=3511.1399
+Saved plot to results/deep_net/epoch_0014.png
+Epoch 15/100: v_loss=-1763.8693, flow_loss=8658.9727, v_grad=26492.0254, flow_grad=74700.8906, E[|v|²]=10350.5840
+Saved plot to results/deep_net/epoch_0015.png
+Epoch 16/100: v_loss=-5208.1753, flow_loss=55371.7266, v_grad=6294.2354, flow_grad=601717.6250, E[|v|²]=123013.3516
+Saved plot to results/deep_net/epoch_0016.png
+Epoch 17/100: v_loss=-2399.6741, flow_loss=-1269.1592, v_grad=25527.2188, flow_grad=72225.8047, E[|v|²]=14613.8027
+Saved plot to results/deep_net/epoch_0017.png
+Epoch 18/100: v_loss=-1849.2290, flow_loss=8519.3379, v_grad=10591.5176, flow_grad=74857.3516, E[|v|²]=19355.9961
+Saved plot to results/deep_net/epoch_0018.png
+Epoch 19/100: v_loss=-794.2088, flow_loss=2109.8042, v_grad=3666.0811, flow_grad=42952.2109, E[|v|²]=3408.5671
+Saved plot to results/deep_net/epoch_0019.png
+Epoch 20/100: v_loss=-398.4717, flow_loss=981.1050, v_grad=11808.4883, flow_grad=21744.1211, E[|v|²]=1740.0906
+Saved plot to results/deep_net/epoch_0020.png
+Epoch 21/100: v_loss=-1383.0583, flow_loss=3468.0215, v_grad=5570.9727, flow_grad=63191.8867, E[|v|²]=4410.3813
+Saved plot to results/deep_net/epoch_0021.png
+Epoch 22/100: v_loss=-1693.9933, flow_loss=3377.3433, v_grad=3747.5903, flow_grad=55377.6094, E[|v|²]=7889.6528
+Saved plot to results/deep_net/epoch_0022.png
+Epoch 23/100: v_loss=-1067.3795, flow_loss=1410.1595, v_grad=10522.4395, flow_grad=27900.4570, E[|v|²]=4087.9077
+Saved plot to results/deep_net/epoch_0023.png
+Epoch 24/100: v_loss=-417.7190, flow_loss=127.2130, v_grad=2771.8843, flow_grad=12675.6865, E[|v|²]=1045.0925
+Saved plot to results/deep_net/epoch_0024.png
+Epoch 25/100: v_loss=-150.1127, flow_loss=97.6298, v_grad=1399.6992, flow_grad=8527.6523, E[|v|²]=569.6520
+Saved plot to results/deep_net/epoch_0025.png
+Epoch 26/100: v_loss=-183.6159, flow_loss=1103.0239, v_grad=5986.4111, flow_grad=16076.5283, E[|v|²]=786.5844
+Saved plot to results/deep_net/epoch_0026.png
+Epoch 27/100: v_loss=-1480.8885, flow_loss=2389.5210, v_grad=15649.7441, flow_grad=27407.8125, E[|v|²]=1905.3300
+Saved plot to results/deep_net/epoch_0027.png
+Epoch 28/100: v_loss=-1836.1130, flow_loss=5927.7002, v_grad=28926.3223, flow_grad=73638.8281, E[|v|²]=6626.4316
+Saved plot to results/deep_net/epoch_0028.png
+Epoch 29/100: v_loss=-474.6514, flow_loss=550.0728, v_grad=9018.4336, flow_grad=18314.3711, E[|v|²]=1160.6997
+Saved plot to results/deep_net/epoch_0029.png
+Epoch 30/100: v_loss=-343.1286, flow_loss=317.3317, v_grad=3907.8518, flow_grad=9692.2520, E[|v|²]=617.7231
+Saved plot to results/deep_net/epoch_0030.png
+Epoch 31/100: v_loss=-288.6416, flow_loss=416.0080, v_grad=18522.6504, flow_grad=11322.6377, E[|v|²]=369.7467
+Saved plot to results/deep_net/epoch_0031.png
+Epoch 32/100: v_loss=-688.7292, flow_loss=3037.7622, v_grad=16770.2402, flow_grad=34917.1289, E[|v|²]=1401.1367
+Saved plot to results/deep_net/epoch_0032.png
+Epoch 33/100: v_loss=-1022.0651, flow_loss=4238.6260, v_grad=64435.2930, flow_grad=63325.4023, E[|v|²]=6273.3452
+Saved plot to results/deep_net/epoch_0033.png
+Epoch 34/100: v_loss=-608.1931, flow_loss=67.0194, v_grad=32969.4102, flow_grad=15304.4023, E[|v|²]=552.7574
+Saved plot to results/deep_net/epoch_0034.png
+Epoch 35/100: v_loss=-497.0426, flow_loss=757.1874, v_grad=29109.2910, flow_grad=19034.0469, E[|v|²]=348.4140
+Saved plot to results/deep_net/epoch_0035.png
+Epoch 36/100: v_loss=-246.2927, flow_loss=639.4642, v_grad=12993.6641, flow_grad=14359.8330, E[|v|²]=1067.4698
+Saved plot to results/deep_net/epoch_0036.png
+Epoch 37/100: v_loss=-456.4355, flow_loss=1590.3883, v_grad=39373.3359, flow_grad=27810.9902, E[|v|²]=1783.1440
+Saved plot to results/deep_net/epoch_0037.png
+Epoch 38/100: v_loss=-453.1131, flow_loss=1099.9116, v_grad=6586.2681, flow_grad=19654.1465, E[|v|²]=790.6000
+Saved plot to results/deep_net/epoch_0038.png
+Epoch 39/100: v_loss=-40.3516, flow_loss=108.4750, v_grad=3768.5862, flow_grad=11224.1045, E[|v|²]=197.8651
+Saved plot to results/deep_net/epoch_0039.png
+Epoch 40/100: v_loss=-1128.3765, flow_loss=822.1323, v_grad=47828.7891, flow_grad=36930.7305, E[|v|²]=4647.4907
+Saved plot to results/deep_net/epoch_0040.png
+Epoch 41/100: v_loss=-429.8868, flow_loss=322.3042, v_grad=4352.7866, flow_grad=11481.4971, E[|v|²]=2542.1831
+Saved plot to results/deep_net/epoch_0041.png
+Epoch 42/100: v_loss=-327.7252, flow_loss=951.3395, v_grad=19687.2930, flow_grad=44859.3242, E[|v|²]=2814.8955
+Saved plot to results/deep_net/epoch_0042.png
+Epoch 43/100: v_loss=-513.3052, flow_loss=353.8878, v_grad=12298.7256, flow_grad=46978.1758, E[|v|²]=5518.8804
+Saved plot to results/deep_net/epoch_0043.png
+Epoch 44/100: v_loss=-62.6534, flow_loss=38.7303, v_grad=2891.9587, flow_grad=3329.3755, E[|v|²]=259.7517
+Saved plot to results/deep_net/epoch_0044.png
+Epoch 45/100: v_loss=-3.4217, flow_loss=64.1676, v_grad=2120.1438, flow_grad=3442.3879, E[|v|²]=253.7963
+Saved plot to results/deep_net/epoch_0045.png
+Epoch 46/100: v_loss=-28.3660, flow_loss=129.5602, v_grad=4832.2764, flow_grad=3463.4697, E[|v|²]=426.9803
+Saved plot to results/deep_net/epoch_0046.png
+Epoch 47/100: v_loss=-249.1885, flow_loss=927.9594, v_grad=4581.7705, flow_grad=12400.7031, E[|v|²]=802.5613
+Saved plot to results/deep_net/epoch_0047.png
+Epoch 48/100: v_loss=-706.5249, flow_loss=2836.0522, v_grad=105429.4141, flow_grad=32547.5098, E[|v|²]=1869.6844
+Saved plot to results/deep_net/epoch_0048.png
+Epoch 49/100: v_loss=-477.0753, flow_loss=795.3167, v_grad=13339.7939, flow_grad=19196.9258, E[|v|²]=540.3033
+Saved plot to results/deep_net/epoch_0049.png
+Epoch 50/100: v_loss=-1067.8304, flow_loss=1594.2261, v_grad=12482.5752, flow_grad=19909.9902, E[|v|²]=4357.5806
+Saved plot to results/deep_net/epoch_0050.png
+Epoch 51/100: v_loss=-1190.1974, flow_loss=810.0294, v_grad=23954.8516, flow_grad=27517.1445, E[|v|²]=9338.1396
+Saved plot to results/deep_net/epoch_0051.png
+Epoch 52/100: v_loss=-233.5521, flow_loss=132.7305, v_grad=2455.6089, flow_grad=15377.0146, E[|v|²]=1297.5354
+Saved plot to results/deep_net/epoch_0052.png
+Epoch 53/100: v_loss=-118.9127, flow_loss=28.7156, v_grad=12728.3291, flow_grad=20563.7090, E[|v|²]=1857.4117
+Saved plot to results/deep_net/epoch_0053.png
+Epoch 54/100: v_loss=-7.7287, flow_loss=-11.3090, v_grad=2732.0388, flow_grad=2628.1875, E[|v|²]=238.3939
+Saved plot to results/deep_net/epoch_0054.png
+Epoch 55/100: v_loss=-20.0853, flow_loss=5.6695, v_grad=1283.4142, flow_grad=3110.6389, E[|v|²]=88.2428
+Saved plot to results/deep_net/epoch_0055.png
+Epoch 56/100: v_loss=-20.5905, flow_loss=348.7506, v_grad=1337.5820, flow_grad=10654.7412, E[|v|²]=424.2700
+Saved plot to results/deep_net/epoch_0056.png
+Epoch 57/100: v_loss=-336.4433, flow_loss=339.5934, v_grad=4885.4272, flow_grad=8618.8779, E[|v|²]=1948.1138
+Saved plot to results/deep_net/epoch_0057.png
+Epoch 58/100: v_loss=-188.6208, flow_loss=148.0789, v_grad=7619.0405, flow_grad=13205.2295, E[|v|²]=790.8469
+Saved plot to results/deep_net/epoch_0058.png
+Epoch 59/100: v_loss=-11.9593, flow_loss=-26.1916, v_grad=5185.0381, flow_grad=7543.0815, E[|v|²]=886.8512
+Saved plot to results/deep_net/epoch_0059.png
+Epoch 60/100: v_loss=-306.6424, flow_loss=484.8270, v_grad=8082.1245, flow_grad=13650.7393, E[|v|²]=861.5653
+Saved plot to results/deep_net/epoch_0060.png
+Epoch 61/100: v_loss=-125.0476, flow_loss=93.6430, v_grad=4753.9751, flow_grad=6608.7153, E[|v|²]=647.5632
+Saved plot to results/deep_net/epoch_0061.png
+Epoch 62/100: v_loss=-459.2809, flow_loss=385.7486, v_grad=12954.4023, flow_grad=13207.6807, E[|v|²]=747.8033
+Saved plot to results/deep_net/epoch_0062.png
+Epoch 63/100: v_loss=-148.3390, flow_loss=-10.6713, v_grad=2153.5527, flow_grad=13128.8740, E[|v|²]=529.8279
+Saved plot to results/deep_net/epoch_0063.png
+Epoch 64/100: v_loss=-48.9571, flow_loss=14.8078, v_grad=5870.7485, flow_grad=4013.3174, E[|v|²]=289.6194
+Saved plot to results/deep_net/epoch_0064.png
+Epoch 65/100: v_loss=6.5004, flow_loss=-28.3814, v_grad=4297.4512, flow_grad=5560.6333, E[|v|²]=63.9602
+Saved plot to results/deep_net/epoch_0065.png
+Epoch 66/100: v_loss=-82.1732, flow_loss=131.1761, v_grad=2384.4878, flow_grad=6718.5972, E[|v|²]=143.6499
+Saved plot to results/deep_net/epoch_0066.png
+Epoch 67/100: v_loss=-27.9509, flow_loss=29.3384, v_grad=2791.2095, flow_grad=3446.5105, E[|v|²]=206.2916
+Saved plot to results/deep_net/epoch_0067.png
+Epoch 68/100: v_loss=-111.4769, flow_loss=453.5083, v_grad=15863.9648, flow_grad=11996.2197, E[|v|²]=773.5629
+Saved plot to results/deep_net/epoch_0068.png
+Epoch 69/100: v_loss=-275.3511, flow_loss=681.2347, v_grad=6906.0884, flow_grad=17350.8633, E[|v|²]=1412.6218
+Saved plot to results/deep_net/epoch_0069.png
+Epoch 70/100: v_loss=-100.0154, flow_loss=118.9793, v_grad=1082.8403, flow_grad=9900.4131, E[|v|²]=735.5863
+Saved plot to results/deep_net/epoch_0070.png
+Epoch 71/100: v_loss=-310.3608, flow_loss=79.3678, v_grad=8857.0195, flow_grad=8700.7725, E[|v|²]=394.1266
+Saved plot to results/deep_net/epoch_0071.png
+Epoch 72/100: v_loss=-94.8385, flow_loss=10.8153, v_grad=4538.2812, flow_grad=5978.2900, E[|v|²]=745.1354
+Saved plot to results/deep_net/epoch_0072.png
+Epoch 73/100: v_loss=22.6234, flow_loss=42.9647, v_grad=2538.6221, flow_grad=6078.4385, E[|v|²]=254.4308
+Saved plot to results/deep_net/epoch_0073.png
+Epoch 74/100: v_loss=-22.4900, flow_loss=-14.7571, v_grad=4090.7305, flow_grad=2255.6523, E[|v|²]=129.0836
+Saved plot to results/deep_net/epoch_0074.png
+Epoch 75/100: v_loss=-22.4763, flow_loss=50.8604, v_grad=1980.2838, flow_grad=3247.2295, E[|v|²]=332.3438
+Saved plot to results/deep_net/epoch_0075.png
+Epoch 76/100: v_loss=-87.7846, flow_loss=227.6238, v_grad=2101.8071, flow_grad=8304.2539, E[|v|²]=331.9023
+Saved plot to results/deep_net/epoch_0076.png
+Epoch 77/100: v_loss=-50.4829, flow_loss=106.3085, v_grad=5797.4941, flow_grad=5680.0391, E[|v|²]=384.1547
+Saved plot to results/deep_net/epoch_0077.png
+Epoch 78/100: v_loss=-35.8734, flow_loss=131.5023, v_grad=3655.4326, flow_grad=5228.1211, E[|v|²]=284.2448
+Saved plot to results/deep_net/epoch_0078.png
+Epoch 79/100: v_loss=-107.7086, flow_loss=88.6130, v_grad=3368.6443, flow_grad=8881.5273, E[|v|²]=845.5167
+Saved plot to results/deep_net/epoch_0079.png
+Epoch 80/100: v_loss=-144.5912, flow_loss=159.0900, v_grad=1495.5029, flow_grad=10021.8867, E[|v|²]=221.7542
+Saved plot to results/deep_net/epoch_0080.png
+Epoch 81/100: v_loss=-50.1070, flow_loss=26.1717, v_grad=1241.4377, flow_grad=3298.6611, E[|v|²]=116.8945
+Saved plot to results/deep_net/epoch_0081.png
+Epoch 82/100: v_loss=-3.3921, flow_loss=-9.4557, v_grad=2713.4873, flow_grad=2392.4207, E[|v|²]=51.9976
+Saved plot to results/deep_net/epoch_0082.png
+Epoch 83/100: v_loss=3.6813, flow_loss=14.9304, v_grad=2026.3043, flow_grad=1372.6196, E[|v|²]=33.5759
+Saved plot to results/deep_net/epoch_0083.png
+Epoch 84/100: v_loss=0.5635, flow_loss=17.2042, v_grad=2620.7422, flow_grad=1872.7087, E[|v|²]=50.3581
+Saved plot to results/deep_net/epoch_0084.png
+Epoch 85/100: v_loss=-31.2607, flow_loss=89.8438, v_grad=2331.9287, flow_grad=7388.6533, E[|v|²]=746.1741
+Saved plot to results/deep_net/epoch_0085.png
+Epoch 86/100: v_loss=-110.7456, flow_loss=120.8381, v_grad=1305.3317, flow_grad=7279.1279, E[|v|²]=1197.5442
+Saved plot to results/deep_net/epoch_0086.png
+Epoch 87/100: v_loss=-34.5525, flow_loss=-14.5386, v_grad=897.4122, flow_grad=2566.9265, E[|v|²]=167.2064
+Saved plot to results/deep_net/epoch_0087.png
+Epoch 88/100: v_loss=9.8569, flow_loss=12.8543, v_grad=1712.4567, flow_grad=2482.0366, E[|v|²]=58.5830
+Saved plot to results/deep_net/epoch_0088.png
+Epoch 89/100: v_loss=-0.6208, flow_loss=36.3520, v_grad=1805.6851, flow_grad=3112.7449, E[|v|²]=109.5298
+Saved plot to results/deep_net/epoch_0089.png
+Epoch 90/100: v_loss=-23.9630, flow_loss=57.6435, v_grad=1582.0936, flow_grad=5068.8091, E[|v|²]=147.7890
+Saved plot to results/deep_net/epoch_0090.png
+Epoch 91/100: v_loss=-60.5418, flow_loss=34.1258, v_grad=1520.4539, flow_grad=5304.9614, E[|v|²]=547.6608
+Saved plot to results/deep_net/epoch_0091.png
+Epoch 92/100: v_loss=-36.3846, flow_loss=5.8959, v_grad=2338.4619, flow_grad=2191.5664, E[|v|²]=96.6005
+Saved plot to results/deep_net/epoch_0092.png
+Epoch 93/100: v_loss=8.0252, flow_loss=-2.5614, v_grad=1236.9580, flow_grad=1244.2118, E[|v|²]=46.5241
+Saved plot to results/deep_net/epoch_0093.png
+Epoch 94/100: v_loss=-10.4912, flow_loss=10.6192, v_grad=1262.2389, flow_grad=1727.4091, E[|v|²]=58.9906
+Saved plot to results/deep_net/epoch_0094.png
+Epoch 95/100: v_loss=-6.4469, flow_loss=38.7633, v_grad=1674.7802, flow_grad=3000.9148, E[|v|²]=395.2831
+Saved plot to results/deep_net/epoch_0095.png
+Epoch 96/100: v_loss=-16.3580, flow_loss=42.3230, v_grad=1306.6594, flow_grad=2726.8730, E[|v|²]=309.4667
+Saved plot to results/deep_net/epoch_0096.png
+Epoch 97/100: v_loss=-42.0624, flow_loss=55.9905, v_grad=2989.3081, flow_grad=3883.3018, E[|v|²]=272.4994
+Saved plot to results/deep_net/epoch_0097.png
+Epoch 98/100: v_loss=-23.1404, flow_loss=34.2772, v_grad=2008.3153, flow_grad=3803.6697, E[|v|²]=148.1458
+Saved plot to results/deep_net/epoch_0098.png
+Epoch 99/100: v_loss=-25.1157, flow_loss=33.5613, v_grad=594.0133, flow_grad=2904.5840, E[|v|²]=131.9131
+Saved plot to results/deep_net/epoch_0099.png
+Epoch 100/100: v_loss=-6.6159, flow_loss=49.3229, v_grad=2014.8423, flow_grad=3277.4792, E[|v|²]=89.1147
+Saved plot to results/deep_net/epoch_0100.png
+===========================================
+Job finished at Thu Sep 25 06:13:02 PM EDT 2025
+Exit code: 1
+===========================================

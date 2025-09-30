@@ -1,0 +1,22 @@
+{
+  "n_epochs": 100,
+  "batch_size": 100,
+  "n_inner": 200,
+  "n_outer": 5,
+  "lr_v": 0.002,
+  "lr_flow": 0.0002,
+  "checkpoint_freq": 10,
+  "flow_config": {
+    "num_layers": 2,
+    "time_embed_dim": 256,
+    "img_base_channels": 128,
+    "img_blocks": 2,
+    "img_groups": 32,
+    "img_log_scale_clamp": 5.0,
+    "img_use_soft_clamp": true,
+    "use_permutation": true,
+    "fourier_min_freq": 1.0,
+    "fourier_max_freq": 150.0
+  },
+  "hidden_sizes": [256, 256, 256, 256]
+}

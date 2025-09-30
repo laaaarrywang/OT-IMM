@@ -1,0 +1,266 @@
+===========================================
+Starting job on g000.gautschi.rcac.purdue.edu at Sat Sep 27 05:20:26 AM EDT 2025
+Config file: configs/conservative.json
+Job ID: 3607601
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Sat Sep 27 05:20:26 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:21:00.0 Off |                    0 |
+| N/A   38C    P8             34W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/conservative.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/conservative/config.json
+
+Starting training for 100 epochs...
+Output directory: results/conservative
+Epoch 1/100: v_loss=-19.8215, flow_loss=-0.8598, v_grad=124.8741, flow_grad=1483.0745, E[|v|²]=37.0269
+Saved plot to results/conservative/epoch_0001.png
+Epoch 2/100: v_loss=-34.8768, flow_loss=-28.5637, v_grad=799.2438, flow_grad=2398.3433, E[|v|²]=79.8070
+Saved plot to results/conservative/epoch_0002.png
+Epoch 3/100: v_loss=-43.3719, flow_loss=-47.5852, v_grad=3025.2300, flow_grad=3206.7107, E[|v|²]=104.5363
+Saved plot to results/conservative/epoch_0003.png
+Epoch 4/100: v_loss=-63.2872, flow_loss=-54.0597, v_grad=1590.9331, flow_grad=3820.0894, E[|v|²]=154.4287
+Saved plot to results/conservative/epoch_0004.png
+Epoch 5/100: v_loss=-53.1185, flow_loss=-72.5822, v_grad=2638.3618, flow_grad=5119.0962, E[|v|²]=139.3900
+Saved plot to results/conservative/epoch_0005.png
+Epoch 6/100: v_loss=-98.0092, flow_loss=-56.6439, v_grad=3680.2715, flow_grad=4585.3936, E[|v|²]=168.5283
+Saved plot to results/conservative/epoch_0006.png
+Epoch 7/100: v_loss=-115.4428, flow_loss=-105.8651, v_grad=3191.1213, flow_grad=6838.0005, E[|v|²]=304.8676
+Saved plot to results/conservative/epoch_0007.png
+Epoch 8/100: v_loss=-107.9138, flow_loss=-154.8363, v_grad=6105.0449, flow_grad=6888.3228, E[|v|²]=253.9345
+Saved plot to results/conservative/epoch_0008.png
+Epoch 9/100: v_loss=-147.3766, flow_loss=-178.1328, v_grad=11335.2637, flow_grad=8653.6875, E[|v|²]=425.1069
+Saved plot to results/conservative/epoch_0009.png
+Epoch 10/100: v_loss=-52.3328, flow_loss=-147.5583, v_grad=11181.6436, flow_grad=7473.2256, E[|v|²]=307.9635
+Saved plot to results/conservative/epoch_0010.png
+Epoch 11/100: v_loss=-265.7148, flow_loss=-301.4539, v_grad=20492.0195, flow_grad=11093.2334, E[|v|²]=560.5076
+Saved plot to results/conservative/epoch_0011.png
+Epoch 12/100: v_loss=-329.6200, flow_loss=-325.2265, v_grad=12103.6045, flow_grad=12977.1094, E[|v|²]=451.9789
+Saved plot to results/conservative/epoch_0012.png
+Epoch 13/100: v_loss=-66.0580, flow_loss=-257.4186, v_grad=18432.4961, flow_grad=9429.2842, E[|v|²]=440.0680
+Saved plot to results/conservative/epoch_0013.png
+Epoch 14/100: v_loss=-232.8084, flow_loss=-246.3925, v_grad=10541.4209, flow_grad=10513.9424, E[|v|²]=417.4531
+Saved plot to results/conservative/epoch_0014.png
+Epoch 15/100: v_loss=-218.5917, flow_loss=-221.6262, v_grad=7364.5723, flow_grad=7219.3677, E[|v|²]=397.2091
+Saved plot to results/conservative/epoch_0015.png
+Epoch 16/100: v_loss=-158.1961, flow_loss=-183.5929, v_grad=11594.2871, flow_grad=6701.8511, E[|v|²]=346.4689
+Saved plot to results/conservative/epoch_0016.png
+Epoch 17/100: v_loss=-138.3413, flow_loss=-199.7916, v_grad=9990.7627, flow_grad=8475.1758, E[|v|²]=343.0510
+Saved plot to results/conservative/epoch_0017.png
+Epoch 18/100: v_loss=-143.7050, flow_loss=-133.5175, v_grad=8371.4697, flow_grad=5621.2451, E[|v|²]=275.3971
+Saved plot to results/conservative/epoch_0018.png
+Epoch 19/100: v_loss=-126.6371, flow_loss=-151.6137, v_grad=5555.0542, flow_grad=5488.9443, E[|v|²]=260.7924
+Saved plot to results/conservative/epoch_0019.png
+Epoch 20/100: v_loss=-114.7494, flow_loss=-135.2054, v_grad=7345.3423, flow_grad=4940.7559, E[|v|²]=226.2668
+Saved plot to results/conservative/epoch_0020.png
+Epoch 21/100: v_loss=-155.6320, flow_loss=-98.7148, v_grad=8955.6006, flow_grad=5628.2363, E[|v|²]=217.4760
+Saved plot to results/conservative/epoch_0021.png
+Epoch 22/100: v_loss=-126.5420, flow_loss=-132.5804, v_grad=6809.5542, flow_grad=5421.5420, E[|v|²]=258.7712
+Saved plot to results/conservative/epoch_0022.png
+Epoch 23/100: v_loss=-137.2754, flow_loss=-87.8686, v_grad=6180.2720, flow_grad=4681.9517, E[|v|²]=270.0229
+Saved plot to results/conservative/epoch_0023.png
+Epoch 24/100: v_loss=-113.9288, flow_loss=-106.1811, v_grad=6329.3535, flow_grad=4368.0464, E[|v|²]=219.8420
+Saved plot to results/conservative/epoch_0024.png
+Epoch 25/100: v_loss=-96.3070, flow_loss=-104.9708, v_grad=5560.6167, flow_grad=4649.7539, E[|v|²]=213.8463
+Saved plot to results/conservative/epoch_0025.png
+Epoch 26/100: v_loss=-79.3667, flow_loss=-54.5731, v_grad=7723.2725, flow_grad=4293.5527, E[|v|²]=151.6575
+Saved plot to results/conservative/epoch_0026.png
+Epoch 27/100: v_loss=-88.9981, flow_loss=-81.3415, v_grad=6098.9189, flow_grad=3577.3667, E[|v|²]=158.3497
+Saved plot to results/conservative/epoch_0027.png
+Epoch 28/100: v_loss=-76.9765, flow_loss=-58.9187, v_grad=6539.5405, flow_grad=3529.6125, E[|v|²]=166.2155
+Saved plot to results/conservative/epoch_0028.png
+Epoch 29/100: v_loss=-91.4671, flow_loss=-90.2110, v_grad=5450.7876, flow_grad=3394.1521, E[|v|²]=142.7058
+Saved plot to results/conservative/epoch_0029.png
+Epoch 30/100: v_loss=-56.7116, flow_loss=-79.3125, v_grad=8276.8770, flow_grad=2885.1187, E[|v|²]=155.5204
+Saved plot to results/conservative/epoch_0030.png
+Epoch 31/100: v_loss=-95.7348, flow_loss=-87.1703, v_grad=2032.2220, flow_grad=3331.7896, E[|v|²]=216.5744
+Saved plot to results/conservative/epoch_0031.png
+Epoch 32/100: v_loss=-85.4582, flow_loss=-86.5790, v_grad=3424.3416, flow_grad=3538.0068, E[|v|²]=185.5642
+Saved plot to results/conservative/epoch_0032.png
+Epoch 33/100: v_loss=-53.8444, flow_loss=-68.1859, v_grad=5639.3989, flow_grad=2791.3188, E[|v|²]=179.0432
+Saved plot to results/conservative/epoch_0033.png
+Epoch 34/100: v_loss=-73.6199, flow_loss=-62.0230, v_grad=5702.1821, flow_grad=2497.4910, E[|v|²]=132.5078
+Saved plot to results/conservative/epoch_0034.png
+Epoch 35/100: v_loss=-50.6630, flow_loss=-69.5773, v_grad=4564.1714, flow_grad=2967.4233, E[|v|²]=156.4510
+Saved plot to results/conservative/epoch_0035.png
+Epoch 36/100: v_loss=-51.4979, flow_loss=-63.2669, v_grad=3757.2285, flow_grad=2647.4958, E[|v|²]=140.1638
+Saved plot to results/conservative/epoch_0036.png
+Epoch 37/100: v_loss=-62.3835, flow_loss=-55.9387, v_grad=3574.8447, flow_grad=2532.1987, E[|v|²]=148.2359
+Saved plot to results/conservative/epoch_0037.png
+Epoch 38/100: v_loss=-50.3995, flow_loss=-60.4732, v_grad=5813.5112, flow_grad=2567.6379, E[|v|²]=142.9806
+Saved plot to results/conservative/epoch_0038.png
+Epoch 39/100: v_loss=-49.7504, flow_loss=-51.7936, v_grad=3209.0032, flow_grad=2444.1343, E[|v|²]=143.3020
+Saved plot to results/conservative/epoch_0039.png
+Epoch 40/100: v_loss=-64.1619, flow_loss=-64.9720, v_grad=3514.6101, flow_grad=2691.6140, E[|v|²]=113.7917
+Saved plot to results/conservative/epoch_0040.png
+Epoch 41/100: v_loss=-62.9484, flow_loss=-57.0443, v_grad=1644.7369, flow_grad=2578.6716, E[|v|²]=142.2940
+Saved plot to results/conservative/epoch_0041.png
+Epoch 42/100: v_loss=-63.5806, flow_loss=-61.5403, v_grad=3325.6843, flow_grad=2638.0896, E[|v|²]=144.8910
+Saved plot to results/conservative/epoch_0042.png
+Epoch 43/100: v_loss=-59.6247, flow_loss=-56.0479, v_grad=1314.9865, flow_grad=2548.8848, E[|v|²]=142.2775
+Saved plot to results/conservative/epoch_0043.png
+Epoch 44/100: v_loss=-57.2716, flow_loss=-56.4084, v_grad=2311.7344, flow_grad=2591.8286, E[|v|²]=122.2017
+Saved plot to results/conservative/epoch_0044.png
+Epoch 45/100: v_loss=-51.9635, flow_loss=-58.9778, v_grad=3192.1553, flow_grad=2302.9209, E[|v|²]=104.9487
+Saved plot to results/conservative/epoch_0045.png
+Epoch 46/100: v_loss=-52.5858, flow_loss=-58.0581, v_grad=1365.3602, flow_grad=2304.8530, E[|v|²]=104.8680
+Saved plot to results/conservative/epoch_0046.png
+Epoch 47/100: v_loss=-49.7128, flow_loss=-44.6646, v_grad=4048.5896, flow_grad=2630.0674, E[|v|²]=109.7481
+Saved plot to results/conservative/epoch_0047.png
+Epoch 48/100: v_loss=-43.1514, flow_loss=-48.3393, v_grad=2733.1975, flow_grad=2098.9763, E[|v|²]=105.9137
+Saved plot to results/conservative/epoch_0048.png
+Epoch 49/100: v_loss=-50.3379, flow_loss=-48.6643, v_grad=1197.4832, flow_grad=1930.6357, E[|v|²]=112.2328
+Saved plot to results/conservative/epoch_0049.png
+Epoch 50/100: v_loss=-43.1999, flow_loss=-41.0384, v_grad=4334.2817, flow_grad=2141.0837, E[|v|²]=96.6656
+Saved plot to results/conservative/epoch_0050.png
+Epoch 51/100: v_loss=-39.8800, flow_loss=-42.6413, v_grad=4042.9365, flow_grad=2140.0769, E[|v|²]=105.1771
+Saved plot to results/conservative/epoch_0051.png
+Epoch 52/100: v_loss=-49.3831, flow_loss=-45.0942, v_grad=1966.7533, flow_grad=2191.3779, E[|v|²]=118.5537
+Saved plot to results/conservative/epoch_0052.png
+Epoch 53/100: v_loss=-42.7439, flow_loss=-44.6422, v_grad=2766.2769, flow_grad=1849.9755, E[|v|²]=105.3974
+Saved plot to results/conservative/epoch_0053.png
+Epoch 54/100: v_loss=-43.4377, flow_loss=-39.6177, v_grad=2308.3906, flow_grad=2046.8005, E[|v|²]=104.5443
+Saved plot to results/conservative/epoch_0054.png
+Epoch 55/100: v_loss=-42.1240, flow_loss=-39.9174, v_grad=1752.5635, flow_grad=1939.8240, E[|v|²]=93.3159
+Saved plot to results/conservative/epoch_0055.png
+Epoch 56/100: v_loss=-37.6849, flow_loss=-41.8242, v_grad=4350.7930, flow_grad=2013.0486, E[|v|²]=90.8799
+Saved plot to results/conservative/epoch_0056.png
+Epoch 57/100: v_loss=-48.6300, flow_loss=-35.5280, v_grad=1213.7228, flow_grad=1513.0264, E[|v|²]=95.0726
+Saved plot to results/conservative/epoch_0057.png
+Epoch 58/100: v_loss=-44.1438, flow_loss=-50.8441, v_grad=2063.7793, flow_grad=1872.0112, E[|v|²]=106.2891
+Saved plot to results/conservative/epoch_0058.png
+Epoch 59/100: v_loss=-41.0454, flow_loss=-42.8576, v_grad=1254.1000, flow_grad=1792.0924, E[|v|²]=96.6157
+Saved plot to results/conservative/epoch_0059.png
+Epoch 60/100: v_loss=-43.7312, flow_loss=-39.3437, v_grad=1118.9756, flow_grad=2100.4404, E[|v|²]=94.8224
+Saved plot to results/conservative/epoch_0060.png
+Epoch 61/100: v_loss=-38.7166, flow_loss=-40.7711, v_grad=2395.2065, flow_grad=1681.2499, E[|v|²]=99.6080
+Saved plot to results/conservative/epoch_0061.png
+Epoch 62/100: v_loss=-40.6507, flow_loss=-39.8120, v_grad=1521.0760, flow_grad=1729.0146, E[|v|²]=91.3083
+Saved plot to results/conservative/epoch_0062.png
+Epoch 63/100: v_loss=-41.3502, flow_loss=-37.0091, v_grad=1456.6489, flow_grad=1754.0092, E[|v|²]=99.9089
+Saved plot to results/conservative/epoch_0063.png
+Epoch 64/100: v_loss=-37.2574, flow_loss=-38.9436, v_grad=2158.8604, flow_grad=1870.4379, E[|v|²]=91.7940
+Saved plot to results/conservative/epoch_0064.png
+Epoch 65/100: v_loss=-39.5059, flow_loss=-39.1144, v_grad=1422.6515, flow_grad=1688.1133, E[|v|²]=86.6804
+Saved plot to results/conservative/epoch_0065.png
+Epoch 66/100: v_loss=-35.0155, flow_loss=-32.0244, v_grad=1765.7264, flow_grad=1681.0820, E[|v|²]=88.8469
+Saved plot to results/conservative/epoch_0066.png
+Epoch 67/100: v_loss=-35.3229, flow_loss=-32.9852, v_grad=1422.6899, flow_grad=1827.0609, E[|v|²]=80.1992
+Saved plot to results/conservative/epoch_0067.png
+Epoch 68/100: v_loss=-30.0234, flow_loss=-33.1530, v_grad=2299.5840, flow_grad=1577.0935, E[|v|²]=78.0116
+Saved plot to results/conservative/epoch_0068.png
+Epoch 69/100: v_loss=-33.2991, flow_loss=-32.1881, v_grad=1457.0066, flow_grad=1693.3976, E[|v|²]=78.7512
+Saved plot to results/conservative/epoch_0069.png
+Epoch 70/100: v_loss=-28.9037, flow_loss=-30.2956, v_grad=1655.6742, flow_grad=1713.9127, E[|v|²]=85.6476
+Saved plot to results/conservative/epoch_0070.png
+Epoch 71/100: v_loss=-32.1280, flow_loss=-33.6502, v_grad=531.9302, flow_grad=1617.5284, E[|v|²]=82.3760
+Saved plot to results/conservative/epoch_0071.png
+Epoch 72/100: v_loss=-32.6495, flow_loss=-32.1395, v_grad=1350.3652, flow_grad=1724.9441, E[|v|²]=78.8648
+Saved plot to results/conservative/epoch_0072.png
+Epoch 73/100: v_loss=-28.6353, flow_loss=-36.1818, v_grad=1579.9440, flow_grad=1427.2670, E[|v|²]=80.5353
+Saved plot to results/conservative/epoch_0073.png
+Epoch 74/100: v_loss=-29.5243, flow_loss=-26.8936, v_grad=1760.1636, flow_grad=1864.0168, E[|v|²]=74.8101
+Saved plot to results/conservative/epoch_0074.png
+Epoch 75/100: v_loss=-28.4119, flow_loss=-31.5975, v_grad=518.7243, flow_grad=1597.1312, E[|v|²]=82.5018
+Saved plot to results/conservative/epoch_0075.png
+Epoch 76/100: v_loss=-26.6574, flow_loss=-31.7895, v_grad=1885.9097, flow_grad=1471.5543, E[|v|²]=81.1707
+Saved plot to results/conservative/epoch_0076.png
+Epoch 77/100: v_loss=-29.1063, flow_loss=-28.5338, v_grad=1259.3905, flow_grad=1566.7943, E[|v|²]=75.1943
+Saved plot to results/conservative/epoch_0077.png
+Epoch 78/100: v_loss=-29.5996, flow_loss=-30.0348, v_grad=838.9365, flow_grad=1520.2509, E[|v|²]=73.9475
+Saved plot to results/conservative/epoch_0078.png
+Epoch 79/100: v_loss=-27.5270, flow_loss=-25.9670, v_grad=2399.0681, flow_grad=1453.4443, E[|v|²]=70.9855
+Saved plot to results/conservative/epoch_0079.png
+Epoch 80/100: v_loss=-28.0267, flow_loss=-28.6907, v_grad=1464.3351, flow_grad=1249.0034, E[|v|²]=73.3982
+Saved plot to results/conservative/epoch_0080.png
+Epoch 81/100: v_loss=-28.9566, flow_loss=-25.7555, v_grad=1319.3593, flow_grad=1240.5902, E[|v|²]=74.1368
+Saved plot to results/conservative/epoch_0081.png
+Epoch 82/100: v_loss=-25.6234, flow_loss=-31.8532, v_grad=484.8470, flow_grad=1463.9447, E[|v|²]=70.7267
+Saved plot to results/conservative/epoch_0082.png
+Epoch 83/100: v_loss=-26.6756, flow_loss=-27.2536, v_grad=834.2410, flow_grad=1377.0852, E[|v|²]=68.4046
+Saved plot to results/conservative/epoch_0083.png
+Epoch 84/100: v_loss=-29.9906, flow_loss=-24.6595, v_grad=1429.9363, flow_grad=1296.2731, E[|v|²]=65.6925
+Saved plot to results/conservative/epoch_0084.png
+Epoch 85/100: v_loss=-27.6460, flow_loss=-23.8028, v_grad=1347.2776, flow_grad=1252.2966, E[|v|²]=66.7865
+Saved plot to results/conservative/epoch_0085.png
+Epoch 86/100: v_loss=-27.3706, flow_loss=-27.2781, v_grad=853.9940, flow_grad=1548.1737, E[|v|²]=69.7169
+Saved plot to results/conservative/epoch_0086.png
+Epoch 87/100: v_loss=-28.7603, flow_loss=-25.2701, v_grad=867.3564, flow_grad=1316.5553, E[|v|²]=65.6975
+Saved plot to results/conservative/epoch_0087.png
+Epoch 88/100: v_loss=-26.4605, flow_loss=-26.2081, v_grad=579.8024, flow_grad=1302.8394, E[|v|²]=68.0655
+Saved plot to results/conservative/epoch_0088.png
+Epoch 89/100: v_loss=-28.6877, flow_loss=-27.5600, v_grad=415.1748, flow_grad=1469.1755, E[|v|²]=67.5628
+Saved plot to results/conservative/epoch_0089.png
+Epoch 90/100: v_loss=-27.2144, flow_loss=-27.5341, v_grad=959.3025, flow_grad=1577.6211, E[|v|²]=66.5490
+Saved plot to results/conservative/epoch_0090.png
+Epoch 91/100: v_loss=-28.7027, flow_loss=-27.1025, v_grad=595.1318, flow_grad=1059.9659, E[|v|²]=67.4487
+Saved plot to results/conservative/epoch_0091.png
+Epoch 92/100: v_loss=-25.6196, flow_loss=-25.8290, v_grad=720.2995, flow_grad=1357.6617, E[|v|²]=64.5369
+Saved plot to results/conservative/epoch_0092.png
+Epoch 93/100: v_loss=-21.1841, flow_loss=-24.5266, v_grad=1589.2897, flow_grad=1492.3873, E[|v|²]=60.0882
+Saved plot to results/conservative/epoch_0093.png
+Epoch 94/100: v_loss=-24.8553, flow_loss=-23.8018, v_grad=891.6738, flow_grad=1213.3363, E[|v|²]=60.3261
+Saved plot to results/conservative/epoch_0094.png
+Epoch 95/100: v_loss=-25.2508, flow_loss=-26.0454, v_grad=823.6284, flow_grad=1507.7856, E[|v|²]=68.7066
+Saved plot to results/conservative/epoch_0095.png
+Epoch 96/100: v_loss=-22.9783, flow_loss=-23.1724, v_grad=625.7495, flow_grad=1170.2487, E[|v|²]=65.4309
+Saved plot to results/conservative/epoch_0096.png
+Epoch 97/100: v_loss=-22.7328, flow_loss=-23.9553, v_grad=384.3492, flow_grad=1232.5350, E[|v|²]=65.9631
+Saved plot to results/conservative/epoch_0097.png
+Epoch 98/100: v_loss=-22.2889, flow_loss=-26.8664, v_grad=1126.8285, flow_grad=1360.6583, E[|v|²]=65.3217
+Saved plot to results/conservative/epoch_0098.png
+Epoch 99/100: v_loss=-22.2886, flow_loss=-23.3118, v_grad=698.3973, flow_grad=1070.4752, E[|v|²]=61.1999
+Saved plot to results/conservative/epoch_0099.png
+Epoch 100/100: v_loss=-24.0725, flow_loss=-27.5443, v_grad=638.2891, flow_grad=1380.2578, E[|v|²]=60.2705
+Saved plot to results/conservative/epoch_0100.png
+===========================================
+Job finished at Sat Sep 27 05:48:09 AM EDT 2025
+Exit code: 1
+===========================================

@@ -1,0 +1,32 @@
+{
+  "N_epoch": 100,
+  "batch_size": 1000,
+  "N_warmup": 50,
+  "scheduler_step_size": 1500,
+  "scheduler_gamma": 0.8,
+  "plot_freq": 1,
+  "v_hidden_sizes": [
+    256,
+    256,
+    256,
+    256
+  ],
+  "activation": "gelu",
+  "use_layernorm": true,
+  "use_permutation": true,
+  "config_name": "wide_net",
+  "num_layers": 3,
+  "hidden": 512,
+  "mlp_blocks": 2,
+  "fourier_min_freq": 1.0,
+  "fourier_max_freq": 30.0,
+  "lr_v": 0.002,
+  "lr_flow": 0.0002,
+  "n_inner": 500,
+  "n_outer": 5,
+  "vector_use_spectral_norm": false,
+  "vector_log_scale_clamp": 2.0,
+  "vector_use_soft_clamp": true,
+  "time_embed_dim": 256,
+  "output_dir": "results/wide_net"
+}

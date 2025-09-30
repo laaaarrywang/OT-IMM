@@ -234,7 +234,9 @@ class ImageCouplingResNet(nn.Module):
 
         # Reconstruct partial image with identity features
         img_full = torch.zeros(B, self.D, device=device, dtype=inputs.dtype)
-        img_full.scatter_(1, self.identity_indices[None, :].expand(B, -1), inputs)
+        # Use out-of-place scatter for vmap compatibility
+        #img_full.scatter_(1, self.identity_indices[None, :].expand(B, -1), inputs)
+        img_full = torch.scatter(img_full, 1, self.identity_indices[None, :].expand(B, -1), inputs)
         img = img_full.view(B, self.C, self.H, self.W)
 
         # Append identity-mask channel

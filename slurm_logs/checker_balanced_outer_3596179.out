@@ -1,0 +1,247 @@
+===========================================
+Starting job on g004.gautschi.rcac.purdue.edu at Thu Sep 25 05:26:00 PM EDT 2025
+Config file: configs/balanced_outer.json
+Job ID: 3596179
+Time limit: 30 minutes
+Auto-cancellation enabled
+===========================================
+Thu Sep 25 17:26:00 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    On  |   00000000:E1:00.0 Off |                    0 |
+| N/A   32C    P8             32W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Running experiment with config: configs/balanced_outer.json
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+Progress detected, resetting counter
+CUDA available, setting default tensor residence to GPU.
+Device: cuda
+Torch version: 2.5.1
+Saved config to results/balanced_outer/config.json
+
+Starting training for 100 epochs...
+Output directory: results/balanced_outer
+Epoch 1/100: v_loss=-4.8034, flow_loss=-4.1507, v_grad=16.6887, flow_grad=106.8715, E[|v|²]=9.8947
+Saved plot to results/balanced_outer/epoch_0001.png
+Epoch 2/100: v_loss=-4.2234, flow_loss=-3.0148, v_grad=18.1786, flow_grad=105.5033, E[|v|²]=9.4278
+Saved plot to results/balanced_outer/epoch_0002.png
+Epoch 3/100: v_loss=-8.0553, flow_loss=32.1100, v_grad=47.3112, flow_grad=275.4108, E[|v|²]=29.0054
+Saved plot to results/balanced_outer/epoch_0003.png
+Epoch 4/100: v_loss=-33.8936, flow_loss=86.2518, v_grad=243.6070, flow_grad=742.1920, E[|v|²]=110.5758
+Saved plot to results/balanced_outer/epoch_0004.png
+Epoch 5/100: v_loss=-14.5568, flow_loss=37.1371, v_grad=349.7206, flow_grad=414.9549, E[|v|²]=73.9167
+Saved plot to results/balanced_outer/epoch_0005.png
+Epoch 6/100: v_loss=-4.9161, flow_loss=-0.9225, v_grad=107.0445, flow_grad=172.2048, E[|v|²]=20.0348
+Saved plot to results/balanced_outer/epoch_0006.png
+Epoch 7/100: v_loss=-3.3456, flow_loss=5.9790, v_grad=84.1720, flow_grad=145.8634, E[|v|²]=13.9984
+Saved plot to results/balanced_outer/epoch_0007.png
+Epoch 8/100: v_loss=-31.3490, flow_loss=59.3804, v_grad=279.0637, flow_grad=421.5408, E[|v|²]=37.3344
+Saved plot to results/balanced_outer/epoch_0008.png
+Epoch 9/100: v_loss=-44.1751, flow_loss=175.2325, v_grad=1645.8209, flow_grad=1028.8998, E[|v|²]=123.0921
+Saved plot to results/balanced_outer/epoch_0009.png
+Epoch 10/100: v_loss=-46.1870, flow_loss=138.1276, v_grad=1068.7834, flow_grad=959.7156, E[|v|²]=133.8459
+Saved plot to results/balanced_outer/epoch_0010.png
+Epoch 11/100: v_loss=-65.6653, flow_loss=71.4668, v_grad=380.3346, flow_grad=666.8372, E[|v|²]=143.9642
+Saved plot to results/balanced_outer/epoch_0011.png
+Epoch 12/100: v_loss=-49.9260, flow_loss=106.2421, v_grad=2586.8855, flow_grad=804.5486, E[|v|²]=535.0762
+Saved plot to results/balanced_outer/epoch_0012.png
+Epoch 13/100: v_loss=-13.0596, flow_loss=-5.7959, v_grad=459.0048, flow_grad=212.3462, E[|v|²]=104.9545
+Saved plot to results/balanced_outer/epoch_0013.png
+Epoch 14/100: v_loss=-7.4791, flow_loss=14.3470, v_grad=127.0580, flow_grad=223.9046, E[|v|²]=33.1628
+Saved plot to results/balanced_outer/epoch_0014.png
+Epoch 15/100: v_loss=-32.8093, flow_loss=134.9393, v_grad=1220.8246, flow_grad=847.6093, E[|v|²]=192.4683
+Saved plot to results/balanced_outer/epoch_0015.png
+Epoch 16/100: v_loss=-64.4595, flow_loss=171.2944, v_grad=750.5245, flow_grad=1432.6624, E[|v|²]=96.3278
+Saved plot to results/balanced_outer/epoch_0016.png
+Epoch 17/100: v_loss=-68.2796, flow_loss=220.6904, v_grad=2233.1094, flow_grad=1065.6044, E[|v|²]=287.8506
+Saved plot to results/balanced_outer/epoch_0017.png
+Epoch 18/100: v_loss=-70.8254, flow_loss=185.7490, v_grad=1942.6146, flow_grad=1138.4745, E[|v|²]=337.3556
+Saved plot to results/balanced_outer/epoch_0018.png
+Epoch 19/100: v_loss=-0.6869, flow_loss=96.9804, v_grad=2031.5140, flow_grad=886.0623, E[|v|²]=42.1333
+Saved plot to results/balanced_outer/epoch_0019.png
+Epoch 20/100: v_loss=-62.2928, flow_loss=194.7803, v_grad=1333.3721, flow_grad=1039.5168, E[|v|²]=58.6918
+Saved plot to results/balanced_outer/epoch_0020.png
+Epoch 21/100: v_loss=-169.4693, flow_loss=461.8919, v_grad=8078.3667, flow_grad=2872.1543, E[|v|²]=195.8247
+Saved plot to results/balanced_outer/epoch_0021.png
+Epoch 22/100: v_loss=-52.1439, flow_loss=116.5347, v_grad=2228.9766, flow_grad=904.2460, E[|v|²]=141.0334
+Saved plot to results/balanced_outer/epoch_0022.png
+Epoch 23/100: v_loss=-47.9034, flow_loss=102.8422, v_grad=1006.6052, flow_grad=1075.2378, E[|v|²]=284.9780
+Saved plot to results/balanced_outer/epoch_0023.png
+Epoch 24/100: v_loss=-21.8024, flow_loss=39.0028, v_grad=355.4245, flow_grad=595.7206, E[|v|²]=184.2623
+Saved plot to results/balanced_outer/epoch_0024.png
+Epoch 25/100: v_loss=-11.8309, flow_loss=87.8725, v_grad=194.0598, flow_grad=759.6902, E[|v|²]=161.9044
+Saved plot to results/balanced_outer/epoch_0025.png
+Epoch 26/100: v_loss=-108.4281, flow_loss=118.1473, v_grad=779.5701, flow_grad=843.5245, E[|v|²]=581.1274
+Saved plot to results/balanced_outer/epoch_0026.png
+Epoch 27/100: v_loss=-48.1225, flow_loss=40.2169, v_grad=465.8924, flow_grad=398.2049, E[|v|²]=172.0516
+Saved plot to results/balanced_outer/epoch_0027.png
+Epoch 28/100: v_loss=-22.3666, flow_loss=41.8741, v_grad=336.3540, flow_grad=682.7781, E[|v|²]=64.9891
+Saved plot to results/balanced_outer/epoch_0028.png
+Epoch 29/100: v_loss=-36.3871, flow_loss=81.8306, v_grad=183.6722, flow_grad=689.4103, E[|v|²]=43.3852
+Saved plot to results/balanced_outer/epoch_0029.png
+Epoch 30/100: v_loss=-41.2798, flow_loss=98.4253, v_grad=739.2569, flow_grad=875.5444, E[|v|²]=62.8232
+Saved plot to results/balanced_outer/epoch_0030.png
+Epoch 31/100: v_loss=-79.0125, flow_loss=185.8658, v_grad=654.7771, flow_grad=1401.5638, E[|v|²]=152.1032
+Saved plot to results/balanced_outer/epoch_0031.png
+Epoch 32/100: v_loss=-95.5665, flow_loss=118.7731, v_grad=981.1754, flow_grad=1141.2289, E[|v|²]=136.8868
+Saved plot to results/balanced_outer/epoch_0032.png
+Epoch 33/100: v_loss=-38.9838, flow_loss=65.9713, v_grad=220.1374, flow_grad=792.6873, E[|v|²]=39.4050
+Saved plot to results/balanced_outer/epoch_0033.png
+Epoch 34/100: v_loss=-33.8496, flow_loss=102.6562, v_grad=487.9305, flow_grad=864.2321, E[|v|²]=39.5695
+Saved plot to results/balanced_outer/epoch_0034.png
+Epoch 35/100: v_loss=-76.4998, flow_loss=205.3965, v_grad=498.4834, flow_grad=1572.3790, E[|v|²]=145.1431
+Saved plot to results/balanced_outer/epoch_0035.png
+Epoch 36/100: v_loss=-101.0991, flow_loss=184.1703, v_grad=1313.0571, flow_grad=1719.4838, E[|v|²]=244.6225
+Saved plot to results/balanced_outer/epoch_0036.png
+Epoch 37/100: v_loss=-35.4049, flow_loss=56.5855, v_grad=332.0108, flow_grad=772.6187, E[|v|²]=85.0025
+Saved plot to results/balanced_outer/epoch_0037.png
+Epoch 38/100: v_loss=-43.0306, flow_loss=152.5904, v_grad=524.0566, flow_grad=1230.2023, E[|v|²]=102.5894
+Saved plot to results/balanced_outer/epoch_0038.png
+Epoch 39/100: v_loss=-90.2544, flow_loss=223.8820, v_grad=1472.1184, flow_grad=1634.9329, E[|v|²]=247.5011
+Saved plot to results/balanced_outer/epoch_0039.png
+Epoch 40/100: v_loss=-109.5313, flow_loss=201.1823, v_grad=325.0685, flow_grad=1617.6320, E[|v|²]=335.0146
+Saved plot to results/balanced_outer/epoch_0040.png
+Epoch 41/100: v_loss=-72.4015, flow_loss=64.5904, v_grad=1878.9557, flow_grad=923.8885, E[|v|²]=85.8475
+Saved plot to results/balanced_outer/epoch_0041.png
+Epoch 42/100: v_loss=-38.9544, flow_loss=86.1656, v_grad=428.4757, flow_grad=1080.0867, E[|v|²]=23.6685
+Saved plot to results/balanced_outer/epoch_0042.png
+Epoch 43/100: v_loss=-65.6609, flow_loss=165.8797, v_grad=433.6435, flow_grad=1583.1270, E[|v|²]=120.9146
+Saved plot to results/balanced_outer/epoch_0043.png
+Epoch 44/100: v_loss=-71.5695, flow_loss=162.8848, v_grad=803.7659, flow_grad=1554.6115, E[|v|²]=182.0837
+Saved plot to results/balanced_outer/epoch_0044.png
+Epoch 45/100: v_loss=-48.9776, flow_loss=87.1097, v_grad=757.1894, flow_grad=1029.8053, E[|v|²]=134.5698
+Saved plot to results/balanced_outer/epoch_0045.png
+Epoch 46/100: v_loss=-30.8681, flow_loss=89.5539, v_grad=224.9247, flow_grad=1015.1437, E[|v|²]=123.2298
+Saved plot to results/balanced_outer/epoch_0046.png
+Epoch 47/100: v_loss=-43.9746, flow_loss=175.9410, v_grad=300.1698, flow_grad=1620.7161, E[|v|²]=71.2607
+Saved plot to results/balanced_outer/epoch_0047.png
+Epoch 48/100: v_loss=-51.2000, flow_loss=135.6707, v_grad=649.7665, flow_grad=1288.4437, E[|v|²]=85.4335
+Saved plot to results/balanced_outer/epoch_0048.png
+Epoch 49/100: v_loss=-51.3503, flow_loss=154.6865, v_grad=1362.1978, flow_grad=1346.9540, E[|v|²]=105.5617
+Saved plot to results/balanced_outer/epoch_0049.png
+Epoch 50/100: v_loss=-60.7933, flow_loss=65.7397, v_grad=952.0949, flow_grad=699.2456, E[|v|²]=30.8212
+Saved plot to results/balanced_outer/epoch_0050.png
+Epoch 51/100: v_loss=-63.2669, flow_loss=61.2307, v_grad=503.7581, flow_grad=740.6102, E[|v|²]=102.9532
+Saved plot to results/balanced_outer/epoch_0051.png
+Epoch 52/100: v_loss=-25.5214, flow_loss=73.8314, v_grad=133.7411, flow_grad=1069.9882, E[|v|²]=39.4626
+Saved plot to results/balanced_outer/epoch_0052.png
+Epoch 53/100: v_loss=-29.0687, flow_loss=106.1204, v_grad=368.4964, flow_grad=1282.1271, E[|v|²]=31.8053
+Saved plot to results/balanced_outer/epoch_0053.png
+Epoch 54/100: v_loss=-45.1097, flow_loss=91.2441, v_grad=716.2863, flow_grad=979.8724, E[|v|²]=35.3620
+Saved plot to results/balanced_outer/epoch_0054.png
+Epoch 55/100: v_loss=-35.2541, flow_loss=106.6936, v_grad=790.5953, flow_grad=1216.8634, E[|v|²]=89.6860
+Saved plot to results/balanced_outer/epoch_0055.png
+Epoch 56/100: v_loss=-34.6627, flow_loss=38.6851, v_grad=599.7429, flow_grad=627.1988, E[|v|²]=114.1510
+Saved plot to results/balanced_outer/epoch_0056.png
+Epoch 57/100: v_loss=-19.0437, flow_loss=41.1184, v_grad=169.6093, flow_grad=635.2833, E[|v|²]=24.4309
+Saved plot to results/balanced_outer/epoch_0057.png
+Epoch 58/100: v_loss=-16.0569, flow_loss=62.0579, v_grad=249.0099, flow_grad=723.2289, E[|v|²]=42.3150
+Saved plot to results/balanced_outer/epoch_0058.png
+Epoch 59/100: v_loss=-55.2705, flow_loss=106.8373, v_grad=551.0594, flow_grad=1196.8892, E[|v|²]=130.5878
+Saved plot to results/balanced_outer/epoch_0059.png
+Epoch 60/100: v_loss=-50.5380, flow_loss=80.3582, v_grad=663.5594, flow_grad=1048.1163, E[|v|²]=178.5465
+Saved plot to results/balanced_outer/epoch_0060.png
+Epoch 61/100: v_loss=-29.1461, flow_loss=48.5149, v_grad=342.7104, flow_grad=841.9330, E[|v|²]=128.4360
+Saved plot to results/balanced_outer/epoch_0061.png
+Epoch 62/100: v_loss=-24.5160, flow_loss=27.1254, v_grad=250.4717, flow_grad=594.3656, E[|v|²]=45.8770
+Saved plot to results/balanced_outer/epoch_0062.png
+Epoch 63/100: v_loss=-25.3997, flow_loss=38.5316, v_grad=339.6656, flow_grad=736.3530, E[|v|²]=91.4611
+Saved plot to results/balanced_outer/epoch_0063.png
+Epoch 64/100: v_loss=-30.7880, flow_loss=55.2334, v_grad=123.9254, flow_grad=902.5411, E[|v|²]=112.6302
+Saved plot to results/balanced_outer/epoch_0064.png
+Epoch 65/100: v_loss=-17.2741, flow_loss=31.3334, v_grad=142.9225, flow_grad=660.1333, E[|v|²]=66.5165
+Saved plot to results/balanced_outer/epoch_0065.png
+Epoch 66/100: v_loss=-29.3159, flow_loss=31.6915, v_grad=312.2144, flow_grad=500.8633, E[|v|²]=37.6330
+Saved plot to results/balanced_outer/epoch_0066.png
+Epoch 67/100: v_loss=-27.0378, flow_loss=32.4461, v_grad=465.5060, flow_grad=594.6893, E[|v|²]=32.9569
+Saved plot to results/balanced_outer/epoch_0067.png
+Epoch 68/100: v_loss=-12.8581, flow_loss=23.7472, v_grad=117.4898, flow_grad=523.7314, E[|v|²]=16.2545
+Saved plot to results/balanced_outer/epoch_0068.png
+Epoch 69/100: v_loss=-24.7309, flow_loss=49.5408, v_grad=398.7339, flow_grad=892.7394, E[|v|²]=21.7956
+Saved plot to results/balanced_outer/epoch_0069.png
+Epoch 70/100: v_loss=-32.6902, flow_loss=28.8713, v_grad=389.6283, flow_grad=546.4658, E[|v|²]=53.0391
+Saved plot to results/balanced_outer/epoch_0070.png
+Epoch 71/100: v_loss=-20.0916, flow_loss=11.5333, v_grad=131.1256, flow_grad=469.6118, E[|v|²]=26.3488
+Saved plot to results/balanced_outer/epoch_0071.png
+Epoch 72/100: v_loss=-7.6333, flow_loss=4.2961, v_grad=57.2550, flow_grad=304.0368, E[|v|²]=12.4296
+Saved plot to results/balanced_outer/epoch_0072.png
+Epoch 73/100: v_loss=-14.3112, flow_loss=27.0423, v_grad=93.8009, flow_grad=567.3716, E[|v|²]=23.1935
+Saved plot to results/balanced_outer/epoch_0073.png
+Epoch 74/100: v_loss=-27.4118, flow_loss=49.6869, v_grad=283.5213, flow_grad=1077.7039, E[|v|²]=119.2091
+Saved plot to results/balanced_outer/epoch_0074.png
+Epoch 75/100: v_loss=-16.4498, flow_loss=19.5728, v_grad=127.0723, flow_grad=565.0833, E[|v|²]=50.1089
+Saved plot to results/balanced_outer/epoch_0075.png
+Epoch 76/100: v_loss=-9.1468, flow_loss=7.8599, v_grad=66.9746, flow_grad=319.1552, E[|v|²]=14.5949
+Saved plot to results/balanced_outer/epoch_0076.png
+Epoch 77/100: v_loss=-8.9424, flow_loss=10.7824, v_grad=62.7309, flow_grad=663.8166, E[|v|²]=15.9873
+Saved plot to results/balanced_outer/epoch_0077.png
+Epoch 78/100: v_loss=-15.2347, flow_loss=29.4199, v_grad=50.8122, flow_grad=679.3018, E[|v|²]=20.0220
+Saved plot to results/balanced_outer/epoch_0078.png
+Epoch 79/100: v_loss=-18.4095, flow_loss=50.4421, v_grad=261.0400, flow_grad=1166.9692, E[|v|²]=30.4373
+Saved plot to results/balanced_outer/epoch_0079.png
+Epoch 80/100: v_loss=-28.0329, flow_loss=26.1489, v_grad=204.6980, flow_grad=801.1089, E[|v|²]=103.8152
+Saved plot to results/balanced_outer/epoch_0080.png
+Epoch 81/100: v_loss=-16.6423, flow_loss=14.3666, v_grad=128.7407, flow_grad=575.3904, E[|v|²]=71.5416
+Saved plot to results/balanced_outer/epoch_0081.png
+Epoch 82/100: v_loss=-9.6516, flow_loss=-2.6410, v_grad=77.7958, flow_grad=332.4246, E[|v|²]=18.2902
+Saved plot to results/balanced_outer/epoch_0082.png
+Epoch 83/100: v_loss=-9.2453, flow_loss=10.9257, v_grad=128.7146, flow_grad=348.6105, E[|v|²]=10.8874
+Saved plot to results/balanced_outer/epoch_0083.png
+Epoch 84/100: v_loss=-20.2183, flow_loss=29.3830, v_grad=347.5113, flow_grad=758.0886, E[|v|²]=11.6707
+Saved plot to results/balanced_outer/epoch_0084.png
+Epoch 85/100: v_loss=-12.4665, flow_loss=13.6473, v_grad=83.4226, flow_grad=611.2120, E[|v|²]=11.9212
+Saved plot to results/balanced_outer/epoch_0085.png
+Epoch 86/100: v_loss=-6.4961, flow_loss=11.1929, v_grad=72.3296, flow_grad=446.7343, E[|v|²]=17.2259
+Saved plot to results/balanced_outer/epoch_0086.png
+Epoch 87/100: v_loss=-9.4233, flow_loss=14.7640, v_grad=64.6571, flow_grad=359.1865, E[|v|²]=13.0917
+Saved plot to results/balanced_outer/epoch_0087.png
+Epoch 88/100: v_loss=-14.1214, flow_loss=13.6819, v_grad=307.7589, flow_grad=530.6616, E[|v|²]=13.0347
+Saved plot to results/balanced_outer/epoch_0088.png
+Epoch 89/100: v_loss=-12.6195, flow_loss=11.3297, v_grad=69.0340, flow_grad=450.7135, E[|v|²]=16.9758
+Saved plot to results/balanced_outer/epoch_0089.png
+Epoch 90/100: v_loss=-10.0064, flow_loss=9.2961, v_grad=61.8778, flow_grad=465.2533, E[|v|²]=25.9065
+Saved plot to results/balanced_outer/epoch_0090.png
+Epoch 91/100: v_loss=-17.7528, flow_loss=11.9896, v_grad=57.0668, flow_grad=544.5861, E[|v|²]=49.3052
+Saved plot to results/balanced_outer/epoch_0091.png
+Epoch 92/100: v_loss=-9.3898, flow_loss=-0.8771, v_grad=82.2805, flow_grad=289.8238, E[|v|²]=26.0639
+Saved plot to results/balanced_outer/epoch_0092.png
+Epoch 93/100: v_loss=-5.7730, flow_loss=-0.5314, v_grad=33.1801, flow_grad=299.7873, E[|v|²]=15.4475
+Saved plot to results/balanced_outer/epoch_0093.png
+Epoch 94/100: v_loss=-8.2109, flow_loss=8.1061, v_grad=76.8411, flow_grad=339.0040, E[|v|²]=31.7465
+Saved plot to results/balanced_outer/epoch_0094.png
+Epoch 95/100: v_loss=-12.0967, flow_loss=14.1637, v_grad=77.7178, flow_grad=528.3260, E[|v|²]=48.1930
+Saved plot to results/balanced_outer/epoch_0095.png
+Epoch 96/100: v_loss=-13.0800, flow_loss=7.0956, v_grad=54.0020, flow_grad=483.0933, E[|v|²]=28.7438
+Saved plot to results/balanced_outer/epoch_0096.png
+Epoch 97/100: v_loss=-4.2253, flow_loss=-2.5513, v_grad=62.2497, flow_grad=401.7823, E[|v|²]=24.2723
+Saved plot to results/balanced_outer/epoch_0097.png
+Epoch 98/100: v_loss=-5.1237, flow_loss=5.3014, v_grad=54.8954, flow_grad=408.2464, E[|v|²]=24.0250
+Saved plot to results/balanced_outer/epoch_0098.png
+Epoch 99/100: v_loss=-7.0688, flow_loss=1.8811, v_grad=54.6396, flow_grad=373.6500, E[|v|²]=9.5034
+Saved plot to results/balanced_outer/epoch_0099.png
+Epoch 100/100: v_loss=-5.8059, flow_loss=2.2452, v_grad=65.0445, flow_grad=353.1539, E[|v|²]=10.1325
+Saved plot to results/balanced_outer/epoch_0100.png
+===========================================
+Job finished at Thu Sep 25 05:34:38 PM EDT 2025
+Exit code: 1
+===========================================
