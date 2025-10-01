@@ -6,7 +6,7 @@
     "n_inner": 500,
     "n_outer": 10,
     "base_lr_v": 0.002,
-    "base_lr_flow": 0.0001,
+    "base_lr_flow": 0.001,
     "v_sq_samples": 50000,
     "v_sq_time_points": 100,
     "plot_batch_size": 10000,

@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=your_job
+#SBATCH --job-name=checker_tuning
 #SBATCH --account=mathdept
 #SBATCH --partition=smallgpu
 #SBATCH --nodes=1
@@ -7,7 +7,7 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=64
 #SBATCH --mem=187500M
-#SBATCH --time=02:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=slurm_logs/%x_%j.out
 #SBATCH --error=slurm_logs/%x_%j.err
 

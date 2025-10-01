@@ -1,6 +1,0 @@
-{
-  "checker_baseline": 100,
-  "checker_deep_slow": 120,
-  "checker_wide_fast": 90,
-  "checker_spectral_lowlr": 110
-}
