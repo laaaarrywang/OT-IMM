@@ -1,0 +1,66 @@
+{
+  "experiment": {
+    "timestamp": "2025-10-02T17:36:24.801905",
+    "save_path": "results_rect/exp_20251002_173624_w10.0h0.10_bvar3.0_interp_base_2L128h8t_2e-03_2e-04_500i_10o_500ep_1000bs_cosineannealing",
+    "target_type": "rect"
+  },
+  "interpolant": {
+    "mode": "base",
+    "active_type": "nonlinear",
+    "warmup_steps": null,
+    "base_type": "nonlinear_flow",
+    "aux_type": "one-sided-trig"
+  },
+  "base_distribution": {
+    "type": "SimpleNormal",
+    "mean": 0.0,
+    "variance": 3.0,
+    "dimension": 2
+  },
+  "target_parameters": {
+    "w": 10.0,
+    "h": 0.1,
+    "layers_x": 2,
+    "layers_y": 4,
+    "scale": 1.0,
+    "device": "cuda",
+    "dtype": "torch.float32"
+  },
+  "flow_config": {
+    "num_layers": 2,
+    "time_embed_dim": 8,
+    "hidden": 128,
+    "mlp_blocks": 2,
+    "activation": "gelu",
+    "use_layernorm": false,
+    "use_permutation": true,
+    "fourier_min_freq": 1.0,
+    "fourier_max_freq": 5.0,
+    "vector_use_spectral_norm": false,
+    "vector_log_scale_clamp": 5.0,
+    "vector_use_soft_clamp": true
+  },
+  "training": {
+    "base_lr_v": 0.002,
+    "base_lr_flow": 0.0002,
+    "n_inner": 500,
+    "n_outer": 10,
+    "N_epoch": 500,
+    "batch_size": 1000
+  },
+  "network": {
+    "v_hidden_sizes": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "v_activation": "relu"
+  },
+  "logging": {
+    "metrics_freq": 50,
+    "plot_freq": 500,
+    "n_save": 10,
+    "n_step": 100
+  }
+}

@@ -380,11 +380,9 @@ def main(config):
     )
 
     # Auxiliary linear interpolant
-    diagonal_scale = torch.tensor([1.0, 1.0], device=device, dtype=torch.float32)
     interpolant_aux = stochastic_interpolant.Interpolant(
         path='one-sided-linear',
         gamma_type=None,
-        diagonal_scale=diagonal_scale
     )
 
     # Warmup interpolant

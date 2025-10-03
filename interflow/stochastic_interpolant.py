@@ -99,8 +99,6 @@ class Interpolant(torch.nn.Module):
         flow_config: dict = None,
         data_type: str = None,
         data_dim: tuple = None,
-        # new parameter for diagonal matrix interpolant (for debugging)
-        diagonal_scale: torch.tensor = None,
     ) -> None:
         super(Interpolant, self).__init__()
         
@@ -120,10 +118,10 @@ class Interpolant(torch.nn.Module):
             assert self.It != None
             assert self.dtIt != None
         elif self.path == "nonlinear":
-            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim, diagonal_scale)
+            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         else:
-            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, diagonal_scale=diagonal_scale)
+            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         
 

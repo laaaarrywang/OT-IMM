@@ -374,7 +374,6 @@ def train(cfg: TrainingConfig, flow_cfg: FlowConfig, device: torch.device) -> No
     aux_interpolant = stochastic_interpolant.Interpolant(
         path="one-sided-trig",
         gamma_type=None,
-        diagonal_scale=torch.ones(ndim, device=device, dtype=dtype),
     ).to(device)
 
     interpolant = WarmupInterpolant(base_interpolant, aux_interpolant, warmup_steps=cfg.warmup_steps).to(device)
