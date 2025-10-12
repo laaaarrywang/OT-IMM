@@ -216,10 +216,14 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                     t = torch.tensor(t)
                 if t.dim() == 0:
                     t = t.unsqueeze(0)  # [1]
+                # Handle [bs, 1] by squeezing to [bs]
+                if t.dim() == 2 and t.shape[1] == 1:
+                    t = t.squeeze(1)
                 # Move tensors to correct device/dtype
                 p = p_exp.to(t.device, t.dtype)
                 M = M_A.to(t.device, t.dtype)
                 # Compute (1-t)^p element-wise, shape: [batch, dim]
+                # Broadcasting: [bs] vs [dim] -> [bs, dim]
                 return M.unsqueeze(0) * ((1 - t).unsqueeze(-1) ** p)
 
             def B_matrix(t):
@@ -228,8 +232,12 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                     t = torch.tensor(t)
                 if t.dim() == 0:
                     t = t.unsqueeze(0)
+                # Handle [bs, 1] by squeezing to [bs]
+                if t.dim() == 2 and t.shape[1] == 1:
+                    t = t.squeeze(1)
                 q = q_exp.to(t.device, t.dtype)
                 M = M_B.to(t.device, t.dtype)
+                # Broadcasting: [bs] vs [dim] -> [bs, dim]
                 return M.unsqueeze(0) * (t.unsqueeze(-1) ** q)
 
             def A_matrix_dot(t):
@@ -238,9 +246,13 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                     t = torch.tensor(t)
                 if t.dim() == 0:
                     t = t.unsqueeze(0)
+                # Handle [bs, 1] by squeezing to [bs]
+                if t.dim() == 2 and t.shape[1] == 1:
+                    t = t.squeeze(1)
                 p = p_exp.to(t.device, t.dtype)
                 M = M_A.to(t.device, t.dtype)
                 eps = 1e-8  # Avoid 0^negative
+                # Broadcasting: [bs] vs [dim] -> [bs, dim]
                 return M.unsqueeze(0) * (-p * ((1 - t + eps).unsqueeze(-1) ** (p - 1)))
 
             def B_matrix_dot(t):
@@ -249,9 +261,13 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                     t = torch.tensor(t)
                 if t.dim() == 0:
                     t = t.unsqueeze(0)
+                # Handle [bs, 1] by squeezing to [bs]
+                if t.dim() == 2 and t.shape[1] == 1:
+                    t = t.squeeze(1)
                 q = q_exp.to(t.device, t.dtype)
                 M = M_B.to(t.device, t.dtype)
                 eps = 1e-8
+                # Broadcasting: [bs] vs [dim] -> [bs, dim]
                 return M.unsqueeze(0) * (q * ((t + eps).unsqueeze(-1) ** (q - 1)))
 
             # For diagonal: use element-wise (Hadamard) product
