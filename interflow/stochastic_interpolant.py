@@ -99,13 +99,15 @@ class Interpolant(torch.nn.Module):
         flow_config: dict = None,
         data_type: str = None,
         data_dim: tuple = None,
+        # new parameters for multivariate (matrix-coefficient) interpolant
+        matrix_config: dict = None,
     ) -> None:
         super(Interpolant, self).__init__()
         
 
         self.path = path # store interpolant type
         if gamma == None: # no gamma provided
-            if self.path == 'one-sided-linear' or self.path == 'one-sided-trig' or  self.path == 'nonlinear': gamma_type = None #  no gamma needed
+            if self.path == 'one-sided-linear' or self.path == 'one-sided-trig' or  self.path == 'nonlinear' or self.path == 'multivariate': gamma_type = None #  no gamma needed
             self.gamma, self.gamma_dot, self.gg_dot = fabrics.make_gamma(gamma_type=gamma_type) # create gamma functions from presets
         else:
             self.gamma, self.gamma_dot, self.gg_dot = gamma, gamma_dot, gg_dot # use provided gamma functions
@@ -118,15 +120,18 @@ class Interpolant(torch.nn.Module):
             assert self.It != None
             assert self.dtIt != None
         elif self.path == "nonlinear":
-            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim)
+            self.It, self.dtIt, ab, self.flow_model = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim, matrix_config)
+            self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
+        elif self.path == "multivariate":
+            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim, matrix_config)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         else:
-            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot)
+            self.It, self.dtIt, ab = fabrics.make_It(path, self.gamma, self.gamma_dot, self.gg_dot, flow_config, data_type, data_dim, matrix_config)
             self.a, self.adot, self.b, self.bdot = ab[0], ab[1], ab[2], ab[3]
         
 
     def calc_xt(self, t: Time, x0: Sample, x1: Sample):
-        if self.path=='one-sided-linear' or self.path == 'mirror' or self.path=='one-sided-trig' or self.path == "nonlinear": 
+        if self.path=='one-sided-linear' or self.path == 'mirror' or self.path=='one-sided-trig' or self.path == "nonlinear" or self.path == "multivariate":
             return self.It(t, x0, x1)
         else:
             z = torch.randn(x0.shape).to(t)

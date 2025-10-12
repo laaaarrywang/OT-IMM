@@ -52,7 +52,9 @@ def make_fc_net(hidden_sizes, in_size, out_size, inner_act, final_act, **config)
 
 def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
            # New parameters for nonlinear interpolant
-           flow_config = None, data_type = 'vector', data_dim = None):
+           flow_config = None, data_type = 'vector', data_dim = None,
+           # New parameters for multivariate (matrix-coefficient) interpolant
+           matrix_config = None):
     """gamma function must be specified if using the trigonometric interpolant
     
        For nonlinear interpolant:
@@ -112,7 +114,215 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
         
         It   = lambda t, x0, x1: a(t)*x0 + b(t)*x1
         dtIt = lambda t, x0, x1: adot(t)*x0 + bdot(t)*x1
-        
+
+    elif path == 'multivariate':
+        """
+        Multivariate stochastic interpolant with matrix coefficients.
+
+        Interpolation: x_t = A(t) @ x_0 + B(t) @ x_1
+
+        Where A(t) and B(t) are matrices (can be diagonal or full).
+
+        Parametrization:
+        - A(t) = M_A ⊙ f_A(t)  where f_A(t) = (1-t)^p
+        - B(t) = M_B ⊙ f_B(t)  where f_B(t) = t^q
+
+        Boundary conditions:
+        - A(0) = M_A, B(0) = 0
+        - A(1) = 0, B(1) = M_B
+
+        matrix_config: dict with the following keys:
+          - 'matrix_A': Initial matrix M_A (default: I)
+          - 'matrix_B': Initial matrix M_B (default: I)
+          - 'exponent_p': Exponent(s) for A(t), scalar or per-dimension (default: 1.0)
+          - 'exponent_q': Exponent(s) for B(t), scalar or per-dimension (default: 1.0)
+          - 'matrix_type': 'diagonal' or 'full' (default: 'diagonal')
+          - 'trainable': Whether matrices should be trainable (future feature, default: False)
+
+        For hyperparameter tuning: Pass fixed matrices and vary exponents.
+        For future training: Set trainable=True to make matrices learnable.
+        """
+
+        if data_dim is None:
+            raise ValueError("data_dim must be specified for multivariate interpolant")
+
+        if matrix_config is None:
+            matrix_config = {}
+
+        # Extract configuration
+        matrix_type = matrix_config.get('matrix_type', 'diagonal')
+        trainable = matrix_config.get('trainable', False)
+
+        # Parse exponents (can be scalar or per-dimension)
+        exponent_p = matrix_config.get('exponent_p', 1.0)
+        exponent_q = matrix_config.get('exponent_q', 1.0)
+
+        # Convert to tensors
+        if isinstance(exponent_p, (list, tuple)):
+            p_exp = torch.tensor(exponent_p, dtype=torch.float32)
+        elif isinstance(exponent_p, torch.Tensor):
+            p_exp = exponent_p.float()
+        else:  # scalar
+            p_exp = torch.tensor([exponent_p] * data_dim, dtype=torch.float32)
+
+        if isinstance(exponent_q, (list, tuple)):
+            q_exp = torch.tensor(exponent_q, dtype=torch.float32)
+        elif isinstance(exponent_q, torch.Tensor):
+            q_exp = exponent_q.float()
+        else:  # scalar
+            q_exp = torch.tensor([exponent_q] * data_dim, dtype=torch.float32)
+
+        # Parse matrices M_A and M_B
+        matrix_A = matrix_config.get('matrix_A', None)
+        matrix_B = matrix_config.get('matrix_B', None)
+
+        if matrix_type == 'diagonal':
+            # Diagonal matrices represented as vectors
+            if matrix_A is None:
+                M_A = torch.ones(data_dim, dtype=torch.float32)  # Identity
+            else:
+                M_A = torch.tensor(matrix_A, dtype=torch.float32) if not isinstance(matrix_A, torch.Tensor) else matrix_A.float()
+                assert M_A.shape == (data_dim,), f"matrix_A must be shape ({data_dim},) for diagonal type"
+
+            if matrix_B is None:
+                M_B = torch.ones(data_dim, dtype=torch.float32)  # Identity
+            else:
+                M_B = torch.tensor(matrix_B, dtype=torch.float32) if not isinstance(matrix_B, torch.Tensor) else matrix_B.float()
+                assert M_B.shape == (data_dim,), f"matrix_B must be shape ({data_dim},) for diagonal type"
+
+        elif matrix_type == 'full':
+            # Full matrices
+            if matrix_A is None:
+                M_A = torch.eye(data_dim, dtype=torch.float32)  # Identity
+            else:
+                M_A = torch.tensor(matrix_A, dtype=torch.float32) if not isinstance(matrix_A, torch.Tensor) else matrix_A.float()
+                assert M_A.shape == (data_dim, data_dim), f"matrix_A must be shape ({data_dim}, {data_dim}) for full type"
+
+            if matrix_B is None:
+                M_B = torch.eye(data_dim, dtype=torch.float32)  # Identity
+            else:
+                M_B = torch.tensor(matrix_B, dtype=torch.float32) if not isinstance(matrix_B, torch.Tensor) else matrix_B.float()
+                assert M_B.shape == (data_dim, data_dim), f"matrix_B must be shape ({data_dim}, {data_dim}) for full type"
+        else:
+            raise ValueError(f"matrix_type must be 'diagonal' or 'full', got {matrix_type}")
+
+        # TODO: If trainable=True, wrap as nn.Parameter (for future training support)
+
+        # Define matrix coefficient functions
+        if matrix_type == 'diagonal':
+            def A_matrix(t):
+                """A(t) = M_A ⊙ (1-t)^p for diagonal case"""
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)  # [1]
+                # Move tensors to correct device/dtype
+                p = p_exp.to(t.device, t.dtype)
+                M = M_A.to(t.device, t.dtype)
+                # Compute (1-t)^p element-wise, shape: [batch, dim]
+                return M.unsqueeze(0) * ((1 - t).unsqueeze(-1) ** p)
+
+            def B_matrix(t):
+                """B(t) = M_B ⊙ t^q for diagonal case"""
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                q = q_exp.to(t.device, t.dtype)
+                M = M_B.to(t.device, t.dtype)
+                return M.unsqueeze(0) * (t.unsqueeze(-1) ** q)
+
+            def A_matrix_dot(t):
+                """dA/dt = M_A ⊙ [-p * (1-t)^(p-1)]"""
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                p = p_exp.to(t.device, t.dtype)
+                M = M_A.to(t.device, t.dtype)
+                eps = 1e-8  # Avoid 0^negative
+                return M.unsqueeze(0) * (-p * ((1 - t + eps).unsqueeze(-1) ** (p - 1)))
+
+            def B_matrix_dot(t):
+                """dB/dt = M_B ⊙ [q * t^(q-1)]"""
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                q = q_exp.to(t.device, t.dtype)
+                M = M_B.to(t.device, t.dtype)
+                eps = 1e-8
+                return M.unsqueeze(0) * (q * ((t + eps).unsqueeze(-1) ** (q - 1)))
+
+            # For diagonal: use element-wise (Hadamard) product
+            It   = lambda t, x0, x1: A_matrix(t) * x0 + B_matrix(t) * x1
+            dtIt = lambda t, x0, x1: A_matrix_dot(t) * x0 + B_matrix_dot(t) * x1
+
+        else:  # full matrices
+            def A_matrix(t):
+                """A(t) = M_A @ diag((1-t)^p) for full case"""
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                p = p_exp.to(t.device, t.dtype)
+                M = M_A.to(t.device, t.dtype)
+                # Diagonal scaling: (1-t)^p per dimension
+                scale_diag = (1 - t).unsqueeze(-1) ** p  # [batch, dim]
+                # Apply: M @ diag(scale) equivalent to M * scale (broadcasting)
+                return M.unsqueeze(0) * scale_diag.unsqueeze(1)  # [batch, dim, dim]
+
+            def B_matrix(t):
+                """B(t) = M_B @ diag(t^q) for full case"""
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                q = q_exp.to(t.device, t.dtype)
+                M = M_B.to(t.device, t.dtype)
+                scale_diag = t.unsqueeze(-1) ** q
+                return M.unsqueeze(0) * scale_diag.unsqueeze(1)
+
+            def A_matrix_dot(t):
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                p = p_exp.to(t.device, t.dtype)
+                M = M_A.to(t.device, t.dtype)
+                eps = 1e-8
+                scale_diag = -p * ((1 - t + eps).unsqueeze(-1) ** (p - 1))
+                return M.unsqueeze(0) * scale_diag.unsqueeze(1)
+
+            def B_matrix_dot(t):
+                if not isinstance(t, torch.Tensor):
+                    t = torch.tensor(t)
+                if t.dim() == 0:
+                    t = t.unsqueeze(0)
+                q = q_exp.to(t.device, t.dtype)
+                M = M_B.to(t.device, t.dtype)
+                eps = 1e-8
+                scale_diag = q * ((t + eps).unsqueeze(-1) ** (q - 1))
+                return M.unsqueeze(0) * scale_diag.unsqueeze(1)
+
+            # For full matrices: use matrix-vector product
+            def It(t, x0, x1):
+                A_t = A_matrix(t)  # [batch, dim, dim]
+                B_t = B_matrix(t)
+                # Matrix-vector product: einsum or matmul
+                return torch.einsum('bij,bj->bi', A_t, x0) + torch.einsum('bij,bj->bi', B_t, x1)
+
+            def dtIt(t, x0, x1):
+                A_t_dot = A_matrix_dot(t)
+                B_t_dot = B_matrix_dot(t)
+                return torch.einsum('bij,bj->bi', A_t_dot, x0) + torch.einsum('bij,bj->bi', B_t_dot, x1)
+
+        # For compatibility, define scalar a/b (these won't be used directly)
+        a = A_matrix
+        adot = A_matrix_dot
+        b = B_matrix
+        bdot = B_matrix_dot
+
     elif path == 'mirror':
         if gamma == None:
             raise TypeError("Gamma function must be provided for mirror interpolant!")
