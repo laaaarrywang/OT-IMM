@@ -12,22 +12,17 @@ This is an implementation of the **Stochastic Interpolants** framework for build
 
 **Single experiment:**
 ```bash
-python run_checker_experiment.py configs/baseline.json
+python scripts/run_checker_tuning.py --config configs/baseline.json
 ```
 
 **Batch submission on SLURM cluster:**
 ```bash
-./submit_jobs.sh [batch_size]  # Default batch size is 3
-```
-
-**Generate hyperparameter configurations:**
-```bash
-python hyperparameter_configs.py
+./scripts/submit_checker_tuning_jobs.sh
 ```
 
 **Quick notebook testing:**
 ```bash
-python quick_notebook_test.py
+jupyter lab notebooks/checker-nonlinear-2D.ipynb
 ```
 
 ### Monitoring SLURM Jobs
@@ -36,6 +31,14 @@ python quick_notebook_test.py
 squeue -u $USER                    # Check job status
 tail -f slurm_logs/checker_*.out   # Monitor specific job output
 scancel -u $USER                   # Cancel all jobs
+./scripts/watch_and_cancel_job.sh <job_id> <results_dir> <expected_epochs>
+```
+
+### Testing
+
+```bash
+python interflow/test_nonlinear_interpolant.py  # Test boundary conditions
+python interflow/test_differentiability.py      # Check gradients
 ```
 
 ## Architecture Overview
@@ -43,17 +46,22 @@ scancel -u $USER                   # Cancel all jobs
 ### Core Components
 
 **interflow/stochastic_interpolant.py**
-- `Interpolant` class: Main class implementing stochastic interpolants x_t = I_t(x_0, x_1) + ≥(t)z
-- Supports multiple interpolation paths: linear, trigonometric, encoding-decoding, one-sided, nonlinear
+- `Interpolant` class: Main class implementing stochastic interpolants x_t = I_t(x_0, x_1) + Œ≥(t)z
+- Supports multiple interpolation paths: linear, trigonometric, encoding-decoding, one-sided, nonlinear, multivariate, mirror
 - Provides ODE/SDE integration methods for generation
-- Key methods: `calc_xt()`, `calc_It()`, `calc_dtIt()`, `calc_path_parallel_tvel()`
+- Key methods: `calc_xt()`, `calc_It()`, `calc_dtIt()`, `calc_path_parallel_tvel()`, `calc_antithetic_xts()`
 
 **interflow/fabrics.py**
-- Defines interpolation path functions (±(t), ≤(t)) and their derivatives
+- Defines interpolation path functions (Œ±(t), Œ≤(t)) and their derivatives
 - `make_It()`: Factory function for creating interpolants
 - `make_gamma()`: Factory function for noise schedules (brownian, zero, sines, linear)
 - Network builders: `make_fc_net()`, `make_mlp_blocks()`
 - Nonlinear flow support via RealNVP integration
+
+**interflow/fabrics_extra.py**
+- Advanced neural architectures: Fourier networks, ResNets, SIREN, U-Net
+- `make_fourier_net()`: Critical for sharp boundaries in checkerboard experiments
+- Supports spectral normalization and layer normalization
 
 **interflow/realnvp.py**
 - RealNVP implementation for nonlinear interpolants
@@ -63,9 +71,9 @@ scancel -u $USER                   # Cancel all jobs
 
 ### Key Concepts
 
-1. **Interpolants**: Define trajectories between source distribution ¡Ä and target distribution ¡Å
+1. **Interpolants**: Define trajectories between source distribution œÅ‚ÇÄ and target distribution œÅ‚ÇÅ
 2. **Velocity field v(x,t)**: Learned to match the time derivative of interpolant
-3. **Score function s(x,t)**: Related to denoiser ∑(x,t) = -≥(t)s(x,t)
+3. **Score function s(x,t)**: Related to denoiser Œ∑(x,t) = -Œ≥(t)s(x,t)
 4. **Warmup mechanism**: Uses auxiliary linear interpolant during early training
 
 ### Experiment Structure
@@ -77,22 +85,24 @@ Experiments are configured via JSON files specifying:
 - Fourier embedding parameters
 - Regularization (spectral_norm, log_scale_clamp)
 
-Results are saved in `results/<config_name>/` with:
+Results are saved in `results/<config_name>/` or timestamped directories with:
 - Model checkpoints
 - Training metrics (losses, grad norms)
 - Visualization plots at each epoch
 
 ## Important Implementation Details
 
-- Device handling: Automatically uses CUDA if available
+- Device handling: Automatically uses CUDA if available via `util.init_device()`
 - Mixed precision: Supports float32/float64 based on configuration
 - Gradient accumulation: Inner/outer optimization loops for better stability
 - Fourier embeddings: Maps inputs to higher dimensional space for sharp transitions
 - Path types:
-  - `linear`: Standard linear interpolation (1-t)xÄ + txÅ
+  - `linear`: Standard linear interpolation (1-t)x‚ÇÄ + tx‚ÇÅ
   - `trig`: Trigonometric path with controlled curvature
-  - `one-sided`: ±(t)xÄ + ≤(t)xÅ where xÄ ~ N(0,1)
+  - `one-sided`: Œ±(t)x‚ÇÄ + Œ≤(t)x‚ÇÅ where x‚ÇÄ ~ N(0,1)
   - `nonlinear`: Uses learned normalizing flow for interpolation
+  - `multivariate`: Matrix-coefficient A(t)x‚ÇÄ + B(t)x‚ÇÅ (diagonal or full)
+  - `mirror`: Dataset to itself interpolation
 
 ## Data Generation
 
@@ -106,3 +116,23 @@ Base distributions typically use:
 - Standard Gaussian N(0,1)
 - Mixture of Gaussians
 - Learned prior distributions
+
+## Training Strategy
+
+1. **Inner/Outer Loops**:
+   - Inner loop updates velocity network (n_inner iterations)
+   - Outer loop updates flow network if nonlinear (n_outer iterations)
+
+2. **Learning Rate Hierarchy**:
+   - lr_flow typically 10-50x smaller than lr_v
+   - Flow parameters learn slower for stability
+
+3. **Warmup Phase**:
+   - First N_warmup epochs use linear interpolant
+   - Prevents early training collapse with nonlinear flows
+
+4. **Loss Functions**:
+   - `loss_per_sample_v`: Velocity matching
+   - `loss_per_sample_s`: Score matching
+   - `loss_per_sample_eta`: Denoiser matching
+   - `loss_per_sample_b`: Drift matching

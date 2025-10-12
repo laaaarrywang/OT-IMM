@@ -1,0 +1,32 @@
+{
+  "training": {
+    "exp_name": "lr1e-5_p0.2_1.0_q0.2_1.0",
+    "num_epochs": 500,
+    "batch_size": 1000,
+    "n_inner": 1000,
+    "base_lr_v": 1e-05,
+    "step_gamma": 0.8,
+    "step_interval_inner": 20,
+    "v_sq_samples": 50000,
+    "v_sq_time_points": 100,
+    "v_sq_batch_size": 2000,
+    "plot_batch_size": 10000,
+    "ode_steps": 100,
+    "n_save": 10,
+    "seed": 42,
+    "base_variance": 3.0,
+    "target_type": "rect",
+    "results_root": "results_multivariate_sweep"
+  },
+  "matrix_config": {
+    "matrix_type": "diagonal",
+    "exponent_p": [
+      0.2,
+      1.0
+    ],
+    "exponent_q": [
+      0.2,
+      1.0
+    ]
+  }
+}
