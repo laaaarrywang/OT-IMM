@@ -123,23 +123,41 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
 
         Where A(t) and B(t) are matrices (can be diagonal or full).
 
-        Parametrization:
-        - A(t) = M_A ⊙ f_A(t)  where f_A(t) = (1-t)^p
-        - B(t) = M_B ⊙ f_B(t)  where f_B(t) = t^q
+        Parametrization options (controlled by 'coefficient_type'):
+        1. 'polynomial' (default):
+           - A(t) = M_A ⊙ f_A(t)  where f_A(t) = 1 - t^p
+           - B(t) = M_B ⊙ f_B(t)  where f_B(t) = t^q
 
-        Boundary conditions:
+        2. 'trigonometric' (Family 1):
+           - A(t) = M_A ⊙ f_A(t)  where f_A(t) = cos(π*t/2)^(2*freq_A)
+           - B(t) = M_B ⊙ f_B(t)  where f_B(t) = sin(π*t/2)^(2*freq_B)
+
+        3. 'fourier' (Fourier series expansion):
+           - A(t) = M_A ⊙ f_A(t)  where f_A(t) = cos(π*t/2) + (1/M) * Σ_m α_m * sin(m*π*t)
+           - B(t) = M_B ⊙ f_B(t)  where f_B(t) = sin(π*t/2) + (1/M) * Σ_m β_m * sin(m*π*t)
+
+        Boundary conditions (satisfied by both):
         - A(0) = M_A, B(0) = 0
         - A(1) = 0, B(1) = M_B
 
         matrix_config: dict with the following keys:
+          - 'coefficient_type': 'polynomial', 'trigonometric', or 'fourier' (default: 'polynomial')
           - 'matrix_A': Initial matrix M_A (default: I)
           - 'matrix_B': Initial matrix M_B (default: I)
-          - 'exponent_p': Exponent(s) for A(t), scalar or per-dimension (default: 1.0)
-          - 'exponent_q': Exponent(s) for B(t), scalar or per-dimension (default: 1.0)
+          For polynomial:
+            - 'exponent_p': Exponent(s) for A(t), scalar or per-dimension (default: 1.0)
+            - 'exponent_q': Exponent(s) for B(t), scalar or per-dimension (default: 1.0)
+          For trigonometric:
+            - 'freq_A': Frequency(s) for A(t), scalar or per-dimension (default: 1.0)
+            - 'freq_B': Frequency(s) for B(t), scalar or per-dimension (default: 1.0)
+          For fourier:
+            - 'fourier_M': Number of Fourier terms (default: 5)
+            - 'alpha_coeff': Fourier coefficients for A(t), shape [M, dim] or [M] (default: random)
+            - 'beta_coeff': Fourier coefficients for B(t), shape [M, dim] or [M] (default: random)
           - 'matrix_type': 'diagonal' or 'full' (default: 'diagonal')
           - 'trainable': Whether matrices should be trainable (future feature, default: False)
 
-        For hyperparameter tuning: Pass fixed matrices and vary exponents.
+        For hyperparameter tuning: Pass fixed matrices and vary exponents/frequencies.
         For future training: Set trainable=True to make matrices learnable.
         """
 
@@ -152,25 +170,78 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
         # Extract configuration
         matrix_type = matrix_config.get('matrix_type', 'diagonal')
         trainable = matrix_config.get('trainable', False)
+        coefficient_type = matrix_config.get('coefficient_type', 'polynomial')
 
-        # Parse exponents (can be scalar or per-dimension)
-        exponent_p = matrix_config.get('exponent_p', 1.0)
-        exponent_q = matrix_config.get('exponent_q', 1.0)
+        if coefficient_type == 'polynomial':
+            # Parse exponents (can be scalar or per-dimension)
+            exponent_p = matrix_config.get('exponent_p', 1.0)
+            exponent_q = matrix_config.get('exponent_q', 1.0)
 
-        # Convert to tensors
-        if isinstance(exponent_p, (list, tuple)):
-            p_exp = torch.tensor(exponent_p, dtype=torch.float32)
-        elif isinstance(exponent_p, torch.Tensor):
-            p_exp = exponent_p.float()
-        else:  # scalar
-            p_exp = torch.tensor([exponent_p] * data_dim, dtype=torch.float32)
+            # Convert to tensors
+            if isinstance(exponent_p, (list, tuple)):
+                p_exp = torch.tensor(exponent_p, dtype=torch.float32)
+            elif isinstance(exponent_p, torch.Tensor):
+                p_exp = exponent_p.float()
+            else:  # scalar
+                p_exp = torch.tensor([exponent_p] * data_dim, dtype=torch.float32)
 
-        if isinstance(exponent_q, (list, tuple)):
-            q_exp = torch.tensor(exponent_q, dtype=torch.float32)
-        elif isinstance(exponent_q, torch.Tensor):
-            q_exp = exponent_q.float()
-        else:  # scalar
-            q_exp = torch.tensor([exponent_q] * data_dim, dtype=torch.float32)
+            if isinstance(exponent_q, (list, tuple)):
+                q_exp = torch.tensor(exponent_q, dtype=torch.float32)
+            elif isinstance(exponent_q, torch.Tensor):
+                q_exp = exponent_q.float()
+            else:  # scalar
+                q_exp = torch.tensor([exponent_q] * data_dim, dtype=torch.float32)
+
+        elif coefficient_type == 'trigonometric':
+            # Parse frequencies (can be scalar or per-dimension)
+            freq_A = matrix_config.get('freq_A', 1.0)
+            freq_B = matrix_config.get('freq_B', 1.0)
+
+            # Convert to tensors
+            if isinstance(freq_A, (list, tuple)):
+                freq_A_tensor = torch.tensor(freq_A, dtype=torch.float32)
+            elif isinstance(freq_A, torch.Tensor):
+                freq_A_tensor = freq_A.float()
+            else:  # scalar
+                freq_A_tensor = torch.tensor([freq_A] * data_dim, dtype=torch.float32)
+
+            if isinstance(freq_B, (list, tuple)):
+                freq_B_tensor = torch.tensor(freq_B, dtype=torch.float32)
+            elif isinstance(freq_B, torch.Tensor):
+                freq_B_tensor = freq_B.float()
+            else:  # scalar
+                freq_B_tensor = torch.tensor([freq_B] * data_dim, dtype=torch.float32)
+
+        elif coefficient_type == 'fourier':
+            # Parse Fourier series parameters
+            fourier_M = matrix_config.get('fourier_M', 5)
+
+            # Parse alpha coefficients (for A(t))
+            alpha_coeff = matrix_config.get('alpha_coeff', None)
+            if alpha_coeff is None:
+                # Default: small random coefficients
+                alpha_tensor = torch.randn(fourier_M, data_dim, dtype=torch.float32) * 0.1
+            elif isinstance(alpha_coeff, (list, tuple)):
+                alpha_tensor = torch.tensor(alpha_coeff, dtype=torch.float32)
+                if alpha_tensor.dim() == 1:  # [M] -> [M, dim]
+                    alpha_tensor = alpha_tensor.unsqueeze(1).expand(fourier_M, data_dim)
+            else:
+                alpha_tensor = alpha_coeff.float()
+
+            # Parse beta coefficients (for B(t))
+            beta_coeff = matrix_config.get('beta_coeff', None)
+            if beta_coeff is None:
+                # Default: small random coefficients
+                beta_tensor = torch.randn(fourier_M, data_dim, dtype=torch.float32) * 0.1
+            elif isinstance(beta_coeff, (list, tuple)):
+                beta_tensor = torch.tensor(beta_coeff, dtype=torch.float32)
+                if beta_tensor.dim() == 1:  # [M] -> [M, dim]
+                    beta_tensor = beta_tensor.unsqueeze(1).expand(fourier_M, data_dim)
+            else:
+                beta_tensor = beta_coeff.float()
+
+        else:
+            raise ValueError(f"coefficient_type must be 'polynomial', 'trigonometric', or 'fourier', got {coefficient_type}")
 
         # Parse matrices M_A and M_B
         matrix_A = matrix_config.get('matrix_A', None)
@@ -210,65 +281,249 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
 
         # Define matrix coefficient functions
         if matrix_type == 'diagonal':
-            def A_matrix(t):
-                """A(t) = M_A ⊙ (1-t)^p for diagonal case"""
-                if not isinstance(t, torch.Tensor):
-                    t = torch.tensor(t)
-                if t.dim() == 0:
-                    t = t.unsqueeze(0)  # [1]
-                # Handle [bs, 1] by squeezing to [bs]
-                if t.dim() == 2 and t.shape[1] == 1:
-                    t = t.squeeze(1)
-                # Move tensors to correct device/dtype
-                p = p_exp.to(t.device, t.dtype)
-                M = M_A.to(t.device, t.dtype)
-                # Compute (1-t)^p element-wise, shape: [batch, dim]
-                # Broadcasting: [bs] vs [dim] -> [bs, dim]
-                return M.unsqueeze(0) * ((1 - t).unsqueeze(-1) ** p)
+            if coefficient_type == 'polynomial':
+                def A_matrix(t):
+                    """A(t) = M_A ⊙ (1 - t^p) for diagonal case"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)  # [1]
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    # Move tensors to correct device/dtype
+                    p = p_exp.to(t.device, t.dtype)
+                    M = M_A.to(t.device, t.dtype)
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    t_powers = torch.pow(t.unsqueeze(-1), p)
+                    return M.unsqueeze(0) * (1 - t_powers)
 
-            def B_matrix(t):
-                """B(t) = M_B ⊙ t^q for diagonal case"""
-                if not isinstance(t, torch.Tensor):
-                    t = torch.tensor(t)
-                if t.dim() == 0:
-                    t = t.unsqueeze(0)
-                # Handle [bs, 1] by squeezing to [bs]
-                if t.dim() == 2 and t.shape[1] == 1:
-                    t = t.squeeze(1)
-                q = q_exp.to(t.device, t.dtype)
-                M = M_B.to(t.device, t.dtype)
-                # Broadcasting: [bs] vs [dim] -> [bs, dim]
-                return M.unsqueeze(0) * (t.unsqueeze(-1) ** q)
+                def B_matrix(t):
+                    """B(t) = M_B ⊙ t^q for diagonal case"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    q = q_exp.to(t.device, t.dtype)
+                    M = M_B.to(t.device, t.dtype)
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    return M.unsqueeze(0) * (t.unsqueeze(-1) ** q)
 
-            def A_matrix_dot(t):
-                """dA/dt = M_A ⊙ [-p * (1-t)^(p-1)]"""
-                if not isinstance(t, torch.Tensor):
-                    t = torch.tensor(t)
-                if t.dim() == 0:
-                    t = t.unsqueeze(0)
-                # Handle [bs, 1] by squeezing to [bs]
-                if t.dim() == 2 and t.shape[1] == 1:
-                    t = t.squeeze(1)
-                p = p_exp.to(t.device, t.dtype)
-                M = M_A.to(t.device, t.dtype)
-                eps = 1e-8  # Avoid 0^negative
-                # Broadcasting: [bs] vs [dim] -> [bs, dim]
-                return M.unsqueeze(0) * (-p * ((1 - t + eps).unsqueeze(-1) ** (p - 1)))
+                def A_matrix_dot(t):
+                    """dA/dt = M_A ⊙ [-p * t^(p-1)]"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    p = p_exp.to(t.device, t.dtype)
+                    M = M_A.to(t.device, t.dtype)
+                    eps = 1e-8  # Avoid 0^negative
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    return M.unsqueeze(0) * (-p * torch.pow((t + eps).unsqueeze(-1), p - 1))
 
-            def B_matrix_dot(t):
-                """dB/dt = M_B ⊙ [q * t^(q-1)]"""
-                if not isinstance(t, torch.Tensor):
-                    t = torch.tensor(t)
-                if t.dim() == 0:
-                    t = t.unsqueeze(0)
-                # Handle [bs, 1] by squeezing to [bs]
-                if t.dim() == 2 and t.shape[1] == 1:
-                    t = t.squeeze(1)
-                q = q_exp.to(t.device, t.dtype)
-                M = M_B.to(t.device, t.dtype)
-                eps = 1e-8
-                # Broadcasting: [bs] vs [dim] -> [bs, dim]
-                return M.unsqueeze(0) * (q * ((t + eps).unsqueeze(-1) ** (q - 1)))
+                def B_matrix_dot(t):
+                    """dB/dt = M_B ⊙ [q * t^(q-1)]"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    q = q_exp.to(t.device, t.dtype)
+                    M = M_B.to(t.device, t.dtype)
+                    eps = 1e-8
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    return M.unsqueeze(0) * (q * ((t + eps).unsqueeze(-1) ** (q - 1)))
+
+            elif coefficient_type == 'trigonometric':
+                def A_matrix(t):
+                    """A(t) = M_A ⊙ cos²(π*t/2)^freq_A for diagonal case"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)  # [1]
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    # Move tensors to correct device/dtype
+                    freq = freq_A_tensor.to(t.device, t.dtype)
+                    M = M_A.to(t.device, t.dtype)
+                    # Compute cos²(π*t/2)^freq element-wise, shape: [batch, dim]
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    cos_val = torch.cos(math.pi * t.unsqueeze(-1) / 2)
+                    return M.unsqueeze(0) * (cos_val ** freq)
+
+                def B_matrix(t):
+                    """B(t) = M_B ⊙ sin²(π*t/2)^freq_B for diagonal case"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    freq = freq_B_tensor.to(t.device, t.dtype)
+                    M = M_B.to(t.device, t.dtype)
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    sin_val = torch.sin(math.pi * t.unsqueeze(-1) / 2)
+                    return M.unsqueeze(0) * (sin_val ** freq)
+
+                def A_matrix_dot(t):
+                    """dA/dt = M_A ⊙ d/dt[cos²(π*t/2)^freq_A]"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    freq = freq_A_tensor.to(t.device, t.dtype)
+                    M = M_A.to(t.device, t.dtype)
+                    # d/dt[cos(π*t/2)^freq] = -freq * (π/2) * cos(π*t/2)^(freq-1) * sin(π*t/2)
+                    angle = math.pi * t.unsqueeze(-1) / 2
+                    cos_val = torch.cos(angle)
+                    sin_val = torch.sin(angle)
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    return M.unsqueeze(0) * (-freq * math.pi / 2 * (cos_val ** (freq - 1)) * sin_val)
+
+                def B_matrix_dot(t):
+                    """dB/dt = M_B ⊙ d/dt[sin²(π*t/2)^freq_B]"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    freq = freq_B_tensor.to(t.device, t.dtype)
+                    M = M_B.to(t.device, t.dtype)
+                    # d/dt[sin(π*t/2)^freq] = freq * (π/2) * sin(π*t/2)^(freq-1) * cos(π*t/2)
+                    angle = math.pi * t.unsqueeze(-1) / 2
+                    cos_val = torch.cos(angle)
+                    sin_val = torch.sin(angle)
+                    # Broadcasting: [bs] vs [dim] -> [bs, dim]
+                    return M.unsqueeze(0) * (freq * math.pi / 2 * (sin_val ** (freq - 1)) * cos_val)
+
+            elif coefficient_type == 'fourier':
+                def A_matrix(t):
+                    """A(t) = M_A ⊙ [cos(π*t/2) + (1/M) * Σ_m α_m * sin(m*π*t)] for diagonal case"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)  # [1]
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    # Move tensors to correct device/dtype
+                    alpha = alpha_tensor.to(t.device, t.dtype)  # [M, dim]
+                    M = M_A.to(t.device, t.dtype)
+
+                    # Base term: cos(π*t/2)
+                    base_term = torch.cos(math.pi * t.unsqueeze(-1) / 2)  # [bs, 1] -> [bs, dim]
+
+                    # Fourier terms: (1/M) * Σ_m α_m * sin(m*π*t)
+                    m_range = torch.arange(1, fourier_M + 1, device=t.device, dtype=t.dtype)
+                    fourier_sum = torch.zeros_like(base_term)
+                    for m_idx, m in enumerate(m_range):
+                        # sin(m*π*t) for each batch element
+                        sin_term = torch.sin(m * math.pi * t.unsqueeze(-1))  # [bs, 1] -> [bs, dim]
+                        # Add weighted by coefficient
+                        fourier_sum = fourier_sum + alpha[m_idx].unsqueeze(0) * sin_term
+                    fourier_sum = fourier_sum / fourier_M
+
+                    # Combine terms
+                    return M.unsqueeze(0) * (base_term + fourier_sum)
+
+                def B_matrix(t):
+                    """B(t) = M_B ⊙ [sin(π*t/2) + (1/M) * Σ_m β_m * sin(m*π*t)] for diagonal case"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    beta = beta_tensor.to(t.device, t.dtype)  # [M, dim]
+                    M = M_B.to(t.device, t.dtype)
+
+                    # Base term: sin(π*t/2)
+                    base_term = torch.sin(math.pi * t.unsqueeze(-1) / 2)  # [bs, 1] -> [bs, dim]
+
+                    # Fourier terms: (1/M) * Σ_m β_m * sin(m*π*t)
+                    m_range = torch.arange(1, fourier_M + 1, device=t.device, dtype=t.dtype)
+                    fourier_sum = torch.zeros_like(base_term)
+                    for m_idx, m in enumerate(m_range):
+                        # sin(m*π*t) for each batch element
+                        sin_term = torch.sin(m * math.pi * t.unsqueeze(-1))  # [bs, 1] -> [bs, dim]
+                        # Add weighted by coefficient
+                        fourier_sum = fourier_sum + beta[m_idx].unsqueeze(0) * sin_term
+                    fourier_sum = fourier_sum / fourier_M
+
+                    # Combine terms
+                    return M.unsqueeze(0) * (base_term + fourier_sum)
+
+                def A_matrix_dot(t):
+                    """dA/dt = M_A ⊙ d/dt[cos(π*t/2) + (1/M) * Σ_m α_m * sin(m*π*t)]"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    alpha = alpha_tensor.to(t.device, t.dtype)  # [M, dim]
+                    M = M_A.to(t.device, t.dtype)
+
+                    # Derivative of base term: -π/2 * sin(π*t/2)
+                    base_deriv = -math.pi / 2 * torch.sin(math.pi * t.unsqueeze(-1) / 2)
+
+                    # Derivative of Fourier terms: (1/M) * Σ_m α_m * m*π * cos(m*π*t)
+                    m_range = torch.arange(1, fourier_M + 1, device=t.device, dtype=t.dtype)
+                    fourier_deriv = torch.zeros_like(base_deriv)
+                    for m_idx, m in enumerate(m_range):
+                        # m*π*cos(m*π*t) for each batch element
+                        cos_term = m * math.pi * torch.cos(m * math.pi * t.unsqueeze(-1))
+                        # Add weighted by coefficient
+                        fourier_deriv = fourier_deriv + alpha[m_idx].unsqueeze(0) * cos_term
+                    fourier_deriv = fourier_deriv / fourier_M
+
+                    # Combine terms
+                    return M.unsqueeze(0) * (base_deriv + fourier_deriv)
+
+                def B_matrix_dot(t):
+                    """dB/dt = M_B ⊙ d/dt[sin(π*t/2) + (1/M) * Σ_m β_m * sin(m*π*t)]"""
+                    if not isinstance(t, torch.Tensor):
+                        t = torch.tensor(t)
+                    if t.dim() == 0:
+                        t = t.unsqueeze(0)
+                    # Handle [bs, 1] by squeezing to [bs]
+                    if t.dim() == 2 and t.shape[1] == 1:
+                        t = t.squeeze(1)
+                    beta = beta_tensor.to(t.device, t.dtype)  # [M, dim]
+                    M = M_B.to(t.device, t.dtype)
+
+                    # Derivative of base term: π/2 * cos(π*t/2)
+                    base_deriv = math.pi / 2 * torch.cos(math.pi * t.unsqueeze(-1) / 2)
+
+                    # Derivative of Fourier terms: (1/M) * Σ_m β_m * m*π * cos(m*π*t)
+                    m_range = torch.arange(1, fourier_M + 1, device=t.device, dtype=t.dtype)
+                    fourier_deriv = torch.zeros_like(base_deriv)
+                    for m_idx, m in enumerate(m_range):
+                        # m*π*cos(m*π*t) for each batch element
+                        cos_term = m * math.pi * torch.cos(m * math.pi * t.unsqueeze(-1))
+                        # Add weighted by coefficient
+                        fourier_deriv = fourier_deriv + beta[m_idx].unsqueeze(0) * cos_term
+                    fourier_deriv = fourier_deriv / fourier_M
+
+                    # Combine terms
+                    return M.unsqueeze(0) * (base_deriv + fourier_deriv)
 
             # For diagonal: use element-wise (Hadamard) product
             It   = lambda t, x0, x1: A_matrix(t) * x0 + B_matrix(t) * x1
@@ -276,15 +531,15 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
 
         else:  # full matrices
             def A_matrix(t):
-                """A(t) = M_A @ diag((1-t)^p) for full case"""
+                """A(t) = M_A @ diag(1 - t^p) for full case"""
                 if not isinstance(t, torch.Tensor):
                     t = torch.tensor(t)
                 if t.dim() == 0:
                     t = t.unsqueeze(0)
                 p = p_exp.to(t.device, t.dtype)
                 M = M_A.to(t.device, t.dtype)
-                # Diagonal scaling: (1-t)^p per dimension
-                scale_diag = (1 - t).unsqueeze(-1) ** p  # [batch, dim]
+                # Diagonal scaling: 1 - t^p per dimension
+                scale_diag = 1 - torch.pow(t.unsqueeze(-1), p)  # [batch, dim]
                 # Apply: M @ diag(scale) equivalent to M * scale (broadcasting)
                 return M.unsqueeze(0) * scale_diag.unsqueeze(1)  # [batch, dim, dim]
 
@@ -307,7 +562,7 @@ def make_It(path='linear', gamma = None, gamma_dot = None, gg_dot = None,
                 p = p_exp.to(t.device, t.dtype)
                 M = M_A.to(t.device, t.dtype)
                 eps = 1e-8
-                scale_diag = -p * ((1 - t + eps).unsqueeze(-1) ** (p - 1))
+                scale_diag = -p * torch.pow((t + eps).unsqueeze(-1), p - 1)
                 return M.unsqueeze(0) * scale_diag.unsqueeze(1)
 
             def B_matrix_dot(t):

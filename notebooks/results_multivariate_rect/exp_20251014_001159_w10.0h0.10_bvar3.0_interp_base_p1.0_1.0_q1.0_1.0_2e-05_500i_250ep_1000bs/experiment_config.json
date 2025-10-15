@@ -1,0 +1,62 @@
+{
+  "experiment": {
+    "timestamp": "2025-10-14T00:11:59.477132",
+    "save_path": "results_multivariate_rect/exp_20251014_001159_w10.0h0.10_bvar3.0_interp_base_p1.0_1.0_q1.0_1.0_2e-05_500i_250ep_1000bs",
+    "target_type": "rect"
+  },
+  "interpolant": {
+    "mode": "base",
+    "active_type": "multivariate",
+    "mixed_steps": null,
+    "base_type": "multivariate",
+    "aux_type": "one-sided-trig"
+  },
+  "multivariate_config": {
+    "matrix_type": "diagonal",
+    "exponent_p": [
+      1.0,
+      1.0
+    ],
+    "exponent_q": [
+      1.0,
+      1.0
+    ]
+  },
+  "base_distribution": {
+    "type": "SimpleNormal",
+    "mean": 0.0,
+    "variance": 3.0,
+    "dimension": 2
+  },
+  "target_parameters": {
+    "w": 10.0,
+    "h": 0.1,
+    "layers_x": 2,
+    "layers_y": 4,
+    "scale": 1.0,
+    "device": "cuda",
+    "dtype": "torch.float32"
+  },
+  "training": {
+    "base_lr_v": 2e-05,
+    "n_inner": 500,
+    "n_outer": 1,
+    "N_epoch": 250,
+    "batch_size": 1000
+  },
+  "network": {
+    "v_hidden_sizes": [
+      128,
+      256,
+      256,
+      128
+    ],
+    "v_activation": "gelu"
+  },
+  "logging": {
+    "metrics_freq": 50,
+    "plot_freq": 500,
+    "n_save": 10,
+    "n_step": 100
+  }
+}

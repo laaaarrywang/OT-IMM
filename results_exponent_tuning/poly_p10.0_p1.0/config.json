@@ -1,0 +1,30 @@
+{
+  "training": {
+    "exp_name": "poly_p10.0_p1.0",
+    "num_epochs": 250,
+    "batch_size": 1000,
+    "n_inner": 500,
+    "base_lr_v": 0.001,
+    "v_sq_samples": 50000,
+    "v_sq_time_points": 100,
+    "v_sq_batch_size": 2000,
+    "plot_batch_size": 10000,
+    "ode_steps": 100,
+    "seed": 42,
+    "base_variance": 3.0,
+    "target_type": "rect",
+    "results_root": "results_exponent_tuning"
+  },
+  "matrix_config": {
+    "matrix_type": "diagonal",
+    "coefficient_type": "polynomial",
+    "exponent_p": [
+      10.0,
+      1.0
+    ],
+    "exponent_q": [
+      10.0,
+      1.0
+    ]
+  }
+}
