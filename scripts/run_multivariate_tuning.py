@@ -49,6 +49,7 @@ class TrainingConfig:
     n_save: int = 10
     seed: int = 0
     base_variance: float = 3.0
+    base_correlation: float = 0.0  # Correlation coefficient for 2D Gaussian (-1 to 1)
     target_type: str = "rect"
     results_root: Path = Path("results_multivariate")
 
